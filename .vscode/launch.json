@@ -2,15 +2,6 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "chrome",
-      "request": "launch",
-      "name": "Debug Web",
-      "file": "${workspaceFolder}/dist/web/spec-runner.html",
-      "webRoot": "${workspaceFolder}",
-      "sourceMaps": true,
-      "breakOnLoad": true
-    },
-    {
       "type": "node",
       "request": "launch",
       "name": "Debug Node",
@@ -31,6 +22,15 @@
       "smartStep": true,
       "outFiles": [ "${workspaceFolder}/dist/node/**/*.js" ],
       "internalConsoleOptions": "openOnSessionStart"
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Debug Web",
+      "file": "${workspaceFolder}/dist/web/spec-runner.html",
+      "webRoot": "${workspaceFolder}",
+      "sourceMaps": true,
+      "breakOnLoad": true
     }
   ]
 }
