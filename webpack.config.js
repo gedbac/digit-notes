@@ -9,7 +9,8 @@ var nodeConfig = {
   target: "node",
   mode: "development",
   entry: [
-    path.resolve(__dirname, "./spec/infrastructure/util/index.node.js")
+    path.resolve(__dirname, "./spec/infrastructure/util/index.node.js"),
+    path.resolve(__dirname, "./spec/infrastructure/events/index.node.js")
   ],
   output: {
     path: path.resolve(__dirname, "./dist/node"),
@@ -21,7 +22,8 @@ var nodeConfig = {
     alias: {
       "amber-notes-infrastructure-util$": path.resolve(__dirname, "./src/infrastructure/util/index.node.js"),
       "amber-notes-infrastructure-model$": path.resolve(__dirname, "./src/infrastructure/model/index.js"),
-      "amber-notes-infrastructure-repositories$": path.resolve(__dirname, "./src/infrastructure/repositories/index.js")
+      "amber-notes-infrastructure-repositories$": path.resolve(__dirname, "./src/infrastructure/repositories/index.js"),
+      "amber-notes-infrastructure-events$": path.resolve(__dirname, "./src/infrastructure/events/index.node.js"),
     }
   },
   plugins: [
@@ -38,6 +40,7 @@ var webConfig = {
   mode: "development",
   entry: [
     path.resolve(__dirname, "./spec/infrastructure/util/index.web.js"),
+    path.resolve(__dirname, "./spec/infrastructure/events/index.web.js")
   ],
   output: {
     path: path.resolve(__dirname, "./dist/web"),
@@ -51,7 +54,8 @@ var webConfig = {
     alias: {
       "amber-notes-infrastructure-util$": path.resolve(__dirname, "./src/infrastructure/util/index.web.js"),
       "amber-notes-infrastructure-model$": path.resolve(__dirname, "./src/infrastructure/model/index.js"),
-      "amber-notes-infrastructure-repositories$": path.resolve(__dirname, "./src/infrastructure/repositories/index.js")
+      "amber-notes-infrastructure-repositories$": path.resolve(__dirname, "./src/infrastructure/repositories/index.js"),
+      "amber-notes-infrastructure-events$": path.resolve(__dirname, "./src/infrastructure/events/index.web.js"),
     }
   },
   plugins: [
