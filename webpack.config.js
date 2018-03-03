@@ -9,7 +9,7 @@ var nodeConfig = {
   target: "node",
   mode: "development",
   entry: [
-    path.resolve(__dirname, "./spec/infrastructure/util/index.js")
+    path.resolve(__dirname, "./spec/infrastructure/util/index.node.js")
   ],
   output: {
     path: path.resolve(__dirname, "./dist/node"),
@@ -17,9 +17,9 @@ var nodeConfig = {
   },
   externals: [ nodeExternals() ],
   resolve: {
-    extensions: [ ".js" ],
+    extensions: [ ".node.js", ".js" ],
     alias: {
-      "amber-notes-infrastructure-util$": path.resolve(__dirname, "./src/infrastructure/util/index.js")
+      "amber-notes-infrastructure-util$": path.resolve(__dirname, "./src/infrastructure/util/index.node.js")
     }
   },
   plugins: [
@@ -35,7 +35,7 @@ var webConfig = {
   target: "web",
   mode: "development",
   entry: [
-    path.resolve(__dirname, "./spec/infrastructure/util/index.js"),
+    path.resolve(__dirname, "./spec/infrastructure/util/index.web.js"),
   ],
   output: {
     path: path.resolve(__dirname, "./dist/web"),
@@ -45,9 +45,9 @@ var webConfig = {
     chai: "chai"
   },
   resolve: {
-    extensions: [ ".js" ],
+    extensions: [ ".web.js", ".js" ],
     alias: {
-      "amber-notes-infrastructure-util$": path.resolve(__dirname, "./src/infrastructure/util/index.js"),
+      "amber-notes-infrastructure-util$": path.resolve(__dirname, "./src/infrastructure/util/index.web.js"),
     }
   },
   plugins: [
