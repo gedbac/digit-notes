@@ -1,0 +1,18 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Amber Notes Tests</title>
+  <link href="./css/mocha.css" rel="stylesheet" />
+</head>
+<body>
+  <div id="mocha"></div>
+  <script src="./js/mocha.js"></script>
+  <script src="./js/chai.js"></script>
+  <script>mocha.setup('bdd')</script>
+  <script src="./amber-notes-infrastructure.spec.js"></script>
+  <script>
+    mocha.checkLeaks();
+    mocha.run();
+  </script>
+</body>
+</html>
