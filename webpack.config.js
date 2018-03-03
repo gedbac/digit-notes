@@ -19,7 +19,9 @@ var nodeConfig = {
   resolve: {
     extensions: [ ".node.js", ".js" ],
     alias: {
-      "amber-notes-infrastructure-util$": path.resolve(__dirname, "./src/infrastructure/util/index.node.js")
+      "amber-notes-infrastructure-util$": path.resolve(__dirname, "./src/infrastructure/util/index.node.js"),
+      "amber-notes-infrastructure-model$": path.resolve(__dirname, "./src/infrastructure/model/index.js"),
+      "amber-notes-infrastructure-repositories$": path.resolve(__dirname, "./src/infrastructure/repositories/index.js")
     }
   },
   plugins: [
@@ -48,6 +50,8 @@ var webConfig = {
     extensions: [ ".web.js", ".js" ],
     alias: {
       "amber-notes-infrastructure-util$": path.resolve(__dirname, "./src/infrastructure/util/index.web.js"),
+      "amber-notes-infrastructure-model$": path.resolve(__dirname, "./src/infrastructure/model/index.js"),
+      "amber-notes-infrastructure-repositories$": path.resolve(__dirname, "./src/infrastructure/repositories/index.js")
     }
   },
   plugins: [
