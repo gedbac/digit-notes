@@ -1,0 +1,1 @@
+export { default as OutlineDocumentFactory } from "./outline-document-factory";
