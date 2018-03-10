@@ -1,0 +1,11 @@
+languahe: node_js
+node_js:
+  - "8"
+install:
+  - yarn install
+script:
+  - yarn run build
+cache:
+  yarn: true
+  directories:
+    - "node_modules"

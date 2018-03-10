@@ -1,6 +1,7 @@
 # Amber Notes
 
 [![devDependency Status](https://david-dm.org/gedbac/amber-notes-prototype/dev-status.svg)](https://david-dm.org/gedbac/amber-notes-prototype#info=devDependencies)
+[![Build Status](https://secure.travis-ci.org/gedbac/amber-notes-prototype.svg)](http://travis-ci.org/gedbac/amber-notes-prototype)
 
 A tool which helps manage daily routines easier.
 
