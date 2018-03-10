@@ -1,6 +1,6 @@
 import { expect } from "chai";
-import { Event, InMemoryEventStream } from "amber-notes-infrastructure-events";
-import { EventStreamEncryptor, EventStreamEncryptorOptions } from "amber-notes-infrastructure-cryptography";
+import { Event, InMemoryEventStream } from "infrastructure-events";
+import { EventStreamEncryptor, EventStreamEncryptorOptions } from "infrastructure-cryptography";
 
 class FooEvent extends Event {
 

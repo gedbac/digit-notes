@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { InMemoryEventStream, InMemoryEventStore } from "amber-notes-infrastructure-events";
+import { InMemoryEventStream, InMemoryEventStore } from "infrastructure-events";
 
 describe("In Memory Event Store", () => {
 

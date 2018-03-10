@@ -1,6 +1,6 @@
 import { expect } from "chai";
-import { writeFile, deleteFile } from "amber-notes-infrastructure-util";
-import { FileEventStore } from "amber-notes-infrastructure-events";
+import { writeFile, deleteFile } from "infrastructure-util";
+import { FileEventStore } from "infrastructure-events";
 
 describe("File Event Store", () => {
 

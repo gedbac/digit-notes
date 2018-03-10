@@ -17,8 +17,8 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Repository } from "amber-notes-infrastructure-repositories";
-import { OutlineDocument } from "amber-notes-outlines-model";
+import { Repository } from "infrastructure-repositories";
+import { OutlineDocument } from "outlines-model";
 
 export default class OutlineDocumentRepository extends Repository {
 

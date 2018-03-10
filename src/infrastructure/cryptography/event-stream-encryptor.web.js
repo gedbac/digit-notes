@@ -17,7 +17,7 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Event, EventStream } from "amber-notes-infrastructure-events";
+import { Event, EventStream } from "infrastructure-events";
 
 export default class EventStreamEncryptor extends EventStream {
 

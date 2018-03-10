@@ -17,7 +17,7 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { EventSourcedEntity } from "amber-notes-infrastructure-model";
+import { EventSourcedEntity } from "infrastructure-model";
 import {
   OutlineAdded,
   OutlineRemoved,
@@ -27,7 +27,7 @@ import {
   OutlineIncompleted,
   OutlineTagAdded,
   OutlineTagRemoved
-} from "amber-notes-outlines-events";
+} from "outlines-events";
 
 export default class Outline extends EventSourcedEntity {
 

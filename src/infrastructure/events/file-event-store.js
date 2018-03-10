@@ -18,7 +18,7 @@
  */
 
 import * as path from "path";
-import { fileExists, deleteFile } from "amber-notes-infrastructure-util";
+import { fileExists, deleteFile } from "infrastructure-util";
 import EventStore from "./event-store";
 import FileEventStream from "./file-event-stream";
 

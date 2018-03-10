@@ -18,7 +18,7 @@
  */
 
 import AggregateRoot from "./aggregate-root";
-import { Event } from "amber-notes-infrastructure-events";
+import { Event } from "infrastructure-events";
 
 export default class EventSourcedAggregate extends AggregateRoot {
 

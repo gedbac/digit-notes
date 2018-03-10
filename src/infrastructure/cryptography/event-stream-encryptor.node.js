@@ -18,7 +18,7 @@
  */
 
 import crypto from "crypto";
-import { Event, EventStream } from "amber-notes-infrastructure-events";
+import { Event, EventStream } from "infrastructure-events";
 
 export default class EventStreamEncryptor extends EventStream {
 

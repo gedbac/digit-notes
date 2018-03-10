@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { Options } from "amber-notes-infrastructure-util";
+import { Options } from "infrastructure-util";
 
 class Foo {
 

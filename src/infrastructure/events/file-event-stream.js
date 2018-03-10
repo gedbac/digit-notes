@@ -19,7 +19,7 @@
 
 import * as os from "os";
 import * as path from "path";
-import { directoryExists, createDirectory, fileExists, readFile, writeFile } from "amber-notes-infrastructure-util";
+import { directoryExists, createDirectory, fileExists, readFile, writeFile } from "infrastructure-util";
 import Event from "./event";
 import EventStream from "./event-stream";
 

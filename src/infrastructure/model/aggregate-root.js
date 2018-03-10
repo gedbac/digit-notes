@@ -18,7 +18,7 @@
  */
 
 import Entity from "./entity";
-import { timestamp } from "amber-notes-infrastructure-util";
+import { timestamp } from "infrastructure-util";
 
 export default class AggregateRoot extends Entity {
 

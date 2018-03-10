@@ -1,6 +1,6 @@
 import { expect } from "chai";
-import { fileExists, writeFile, deleteFile } from "amber-notes-infrastructure-util";
-import { Event, FileEventStream } from "amber-notes-infrastructure-events";
+import { fileExists, writeFile, deleteFile } from "infrastructure-util";
+import { Event, FileEventStream } from "infrastructure-events";
 
 class FooEvent extends Event {
 

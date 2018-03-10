@@ -17,7 +17,7 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Event } from "amber-notes-infrastructure-events";
+import { Event } from "infrastructure-events";
 
 export default class OutlineDocumentEvent extends Event {
 

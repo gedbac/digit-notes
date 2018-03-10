@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { ConsoleLoggerFactory, LogLevels } from "amber-notes-infrastructure-logging";
+import { ConsoleLoggerFactory, LogLevels } from "infrastructure-logging";
 
 describe("Console Logger Factory", () => {
 

@@ -17,13 +17,13 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { EventSourcedAggregate } from "amber-notes-infrastructure-model";
+import { EventSourcedAggregate } from "infrastructure-model";
 import {
   OutlineDocumentTitleChanged,
   OutlineDocumentDeleted,
   OutlineAdded,
   OutlineRemoved
-} from "amber-notes-outlines-events";
+} from "outlines-events";
 import Outline from "./outline";
 
 export default class OutlineDocument extends EventSourcedAggregate {

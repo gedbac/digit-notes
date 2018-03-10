@@ -17,9 +17,9 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { uuid } from "amber-notes-infrastructure-util";
-import { OutlineDocument } from "amber-notes-outlines-model";
-import { OutlineDocumentCreated } from "amber-notes-outlines-events";
+import { uuid } from "infrastructure-util";
+import { OutlineDocument } from "outlines-model";
+import { OutlineDocumentCreated } from "outlines-events";
 
 export default class OutlineDocumentFactory {
 

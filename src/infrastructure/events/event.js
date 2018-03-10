@@ -17,7 +17,7 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { timestamp, uuid } from "amber-notes-infrastructure-util";
+import { timestamp, uuid } from "infrastructure-util";
 
 export default class Event {
 

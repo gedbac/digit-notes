@@ -1,10 +1,10 @@
 import { expect } from "chai";
-import { fileExists, writeFile } from "amber-notes-infrastructure-util";
-import { FileEventStore } from "amber-notes-infrastructure-events";
-import { OutlineDocument } from "amber-notes-outlines-model";
-import { OutlineDocumentFactory } from "amber-notes-outlines-factories";
-import { OutlineDocumentRepository } from "amber-notes-outlines-repositories";
-import { OutlineDocumentCreated, OutlineDocumentTitleChanged } from "amber-notes-outlines-events";
+import { fileExists, writeFile } from "infrastructure-util";
+import { FileEventStore } from "infrastructure-events";
+import { OutlineDocument } from "outlines-model";
+import { OutlineDocumentFactory } from "outlines-factories";
+import { OutlineDocumentRepository } from "outlines-repositories";
+import { OutlineDocumentCreated, OutlineDocumentTitleChanged } from "outlines-events";
 
 describe("Outline Document Repository", () => {
 
