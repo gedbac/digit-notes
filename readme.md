@@ -1,5 +1,7 @@
 # Amber Notes
 
+[![devDependency Status](https://david-dm.org/gedbac/amber-notes-prototype/dev-status.svg)](https://david-dm.org/gedbac/amber-notes-prototype#info=devDependencies)
+
 A tool which helps manage daily routines easier.
 
 ## Getting Started
