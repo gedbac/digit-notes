@@ -6,9 +6,6 @@ addons:
   chrome: stable
 install:
   - yarn install
-before_script:
-  - export chrome=google-chrome-stable
-  - export chromium=google-chrome-stable
 script:
   - yarn run build
   - yarn run spec-node
