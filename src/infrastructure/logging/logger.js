@@ -22,7 +22,7 @@ import LogLevel from "./log-levels";
 export default class Logger {
 
   constructor(props) {
-    this._name = null;
+    this._name = "Default";
     if (props && "name" in props) {
       this._name = props.name;
     }

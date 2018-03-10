@@ -28,32 +28,51 @@ export default class ConsoleLogger extends Logger {
 
   logDebug(message) {
     if (this.isEnabled(LogLevels.Debug)) {
-      console.log(message);
+      console.log(this._formatMessage(LogLevels.Debug, message));
     }
   }
 
   logInformation(message) {
     if (this.isEnabled(LogLevels.Information)) {
-      console.info(message);
+      console.info(this._formatMessage(LogLevels.Information, message));
     }
   }
 
   logWarning(message) {
     if (this.isEnabled(LogLevels.Warning)) {
-      console.warn(message);
+      console.warn(this._formatMessage(LogLevels.Warning, message));
     }
   }
 
   logError(message) {
     if (this.isEnabled(LogLevels.Error)) {
-      console.error(message);
+      console.error(this._formatMessage(LogLevels.Error, message));
     }
   }
 
   logCritical(message) {
     if (this.isEnabled(LogLevels.Critical)) {
-      console.error(message);
+      console.error(this._formatMessage(LogLevels.Critical, message));
     }
+  }
+
+  _formatMessage(logLevel, message) {
+    return `${new Date().toISOString()} ${this.name} ${this._formatLogLevel(logLevel)}: ${message}`;
+  }
+
+  _formatLogLevel(logLevel) {
+    if (logLevel === LogLevels.Debug) {
+      return "DEBUG";
+    } else if (logLevel === LogLevels.Information) {
+      return "INFO";
+    } else if (logLevel === LogLevels.Warning) {
+      return "WARN";
+    } else if (logLevel === LogLevels.Error) {
+      return "ERROR";
+    } else if (logLevel === LogLevels.Critical) {
+      return "CRITICAL";
+    }
+    return null;
   }
 
 }
