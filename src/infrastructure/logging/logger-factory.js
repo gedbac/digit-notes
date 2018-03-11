@@ -33,6 +33,23 @@ export default class LoggerFactory {
   }
 
   createLogger(name) {
+    if (!name) {
+      throw {
+        message: "Logger's name is not set"
+      };
+    }
+    if (typeof name === "function") {
+      name = name.name;
+    }
+    if (typeof name !== "string") {
+      throw {
+        message: "Logger's name is not a string"
+      };
+    }
+    return this._onCreateLogger(name);
+  }
+
+  _onCreateLogger(name) {
     return new Logger({
       name: name,
       logLevel: this.logLevel
