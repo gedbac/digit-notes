@@ -25,6 +25,10 @@ export default class Logger {
     this._name = null;
     if (props && "name" in props) {
       this._name = props.name;
+    } else {
+      throw {
+        message: "Logger's name is null"
+      };
     }
     this._logLevel = LogLevel.None;
     if (props && "logLevel" in props) {

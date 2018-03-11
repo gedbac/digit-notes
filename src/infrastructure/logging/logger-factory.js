@@ -35,7 +35,7 @@ export default class LoggerFactory {
   createLogger(name) {
     if (!name) {
       throw {
-        message: "Logger's name is not set"
+        message: "Logger's name is null"
       };
     }
     if (typeof name === "function") {

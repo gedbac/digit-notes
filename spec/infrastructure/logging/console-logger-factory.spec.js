@@ -1,9 +1,7 @@
 import { expect } from "chai";
 import { ConsoleLoggerFactory, LogLevels } from "infrastructure-logging";
 
-class Foo {
-
-}
+class Foo {}
 
 describe("Console Logger Factory", () => {
 
