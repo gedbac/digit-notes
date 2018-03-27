@@ -1,8 +1,9 @@
 {
   "extends": [ "eslint:recommended", "plugin:react/recommended" ],
-  "envs": [
-    "node", "browser"
-  ],
+  "envs": {
+    "node": true,
+    "browser": true
+  },
   "parserOptions": {
     "ecmaVersion": 8,
     "sourceType": "module",

@@ -13,12 +13,12 @@ To start, run:
 
 To build, run:
 
-    yarn run build
+    yarn build
 
 To run specs, run:
 
-    yarn run spec-node
-    yarn run spec-web
+    yarn spec-node
+    yarn spec-web
 
 ## License
 

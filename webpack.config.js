@@ -7,12 +7,12 @@ const DefinePlugin = webpack.DefinePlugin;
 
 var nodeConfig = {
   target: "node",
-  mode: "development",
   entry: [
     path.resolve(__dirname, "./spec/infrastructure/logging/index.js"),
     path.resolve(__dirname, "./spec/infrastructure/util/index.node.js"),
     path.resolve(__dirname, "./spec/infrastructure/events/index.node.js"),
     path.resolve(__dirname, "./spec/infrastructure/cryptography/index.js"),
+    path.resolve(__dirname, "./spec/text-search/index.js"),
     path.resolve(__dirname, "./spec/outlines/model/index.js"),
     path.resolve(__dirname, "./spec/outlines/repositories/index.node.js")
   ],
@@ -30,6 +30,7 @@ var nodeConfig = {
       "infrastructure-repositories$": path.resolve(__dirname, "./src/infrastructure/repositories/index.js"),
       "infrastructure-events$": path.resolve(__dirname, "./src/infrastructure/events/index.node.js"),
       "infrastructure-cryptography$": path.resolve(__dirname, "./src/infrastructure/cryptography/index.js"),
+      "text-search$": path.resolve(__dirname, "./src/text-search/index.js"),
       "outlines-events$": path.resolve(__dirname, "./src/outlines/events/index.js"),
       "outlines-model$": path.resolve(__dirname, "./src/outlines/model/index.js"),
       "outlines-factories$": path.resolve(__dirname, "./src/outlines/factories/index.js"),
@@ -47,12 +48,12 @@ var nodeConfig = {
 
 var webConfig = {
   target: "web",
-  mode: "development",
   entry: [
     path.resolve(__dirname, "./spec/infrastructure/logging/index.js"),
     path.resolve(__dirname, "./spec/infrastructure/util/index.web.js"),
     path.resolve(__dirname, "./spec/infrastructure/events/index.web.js"),
     path.resolve(__dirname, "./spec/infrastructure/cryptography/index.js"),
+    path.resolve(__dirname, "./spec/text-search/index.js"),
     path.resolve(__dirname, "./spec/outlines/model/index.js"),
     path.resolve(__dirname, "./spec/outlines/repositories/index.web.js")
   ],
@@ -72,6 +73,7 @@ var webConfig = {
       "infrastructure-repositories$": path.resolve(__dirname, "./src/infrastructure/repositories/index.js"),
       "infrastructure-events$": path.resolve(__dirname, "./src/infrastructure/events/index.web.js"),
       "infrastructure-cryptography$": path.resolve(__dirname, "./src/infrastructure/cryptography/index.js"),
+      "text-search$": path.resolve(__dirname, "./src/text-search/index.js"),
       "outlines-events$": path.resolve(__dirname, "./src/outlines/events/index.js"),
       "outlines-model$": path.resolve(__dirname, "./src/outlines/model/index.js"),
       "outlines-factories$": path.resolve(__dirname, "./src/outlines/factories/index.js"),
