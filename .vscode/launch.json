@@ -14,23 +14,31 @@
         "--colors",
         "${workspaceFolder}/dist/node/amber-notes-infrastructure.spec.js"
       ],
-      "cwd": "${workspaceRoot}",
+      "cwd": "${workspaceRoot}/dist/node",
       "runtimeArgs": [
         "--nolazy"
       ],
       "sourceMaps": true,
       "smartStep": true,
       "outFiles": [ "${workspaceFolder}/dist/node/**/*.js" ],
-      "internalConsoleOptions": "openOnSessionStart"
+      "internalConsoleOptions": "openOnSessionStart",
+      "sourceMapPathOverrides": {
+        "webpack:///./src/*": "${workspaceRoot}/src/*",
+        "webpack:///./spec/*": "${workspaceRoot}/spec/*"
+      }
     },
     {
       "type": "chrome",
       "request": "launch",
       "name": "Debug Web",
       "file": "${workspaceFolder}/dist/web/spec-runner.html",
-      "webRoot": "${workspaceFolder}",
+      "webRoot": "${workspaceFolder}/dist/web",
       "sourceMaps": true,
-      "breakOnLoad": true
+      "breakOnLoad": true,
+      "sourceMapPathOverrides": {
+        "webpack:///./src/*": "${workspaceRoot}/src/*",
+        "webpack:///./spec/*": "${workspaceRoot}/spec/*"
+      }
     }
   ]
 }

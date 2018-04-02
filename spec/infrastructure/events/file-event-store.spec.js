@@ -5,12 +5,12 @@ import { FileEventStore } from "infrastructure-events";
 describe("File Event Store", () => {
 
   after(async () => {
-    await deleteFile("./dist/node/streams/foo4");
+    await deleteFile("./streams/foo4");
   });
 
   it("should create stream", async () => {
     var eventStore = new FileEventStore({
-      path: "./dist/node/streams"
+      path: "./streams"
     });
     await eventStore.open();
     var stream = await eventStore.createStream("foo3");
@@ -20,9 +20,9 @@ describe("File Event Store", () => {
   });
 
   it("should get stream", async () => {
-    await writeFile("./dist/node/streams/foo4", { flag: "w", encoding: "utf8" }, null);
+    await writeFile("./streams/foo4", { flag: "w", encoding: "utf8" }, null);
     var eventStore = new FileEventStore({
-      path: "./dist/node/streams"
+      path: "./streams"
     });
     await eventStore.open();
     var stream = await eventStore.getStream("foo4");
@@ -31,9 +31,9 @@ describe("File Event Store", () => {
   });
 
   it("should delete stream", async () => {
-    await writeFile("./dist/node/streams/foo5", { flag: "w", encoding: "utf8" }, null);
+    await writeFile("./streams/foo5", { flag: "w", encoding: "utf8" }, null);
     var eventStore = new FileEventStore({
-      path: "./dist/node/streams"
+      path: "./streams"
     });
     await eventStore.open();
     await eventStore.deleteStream("foo5");

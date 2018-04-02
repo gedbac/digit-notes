@@ -13,15 +13,15 @@ class FooEvent extends Event {
 describe("File Event Stream", () => {
 
   after(async () => {
-    await deleteFile("./dist/node/streams/foo");
-    await deleteFile("./dist/node/streams/foo1");
-    await deleteFile("./dist/node/streams/foo2");
+    await deleteFile("./streams/foo");
+    await deleteFile("./streams/foo1");
+    await deleteFile("./streams/foo2");
   });
 
   it("should write to file stream", async () => {
     var stream = new FileEventStream({
       name: "foo",
-      path: "./dist/node/streams",
+      path: "./streams",
       supportedEventTypes: [[ "FooEvent", FooEvent ]]
     });
     await stream.open();
@@ -29,15 +29,15 @@ describe("File Event Stream", () => {
     await stream.write(new FooEvent({ id: 2, name: "FooEvent", timestamp: 1002 }));
     await stream.write(new FooEvent({ id: 3, name: "FooEvent", timestamp: 1003 }));
     await stream.close();
-    expect(await fileExists("./dist/node/streams/foo")).to.be.true;
+    expect(await fileExists("./streams/foo")).to.be.true;
   });
 
   it("should read event from file stream", async () => {
-    await writeFile("./dist/node/streams/foo1", { flag: "w", encoding: "utf8" },
+    await writeFile("./streams/foo1", { flag: "w", encoding: "utf8" },
       "{\"id\":1,\"name\":\"FooEvent\",\"timestamp\":1001}");
     var stream = new FileEventStream({
       name: "foo1",
-      path: "./dist/node/streams",
+      path: "./streams",
       supportedEventTypes: new Map([ [ 'FooEvent', FooEvent ] ])
     });
     await stream.open();
@@ -49,7 +49,7 @@ describe("File Event Stream", () => {
   it("should iterate over stream", async () => {
     var stream = new FileEventStream({
       name: "foo2",
-      path: "./dist/node/streams",
+      path: "./streams",
       supportedEventTypes: [[ "FooEvent", FooEvent ]]
     });
     await stream.open();

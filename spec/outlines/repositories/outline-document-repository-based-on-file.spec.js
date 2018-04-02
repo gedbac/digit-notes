@@ -12,7 +12,7 @@ describe("Outline Document Repository", () => {
     var factory = new OutlineDocumentFactory();
     var document = factory.create();
     var eventStore = new FileEventStore({
-      path: "./dist/streams",
+      path: "./streams",
       supportedEventTypes: new Map([[ "OutlineDocumentCreated", OutlineDocumentCreated ]])
     });
     await eventStore.open();
@@ -22,13 +22,13 @@ describe("Outline Document Repository", () => {
     await repository.save(document);
     await eventStore.close();
     var streamName = `${OutlineDocument.name}::${document.id}`;
-    expect(await fileExists(`./dist/streams/${streamName}`)).to.be.true;
+    expect(await fileExists(`./streams/${streamName}`)).to.be.true;
   });
 
   it("should read outline document", async () => {
     var id = "ba7d6c18-26a6-4492-85b7-a6ac02659f7e";
     var streamName = `${OutlineDocument.name}::${id}`;
-    await writeFile(`./dist/streams/${streamName}`, { flag: "w", encoding: "utf8" },
+    await writeFile(`./streams/${streamName}`, { flag: "w", encoding: "utf8" },
       "{" +
       "\"id\":\"52d88c34-84cf-406a-8f31-185c819f6b0f\"," +
       "\"name\":\"OutlineDocumentCreated\"," +
@@ -36,7 +36,7 @@ describe("Outline Document Repository", () => {
       "\"outlineDocumentId\":\"ba7d6c18-26a6-4492-85b7-a6ac02659f7e\"" +
       "}");
     var eventStore = new FileEventStore({
-      path: "./dist/streams",
+      path: "./streams",
       supportedEventTypes: new Map([
         [ "OutlineDocumentCreated", OutlineDocumentCreated ]
       ])
@@ -54,7 +54,7 @@ describe("Outline Document Repository", () => {
   it("should update outline document", async () => {
     var id = "995c6eb4-a049-4a04-8201-91a0a146be4a";
     var streamName = `${OutlineDocument.name}::${id}`;
-    await writeFile(`./dist/streams/${streamName}`, { flag: "w", encoding: "utf8" },
+    await writeFile(`./streams/${streamName}`, { flag: "w", encoding: "utf8" },
       "{" +
       "\"id\":\"52d88c34-84cf-406a-8f31-185c819f6b0f\"," +
       "\"name\":\"OutlineDocumentCreated\"," +
@@ -62,7 +62,7 @@ describe("Outline Document Repository", () => {
       "\"outlineDocumentId\":\"995c6eb4-a049-4a04-8201-91a0a146be4a\"" +
       "}");
     var eventStore = new FileEventStore({
-      path: "./dist/streams",
+      path: "./streams",
       supportedEventTypes: new Map([
         [ "OutlineDocumentCreated", OutlineDocumentCreated ],
         [ "OutlineDocumentTitleChanged", OutlineDocumentTitleChanged ]
@@ -83,7 +83,7 @@ describe("Outline Document Repository", () => {
   it("should delete outline document", async () => {
     var id = "52c049de-6991-4e30-82b7-1fd353685d3f";
     var streamName = `${OutlineDocument.name}::${id}`;
-    await writeFile(`./dist/streams/${streamName}`, { flag: "w", encoding: "utf8" },
+    await writeFile(`./streams/${streamName}`, { flag: "w", encoding: "utf8" },
       "{" +
       "\"id\":\"52d88c34-84cf-406a-8f31-185c819f6b0f\"," +
       "\"name\":\"OutlineDocumentCreated\"," +
@@ -91,7 +91,7 @@ describe("Outline Document Repository", () => {
       "\"outlineDocumentId\":\"52c049de-6991-4e30-82b7-1fd353685d3f\"" +
       "}");
     var eventStore = new FileEventStore({
-      path: "./dist/streams"
+      path: "./streams"
     });
     await eventStore.open();
     var repository = new OutlineDocumentRepository({
@@ -99,7 +99,7 @@ describe("Outline Document Repository", () => {
     });
     await repository.delete(id);
     await eventStore.close();
-    expect(await fileExists(`./dist/streams/${streamName}`)).to.be.false;
+    expect(await fileExists(`./dist/${streamName}`)).to.be.false;
   });
 
 });
