@@ -1,12 +1,12 @@
 import { expect } from "chai";
-import { TextIndex, TextAnalyzer } from "text-search";
+import { TextIndex, WhitespaceTextAnalyzer } from "infrastructure-text-search";
 
 describe("Text Index", () => {
 
   it("should create index", () => {
     var textIndex = new TextIndex({
       propertyName: "text",
-      analyzer: new TextAnalyzer()
+      analyzer: new WhitespaceTextAnalyzer()
     });
     var doc = {
       text: "black rabbit"

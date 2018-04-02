@@ -17,7 +17,7 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-export default class TextAnalayzer {
+export default class WhitespaceTextAnalyzer {
 
   constructor(props) {}
 
@@ -39,7 +39,7 @@ export default class TextAnalayzer {
       if (substrings && substrings.length > 0) {
         for (var substring of substrings) {
           if (!terms.includes(substring)) {
-            terms.push(substring);
+            terms.push(substring.toLowerCase());
           }
         }
       }

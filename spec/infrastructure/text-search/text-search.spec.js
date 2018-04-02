@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { TextSearch, TextAnalyzer } from "text-search";
+import { TextSearch, WhitespaceTextAnalyzer } from "infrastructure-text-search";
 import { ConsoleLoggerFactory, LogLevels } from "infrastructure-logging";
 
 describe("Text Search", () => {
@@ -34,7 +34,7 @@ describe("Text Search", () => {
 
     textSearch.createIndex("myterms", {
       propertyName: "text",
-      analyzer: new TextAnalyzer(),
+      analyzer: new WhitespaceTextAnalyzer(),
       map: doc => doc.id
     });
 
@@ -51,7 +51,7 @@ describe("Text Search", () => {
     expect(result.hits.length).to.be.equal(1);
 
     console.log(`took: ${result.took}ms`); // 53ms-58ms
-  }).timeout(20000);
+  }).timeout(30000);
 
 });
 

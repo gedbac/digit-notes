@@ -85,6 +85,7 @@ export default class TextIndex {
 
   find(term) {
     if (term) {
+      term = term.toLowerCase();
       if (this._data.has(term)) {
         return this._data.get(term);
       }

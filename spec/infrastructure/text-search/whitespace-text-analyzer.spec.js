@@ -1,11 +1,11 @@
 import { expect } from "chai";
-import { TextAnalyzer } from "text-search";
+import { WhitespaceTextAnalyzer } from "infrastructure-text-search";
 
-describe("Text Analyzer", () => {
+describe("Whitespace Text Analyzer", () => {
 
   it("should analyze text", () => {
     var value = "black rabbit rabbit";
-    var textAnalyzer = new TextAnalyzer();
+    var textAnalyzer = new WhitespaceTextAnalyzer();
     var terms = textAnalyzer.analyze(value);
     expect(terms.length).is.equal(2);
     expect(terms[0]).to.be.equal("black");
@@ -14,7 +14,7 @@ describe("Text Analyzer", () => {
 
   it("should analyze array", () => {
     var value = [ "black", "rabbit", "rabbit" ];
-    var textAnalyzer = new TextAnalyzer();
+    var textAnalyzer = new WhitespaceTextAnalyzer();
     var terms = textAnalyzer.analyze(value);
     expect(terms.length).is.equal(2);
     expect(terms[0]).to.be.equal("black");
