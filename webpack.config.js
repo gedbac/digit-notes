@@ -17,7 +17,7 @@ var nodeConfig = {
     path.resolve(__dirname, "./spec/outlines/repositories/index.node.js")
   ],
   output: {
-    path: path.resolve(__dirname, "./dist/node"),
+    path: path.resolve(__dirname, "./dist/spec/node"),
     filename: "amber-notes-infrastructure.spec.js"
   },
   externals: [ nodeExternals() ],
@@ -58,7 +58,7 @@ var webConfig = {
     path.resolve(__dirname, "./spec/outlines/repositories/index.web.js")
   ],
   output: {
-    path: path.resolve(__dirname, "./dist/web"),
+    path: path.resolve(__dirname, "./dist/spec/web"),
     filename: "amber-notes-infrastructure.spec.js"
   },
   externals: {
@@ -87,16 +87,16 @@ var webConfig = {
     new CleanupPlugin(),
     new CopyPlugin([{
       from: path.resolve(__dirname, "./node_modules/mocha/mocha.css"),
-      to: path.resolve(__dirname, "./dist/web/css")
+      to: path.resolve(__dirname, "./dist/spec/web/css")
     }, {
       from: path.resolve(__dirname, "./node_modules/mocha/mocha.js"),
-      to: path.resolve(__dirname, "./dist/web/js")
+      to: path.resolve(__dirname, "./dist/spec/web/js")
     }, {
       from: path.resolve(__dirname, "./node_modules/chai/chai.js"),
-      to: path.resolve(__dirname, "./dist/web/js")
+      to: path.resolve(__dirname, "./dist/spec/web/js")
     }, {
       from: path.resolve(__dirname, "./spec/spec-runner.html"),
-      to: path.resolve(__dirname, "./dist/web")
+      to: path.resolve(__dirname, "./dist/spec/web")
     }])
   ],
   devtool: "source-map"

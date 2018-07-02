@@ -19,8 +19,8 @@
   },
   "scripts": {
     "build": "./node_modules/.bin/webpack --config webpack.config.js --mode development",
-    "spec-node": "cd ./dist/node && ../../node_modules/mocha/bin/_mocha ./amber-notes-infrastructure.spec.js",
-    "spec-web": "cd ./dist/web && ../../node_modules/mocha-headless-chrome/bin/start -f ./spec-runner.html -a no-sandbox"
+    "spec-node": "cd ./dist/spec/node && ../../../node_modules/mocha/bin/_mocha ./amber-notes-infrastructure.spec.js",
+    "spec-web": "cd ./dist/spec/web && ../../../node_modules/mocha-headless-chrome/bin/start -f ./spec-runner.html -a no-sandbox"
   },
   "devDependencies": {
     "chai": "^4.1.2",
