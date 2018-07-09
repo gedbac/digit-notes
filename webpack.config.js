@@ -4,8 +4,9 @@ const CopyPlugin = require("copy-webpack-plugin");
 const CleanupPlugin = require("webpack-cleanup-plugin");
 const nodeExternals = require("webpack-node-externals");
 const DefinePlugin = webpack.DefinePlugin;
+const HtmlWebPackPlugin = require("html-webpack-plugin");
 
-var nodeConfig = {
+var specNodeConfig = {
   target: "node",
   entry: [
     path.resolve(__dirname, "./spec/infrastructure/logging/index.js"),
@@ -46,7 +47,7 @@ var nodeConfig = {
   devtool: "source-map"
 };
 
-var webConfig = {
+var specWebConfig = {
   target: "web",
   entry: [
     path.resolve(__dirname, "./spec/infrastructure/logging/index.js"),
@@ -102,4 +103,46 @@ var webConfig = {
   devtool: "source-map"
 };
 
-module.exports = [ nodeConfig, webConfig ];
+var webappConfig = {
+  target: "web",
+  entry: [
+    path.resolve(__dirname, "./src/webapp/public/js/index.js")
+  ],
+  output: {
+    path: path.resolve(__dirname, "./dist/webapp/public/js"),
+    filename: "amber-notes.js"
+  },
+  resolve: {
+    extensions: [ ".js", ".scss" ]
+  },
+  module: {
+    rules: [{
+      test: /\.js$/,
+      exclude: /node_modules/,
+      use: {
+        loader: "babel-loader"
+      }
+    }, {
+      test: /\.scss$/,
+      use: [
+        "style-loader",
+        "css-loader",
+        "sass-loader"
+      ]
+    }]
+  },
+  plugins: [
+    new HtmlWebPackPlugin({
+      template: path.resolve(__dirname, "./src/webapp/public/index.html"),
+      filename: path.resolve(__dirname, "./dist/webapp/public/index.html")
+    }),
+    new CleanupPlugin()
+  ],
+  devtool: "source-map"
+};
+
+module.exports = [
+  specNodeConfig,
+  specWebConfig,
+  webappConfig
+];
