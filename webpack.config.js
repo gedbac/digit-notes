@@ -5,6 +5,7 @@ const CleanupPlugin = require("webpack-cleanup-plugin");
 const nodeExternals = require("webpack-node-externals");
 const DefinePlugin = webpack.DefinePlugin;
 const HtmlWebPackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 var specNodeConfig = {
   target: "node",
@@ -109,8 +110,9 @@ var webappConfig = {
     path.resolve(__dirname, "./src/webapp/public/js/index.js")
   ],
   output: {
-    path: path.resolve(__dirname, "./dist/webapp/public/js"),
-    filename: "amber-notes.js"
+    path: path.resolve(__dirname, "./dist/webapp/public"),
+    filename: "js/bundle.js",
+    publicPath: ""
   },
   resolve: {
     extensions: [ ".js", ".scss" ]
@@ -124,14 +126,20 @@ var webappConfig = {
       }
     }, {
       test: /\.scss$/,
+      exclude: /node_modules/,
       use: [
-        "style-loader",
+        {
+          loader: MiniCssExtractPlugin.loader
+        },
         "css-loader",
         "sass-loader"
       ]
     }]
   },
   plugins: [
+    new MiniCssExtractPlugin({
+      filename: "css/style.css"
+    }),
     new HtmlWebPackPlugin({
       template: path.resolve(__dirname, "./src/webapp/public/index.html"),
       filename: path.resolve(__dirname, "./dist/webapp/public/index.html")
