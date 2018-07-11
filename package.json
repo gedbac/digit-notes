@@ -18,7 +18,10 @@
     "node": ">=8.9.0"
   },
   "scripts": {
-    "build": "./node_modules/.bin/webpack --config webpack.config.js --mode development",
+    "dev": "./node_modules/.bin/webpack-dev-server --config webapp.config.js --mode development",
+    "build": "yarn build-spec && yarn build-webapp",
+    "build-spec": "./node_modules/.bin/webpack --config spec.config.js --mode development",
+    "build-webapp": "./node_modules/.bin/webpack --config webapp.config.js --mode development",
     "spec-node": "cd ./dist/spec/node && ../../../node_modules/mocha/bin/_mocha ./amber-notes-infrastructure.spec.js",
     "spec-web": "cd ./dist/spec/web && ../../../node_modules/mocha-headless-chrome/bin/start -f ./spec-runner.html -a no-sandbox"
   },
@@ -37,9 +40,10 @@
     "node-sass": "^4.9.2",
     "sass-loader": "^7.0.3",
     "style-loader": "^0.21.0",
-    "webpack": "^4.14.0",
+    "webpack": "^4.16.0",
     "webpack-cleanup-plugin": "^0.5.1",
     "webpack-cli": "^3.0.8",
+    "webpack-dev-server": "^3.1.4",
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {

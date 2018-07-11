@@ -20,6 +20,10 @@ To run specs, run:
     yarn spec-node
     yarn spec-web
 
+To start developing, run:
+
+    yarn dev
+
 ## License
 
 This software is distributed under the terms of the Affero General Public License (AGPLv3).
