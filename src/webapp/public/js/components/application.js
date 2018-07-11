@@ -17,9 +17,20 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from "react";
-import ReactDOM from "react-dom";
-import Application from "./components/application";
-import "../css/style.scss";
+import React, { Component } from "react";
 
-ReactDOM.render(<Application />, document.getElementById("container"));
+export default class Application extends Component {
+
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div className="application">
+        _
+      </div>
+    );
+  }
+
+}

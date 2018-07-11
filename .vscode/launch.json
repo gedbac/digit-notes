@@ -2,9 +2,21 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Launch Web App",
+      "url": "http://localhost:9789",
+      "webRoot": "${workspaceFolder}/dist/webapp",
+      "sourceMaps": true,
+      "breakOnLoad": true,
+      "sourceMapPathOverrides": {
+        "webpack:///./src/*": "${workspaceRoot}/src/*"
+      }
+    },
+    {
       "type": "node",
       "request": "launch",
-      "name": "Debug Node",
+      "name": "Launch Spec (Node)",
       "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
       "args": [
         "--ui",
@@ -12,15 +24,15 @@
         "--timeout",
         "999999",
         "--colors",
-        "${workspaceFolder}/dist/node/amber-notes-infrastructure.spec.js"
+        "${workspaceFolder}/dist/spec/node/amber-notes-infrastructure.spec.js"
       ],
-      "cwd": "${workspaceRoot}/dist/node",
+      "cwd": "${workspaceRoot}/dist/spec/node",
       "runtimeArgs": [
         "--nolazy"
       ],
       "sourceMaps": true,
       "smartStep": true,
-      "outFiles": [ "${workspaceFolder}/dist/node/**/*.js" ],
+      "outFiles": [ "${workspaceFolder}/dist/spec/node/**/*.js" ],
       "internalConsoleOptions": "openOnSessionStart",
       "sourceMapPathOverrides": {
         "webpack:///./src/*": "${workspaceRoot}/src/*",
@@ -30,9 +42,9 @@
     {
       "type": "chrome",
       "request": "launch",
-      "name": "Debug Web",
-      "file": "${workspaceFolder}/dist/web/spec-runner.html",
-      "webRoot": "${workspaceFolder}/dist/web",
+      "name": "Launch Spec (Web)",
+      "file": "${workspaceFolder}/dist/spec/web/spec-runner.html",
+      "webRoot": "${workspaceFolder}/dist/spec/web",
       "sourceMaps": true,
       "breakOnLoad": true,
       "sourceMapPathOverrides": {
