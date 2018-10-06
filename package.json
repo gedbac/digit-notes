@@ -26,28 +26,28 @@
     "spec-web": "cd ./dist/spec/web && ../../../node_modules/mocha-headless-chrome/bin/start -f ./spec-runner.html -a no-sandbox"
   },
   "devDependencies": {
-    "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.5",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
-    "chai": "^4.1.2",
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.4",
+    "chai": "^4.2.0",
     "copy-webpack-plugin": "^4.5.2",
     "css-loader": "^1.0.0",
     "html-webpack-plugin": "^3.2.0",
-    "mini-css-extract-plugin": "^0.4.1",
+    "mini-css-extract-plugin": "^0.4.3",
     "mocha": "^5.2.0",
     "mocha-headless-chrome": "^2.0.1",
-    "node-sass": "^4.9.2",
-    "sass-loader": "^7.0.3",
-    "style-loader": "^0.21.0",
-    "webpack": "^4.16.0",
+    "node-sass": "^4.9.3",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.0",
+    "webpack": "^4.20.2",
     "webpack-cleanup-plugin": "^0.5.1",
-    "webpack-cli": "^3.0.8",
-    "webpack-dev-server": "^3.1.4",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.9",
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1"
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2"
   }
 }
