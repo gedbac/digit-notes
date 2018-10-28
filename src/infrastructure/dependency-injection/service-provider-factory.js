@@ -19,11 +19,31 @@
 
 import ServiceDescriptor from "./service-descriptor";
 import ServiceLifetimes from "./service-lifetimes";
+import ServiceProvider from "./service-provider";
 
-export default class ServiceDescriptorCollection {
+export default class ServiceProviderFactory {
 
   constructor() {
     this._serviceDescriptors = new Map();
+  }
+
+  create() {
+    return new ServiceProvider({
+      serviceDescriptors: this._serviceDescriptors
+    });
+  }
+
+  use(configuration) {
+    if (!configuration) {
+      throw {
+        message: "Configuration is null"
+      };
+    }
+    if (configuration && configuration === "function") {
+      configuration(this);
+    } else if ("configure" in configuration) {
+      configuration.configure(this);
+    }
   }
 
   get(name) {
@@ -95,6 +115,7 @@ export default class ServiceDescriptorCollection {
       };
     }
     this._serviceDescriptors.set(serviceName, serviceDescriptor);
+    return this;
   }
 
   addSingleton(name, props) {
@@ -109,7 +130,7 @@ export default class ServiceDescriptorCollection {
     } else if (!props) {
       props = {};
     }
-    this.add(new ServiceDescriptor({
+    return this.add(new ServiceDescriptor({
       name: name,
       lifetime: ServiceLifetimes.Singleton,
       instance: props.instance,
@@ -130,7 +151,7 @@ export default class ServiceDescriptorCollection {
     } else if (!props) {
       props = {};
     }
-    this.add(new ServiceDescriptor({
+    return this.add(new ServiceDescriptor({
       name: name,
       lifetime: ServiceLifetimes.Transient,
       instance: props.instance,
@@ -151,7 +172,7 @@ export default class ServiceDescriptorCollection {
     } else if (!props) {
       props = {};
     }
-    this.add(new ServiceDescriptor({
+    return this.add(new ServiceDescriptor({
       name: name,
       lifetime: ServiceLifetimes.Scoped,
       instance: props.instance,

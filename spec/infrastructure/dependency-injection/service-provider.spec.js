@@ -1,6 +1,5 @@
 import { expect } from "chai";
-import { ServiceDescriptorCollection, ServiceProvider } from "infrastructure-dependency-injection";
-import ServiceDescriptor from "../../../src/infrastructure/dependency-injection/service-descriptor";
+import { ServiceProviderFactory, ServiceDescriptor } from "infrastructure-dependency-injection";
 
 class FooService {
   constructor() {}
@@ -8,41 +7,38 @@ class FooService {
 
 describe("Service Provider", () => {
 
-  var serviceDescriptors = null;
+  var serviceProviderFactory = null;
 
   beforeEach(() => {
-    serviceDescriptors = new ServiceDescriptorCollection();
+    serviceProviderFactory = new ServiceProviderFactory();
   });
 
   afterEach(() => {
-    serviceDescriptors = null;
+    serviceProviderFactory = null;
   });
 
   it("should get singleton service", () => {
-    serviceDescriptors.addSingleton(FooService);
-    var serviceProvider = new ServiceProvider({
-      serviceDescriptors: serviceDescriptors
-    });
+    var serviceProvider = serviceProviderFactory
+      .addSingleton(FooService)
+      .create();
     var service = serviceProvider.getService(FooService);
     expect(service).not.to.be.null;
   });
 
   it("should get singleton service by name", () => {
-    serviceDescriptors.addSingleton("foo", FooService);
-    var serviceProvider = new ServiceProvider({
-      serviceDescriptors: serviceDescriptors
-    });
+    var serviceProvider = serviceProviderFactory
+      .addSingleton("foo", FooService)
+      .create();
     var service = serviceProvider.getService("foo");
     expect(service).not.to.be.null;
   });
 
   it("should get singleton service registered as instance", () => {
-    serviceDescriptors.addSingleton(FooService, {
-      instance: new FooService()
-    });
-    var serviceProvider = new ServiceProvider({
-      serviceDescriptors: serviceDescriptors
-    });
+    var serviceProvider = serviceProviderFactory
+      .addSingleton(FooService, {
+        instance: new FooService()
+      })
+      .create();
     var service1 = serviceProvider.getService(FooService);
     var service2 = serviceProvider.getService(FooService);
     var scope = serviceProvider.createScope();
@@ -56,12 +52,11 @@ describe("Service Provider", () => {
   });
 
   it("should get singleton service registered as factory", () => {
-    serviceDescriptors.addSingleton(FooService, {
-      factory: () => new FooService()
-    });
-    var serviceProvider = new ServiceProvider({
-      serviceDescriptors: serviceDescriptors
-    });
+    var serviceProvider = serviceProviderFactory
+      .addSingleton(FooService, {
+        factory: () => new FooService()
+      })
+      .create();
     var service1 = serviceProvider.getService(FooService);
     var service2 = serviceProvider.getService(FooService);
     var scope = serviceProvider.createScope();
@@ -75,12 +70,11 @@ describe("Service Provider", () => {
   });
 
   it("should get singleton service registered as type", () => {
-    serviceDescriptors.addSingleton(FooService, {
-      type: FooService
-    });
-    var serviceProvider = new ServiceProvider({
-      serviceDescriptors: serviceDescriptors
-    });
+    var serviceProvider = serviceProviderFactory
+      .addSingleton(FooService, {
+        type: FooService
+      })
+      .create();
     var service1 = serviceProvider.getService(FooService);
     var service2 = serviceProvider.getService(FooService);
     var scope = serviceProvider.createScope();
@@ -94,30 +88,27 @@ describe("Service Provider", () => {
   });
 
   it("should get transient service", () => {
-    serviceDescriptors.addTransient(FooService);
-    var serviceProvider = new ServiceProvider({
-      serviceDescriptors: serviceDescriptors
-    });
+    var serviceProvider = serviceProviderFactory
+      .addTransient(FooService)
+      .create();
     var service = serviceProvider.getService(FooService);
     expect(service).not.to.be.null;
   });
 
   it("should get transient service by name", () => {
-    serviceDescriptors.addTransient("foo", FooService);
-    var serviceProvider = new ServiceProvider({
-      serviceDescriptors: serviceDescriptors
-    });
+    var serviceProvider = serviceProviderFactory
+      .addTransient("foo", FooService)
+      .create();
     var service = serviceProvider.getService("foo");
     expect(service).not.to.be.null;
   });
 
   it("should get transient service registered as factory", () => {
-    serviceDescriptors.addTransient(FooService, {
-      factory: () => new FooService()
-    });
-    var serviceProvider = new ServiceProvider({
-      serviceDescriptors: serviceDescriptors
-    });
+    var serviceProvider  = serviceProviderFactory
+      .addTransient(FooService, {
+        factory: () => new FooService()
+      })
+      .create();
     var service1 = serviceProvider.getService(FooService);
     var service2 = serviceProvider.getService(FooService);
     var scope = serviceProvider.createScope();
@@ -131,12 +122,11 @@ describe("Service Provider", () => {
   });
 
   it("should get transient service registered as type", () => {
-    serviceDescriptors.addTransient(FooService, {
-      type: FooService
-    });
-    var serviceProvider = new ServiceProvider({
-      serviceDescriptors: serviceDescriptors
-    });
+    var serviceProvider = serviceProviderFactory
+      .addTransient(FooService, {
+        type: FooService
+      })
+      .create();
     var service1 = serviceProvider.getService(FooService);
     var service2 = serviceProvider.getService(FooService);
     var scope = serviceProvider.createScope();
@@ -150,30 +140,27 @@ describe("Service Provider", () => {
   });
 
   it("should get scoped service", () => {
-    serviceDescriptors.addScoped(FooService);
-    var serviceProvider = new ServiceProvider({
-      serviceDescriptors: serviceDescriptors
-    });
+    var serviceProvider = serviceProviderFactory
+      .addScoped(FooService)
+      .create();
     var service = serviceProvider.getService(FooService);
     expect(service).not.to.be.null;
   });
 
   it("should get scoped service by name", () => {
-    serviceDescriptors.addScoped("foo", FooService);
-    var serviceProvider = new ServiceProvider({
-      serviceDescriptors: serviceDescriptors
-    });
+    var serviceProvider = serviceProviderFactory
+      .addScoped("foo", FooService)
+      .create();
     var service = serviceProvider.getService("foo");
     expect(service).not.to.be.null;
   });
 
   it("should get scoped service registered as factory", () => {
-    serviceDescriptors.addScoped(FooService, {
-      factory: () => new FooService()
-    });
-    var serviceProvider = new ServiceProvider({
-      serviceDescriptors: serviceDescriptors
-    });
+    var serviceProvider = serviceProviderFactory
+      .addScoped(FooService, {
+        factory: () => new FooService()
+      })
+      .create();
     var service1 = serviceProvider.getService(FooService);
     var service2 = serviceProvider.getService(FooService);
     var scope = serviceProvider.createScope();
@@ -187,12 +174,11 @@ describe("Service Provider", () => {
   });
 
   it("should get scoped service registered as type", () => {
-    serviceDescriptors.addScoped(FooService, {
-      type: FooService
-    });
-    var serviceProvider = new ServiceProvider({
-      serviceDescriptors: serviceDescriptors
-    });
+    var serviceProvider = serviceProviderFactory
+      .addScoped(FooService, {
+        type: FooService
+      })
+      .create();
     var service1 = serviceProvider.getService(FooService);
     var service2 = serviceProvider.getService(FooService);
     var scope = serviceProvider.createScope();
@@ -207,21 +193,21 @@ describe("Service Provider", () => {
 
   it("should throw an error due missing service descriptor", () => {
     expect(() => {
-      serviceDescriptors.add(null);
+      serviceProviderFactory.add(null);
     })
     .throw().with.property("message", "Service descriptor is null");
   });
 
   it("should throw an error due missing service name", () => {
     expect(() => {
-      serviceDescriptors.addTransient();
+      serviceProviderFactory.addTransient();
     })
     .throw().with.property("message", "Service name is null");
   });
 
   it("should throw an error due missing service lifetime", () => {
     expect(() => {
-      serviceDescriptors.add(new ServiceDescriptor({
+      serviceProviderFactory.add(new ServiceDescriptor({
         name: FooService
       }));
     })
@@ -230,7 +216,7 @@ describe("Service Provider", () => {
 
   it("should throw an error due invalid lifetime", () => {
     expect(() => {
-      serviceDescriptors.add(new ServiceDescriptor({
+      serviceProviderFactory.add(new ServiceDescriptor({
         name: FooService,
         lifetime: "Foo"
       }));
@@ -240,7 +226,7 @@ describe("Service Provider", () => {
 
   it("should throw an error due provided instance for transient service", () => {
     expect(() => {
-      serviceDescriptors.addTransient(FooService, {
+      serviceProviderFactory.addTransient(FooService, {
         instance: new FooService()
       });
     })
@@ -249,7 +235,7 @@ describe("Service Provider", () => {
 
   it("should throw an error due provided instance for scoped service", () => {
     expect(() => {
-      serviceDescriptors.addScoped(FooService, {
+      serviceProviderFactory.addScoped(FooService, {
         instance: new FooService()
       });
     })
@@ -258,21 +244,21 @@ describe("Service Provider", () => {
 
   it("should throw an error due provided invalid service name", () => {
     expect(() => {
-      serviceDescriptors.addScoped({});
+      serviceProviderFactory.addScoped({});
     })
     .throw().with.property("message", "Service name's type is invalid");
   });
 
   it("should throw an error due not provided type", () => {
     expect(() => {
-      serviceDescriptors.addTransient("foo");
+      serviceProviderFactory.addTransient("foo");
     })
     .throw().with.property("message", "Type of service 'foo' is null");
   });
 
   it("should throw an error due provided instance and factory at the same time", () => {
     expect(() => {
-      serviceDescriptors.addSingleton("foo", {
+      serviceProviderFactory.addSingleton("foo", {
         instance: new FooService(),
         factory: () => new FooService()
       });
@@ -282,7 +268,7 @@ describe("Service Provider", () => {
 
   it("should throw an error due provided instance and type at the same time", () => {
     expect(() => {
-      serviceDescriptors.addSingleton("foo", {
+      serviceProviderFactory.addSingleton("foo", {
         instance: new FooService(),
         type: FooService
       });
@@ -292,7 +278,7 @@ describe("Service Provider", () => {
 
   it("should throw an error due provided instance and factory at the same time", () => {
     expect(() => {
-      serviceDescriptors.addSingleton("foo", {
+      serviceProviderFactory.addSingleton("foo", {
         factory: () => new FooService(),
         type: FooService
       });
