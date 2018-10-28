@@ -13,6 +13,7 @@ var specNodeConfig = {
     path.resolve(__dirname, "./spec/infrastructure/events/index.node.js"),
     path.resolve(__dirname, "./spec/infrastructure/cryptography/index.js"),
     path.resolve(__dirname, "./spec/infrastructure/text-search/index.js"),
+    path.resolve(__dirname, "./spec/infrastructure/dependency-injection/index.js"),
     path.resolve(__dirname, "./spec/outlines/model/index.js"),
     path.resolve(__dirname, "./spec/outlines/repositories/index.node.js")
   ],
@@ -31,6 +32,7 @@ var specNodeConfig = {
       "infrastructure-events$": path.resolve(__dirname, "./src/infrastructure/events/index.node.js"),
       "infrastructure-cryptography$": path.resolve(__dirname, "./src/infrastructure/cryptography/index.js"),
       "infrastructure-text-search$": path.resolve(__dirname, "./src/infrastructure/text-search/index.js"),
+      "infrastructure-dependency-injection$": path.resolve(__dirname, "./src/infrastructure/dependency-injection/index.js"),
       "outlines-events$": path.resolve(__dirname, "./src/outlines/events/index.js"),
       "outlines-model$": path.resolve(__dirname, "./src/outlines/model/index.js"),
       "outlines-factories$": path.resolve(__dirname, "./src/outlines/factories/index.js"),
@@ -54,6 +56,7 @@ var specWebConfig = {
     path.resolve(__dirname, "./spec/infrastructure/events/index.web.js"),
     path.resolve(__dirname, "./spec/infrastructure/cryptography/index.js"),
     path.resolve(__dirname, "./spec/infrastructure/text-search/index.js"),
+    path.resolve(__dirname, "./spec/infrastructure/dependency-injection/index.js"),
     path.resolve(__dirname, "./spec/outlines/model/index.js"),
     path.resolve(__dirname, "./spec/outlines/repositories/index.web.js")
   ],
@@ -74,6 +77,7 @@ var specWebConfig = {
       "infrastructure-events$": path.resolve(__dirname, "./src/infrastructure/events/index.web.js"),
       "infrastructure-cryptography$": path.resolve(__dirname, "./src/infrastructure/cryptography/index.js"),
       "infrastructure-text-search$": path.resolve(__dirname, "./src/infrastructure/text-search/index.js"),
+      "infrastructure-dependency-injection$": path.resolve(__dirname, "./src/infrastructure/dependency-injection/index.js"),
       "outlines-events$": path.resolve(__dirname, "./src/outlines/events/index.js"),
       "outlines-model$": path.resolve(__dirname, "./src/outlines/model/index.js"),
       "outlines-factories$": path.resolve(__dirname, "./src/outlines/factories/index.js"),

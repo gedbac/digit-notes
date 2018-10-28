@@ -17,8 +17,8 @@ To build, run:
 
 To run specs, run:
 
-    yarn spec-node
-    yarn spec-web
+    yarn run-node-specs
+    yarn run-web-specs
 
 To start developing, run:
 
