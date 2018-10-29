@@ -193,7 +193,7 @@ describe("Service Provider", () => {
 
   it("should throw an error due missing service descriptor", () => {
     expect(() => {
-      serviceProviderFactory.add(null);
+      serviceProviderFactory.addService(null);
     })
     .throw().with.property("message", "Service descriptor is null");
   });
@@ -207,7 +207,7 @@ describe("Service Provider", () => {
 
   it("should throw an error due missing service lifetime", () => {
     expect(() => {
-      serviceProviderFactory.add(new ServiceDescriptor({
+      serviceProviderFactory.addService(new ServiceDescriptor({
         name: FooService
       }));
     })
@@ -216,7 +216,7 @@ describe("Service Provider", () => {
 
   it("should throw an error due invalid lifetime", () => {
     expect(() => {
-      serviceProviderFactory.add(new ServiceDescriptor({
+      serviceProviderFactory.addService(new ServiceDescriptor({
         name: FooService,
         lifetime: "Foo"
       }));

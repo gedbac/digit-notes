@@ -25,15 +25,17 @@ export default class ServiceProviderFactory {
 
   constructor() {
     this._serviceDescriptors = new Map();
+    this._serviceInjections = [];
   }
 
   create() {
     return new ServiceProvider({
+      serviceInjections: this._serviceInjections,
       serviceDescriptors: this._serviceDescriptors
     });
   }
 
-  use(configuration) {
+  addModule(configuration) {
     if (!configuration) {
       throw {
         message: "Configuration is null"
@@ -44,16 +46,19 @@ export default class ServiceProviderFactory {
     } else if ("configure" in configuration) {
       configuration.configure(this);
     }
+    return this;
   }
 
-  get(name) {
-    if (name) {
-      return this._serviceDescriptors.get(name);
+  use(serviceInjection) {
+    if (!serviceInjection) {
+      throw {
+        message: "Service injection is null"
+      };
     }
-    return null;
+    this._serviceInjections.push(serviceInjection);
   }
 
-  add(serviceDescriptor) {
+  addService(serviceDescriptor) {
     if (!serviceDescriptor) {
       throw {
         message: "Service descriptor is null"
@@ -69,7 +74,7 @@ export default class ServiceProviderFactory {
         message: "Service name's type is invalid"
       };
     }
-    var serviceName = this._serviceNameAsString(serviceDescriptor.name);
+    var serviceName = this._getServiceName(serviceDescriptor.name);
     if (!serviceDescriptor.lifetime) {
       throw {
         message: `Lifetime of service '${serviceName}' is null`
@@ -114,23 +119,17 @@ export default class ServiceProviderFactory {
         message: `Factory and type can't be set at the same time for service '${serviceName}'`
       };
     }
-    this._serviceDescriptors.set(serviceName, serviceDescriptor);
+    this._serviceDescriptors.set(this._getServiceKey(serviceDescriptor.name), serviceDescriptor);
     return this;
   }
 
-  addSingleton(name, props) {
-    if (name && typeof props === "function") {
-      props = {
-        type: props
-      };
-    } else if (name && typeof name === "function" && !props) {
-      props = {
-        type: name
-      };
-    } else if (!props) {
-      props = {};
+  addSingleton(name, props = {}) {
+    if (name && typeof name === "function" && !props.instance && !props.factory && !props.type) {
+      props.type = name;
+    } else if (name && typeof props === "function") {
+      props.type = props;
     }
-    return this.add(new ServiceDescriptor({
+    return this.addService(new ServiceDescriptor({
       name: name,
       lifetime: ServiceLifetimes.Singleton,
       instance: props.instance,
@@ -139,19 +138,13 @@ export default class ServiceProviderFactory {
     }));
   }
 
-  addTransient(name, props) {
-    if (name && typeof props === "function") {
-      props = {
-        type: props
-      };
-    } else if (name && typeof name === "function" && !props) {
-      props = {
-        type: name
-      };
-    } else if (!props) {
-      props = {};
+  addTransient(name, props = {}) {
+    if (name && typeof name === "function" && !props.instance && !props.factory && !props.type) {
+      props.type = name;
+    } else if (name && typeof props === "function") {
+      props.type = props;
     }
-    return this.add(new ServiceDescriptor({
+    return this.addService(new ServiceDescriptor({
       name: name,
       lifetime: ServiceLifetimes.Transient,
       instance: props.instance,
@@ -160,19 +153,13 @@ export default class ServiceProviderFactory {
     }));
   }
 
-  addScoped(name, props) {
-    if (name && typeof props === "function") {
-      props = {
-        type: props
-      };
-    } else if (name && typeof name === "function" && !props) {
-      props = {
-        type: name
-      };
-    } else if (!props) {
-      props = {};
+  addScoped(name, props = {}) {
+    if (name && typeof name === "function" && !props.instance && !props.factory && !props.type) {
+      props.type = name;
+    } else if (name && typeof props === "function") {
+      props.type = props;
     }
-    return this.add(new ServiceDescriptor({
+    return this.addService(new ServiceDescriptor({
       name: name,
       lifetime: ServiceLifetimes.Scoped,
       instance: props.instance,
@@ -181,11 +168,31 @@ export default class ServiceProviderFactory {
     }));
   }
 
-  _serviceNameAsString(serviceName) {
-    if (typeof serviceName === "function") {
-      serviceName = serviceName.name;
+  _getServiceName(name) {
+    var serviceName = null;
+    if (name) {
+      if (typeof name === "string") {
+        serviceName = name;
+      } else if (typeof name === "function") {
+        serviceName = name.name;
+      }
     }
     return serviceName;
+  }
+
+  _getServiceKey(serviceName) {
+    var serviceKey = null;
+    if (serviceName) {
+      if (typeof serviceName === "string") {
+        serviceKey = serviceName;
+      } else if (typeof serviceName === "function") {
+        serviceKey = serviceName.name;
+      }
+      if (serviceKey) {
+        serviceKey = serviceKey.toLowerCase();
+      }
+    }
+    return serviceKey;
   }
 
 }

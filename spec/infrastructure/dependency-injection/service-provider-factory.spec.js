@@ -19,10 +19,11 @@ describe("Service Provider Factory", () => {
   });
 
   it("should register module using function", () => {
-    serviceProviderFactory.use(x => {
+    serviceProviderFactory.addModule(x => {
       x.addSingleton("foo", { instance: {} });
     });
-    var serviceDescriptor = serviceProviderFactory.get("foo");
+    var serviceProvider = serviceProviderFactory.create();
+    var serviceDescriptor = serviceProvider.getService("foo");
     expect(serviceDescriptor).not.to.be.null;
   });
 
@@ -32,14 +33,15 @@ describe("Service Provider Factory", () => {
         x.addSingleton("foo", { instance: {} });
       }
     };
-    serviceProviderFactory.use(foo);
-    var serviceDescriptor = serviceProviderFactory.get("foo");
-    expect(serviceDescriptor).not.to.be.null;
+    serviceProviderFactory.addModule(foo);
+    var serviceProvider = serviceProviderFactory.create();
+    var service = serviceProvider.getService("foo");
+    expect(service).not.to.be.null;
   });
 
   it("should throw an error due missing configuration", () => {
     expect(() => {
-      serviceProviderFactory.use();
+      serviceProviderFactory.addModule();
     })
     .throw().with.property("message", "Configuration is null");
   });
