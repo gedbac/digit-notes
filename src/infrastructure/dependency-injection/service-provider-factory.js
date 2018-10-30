@@ -56,6 +56,7 @@ export default class ServiceProviderFactory {
       };
     }
     this._serviceInjections.push(serviceInjection);
+    return this;
   }
 
   addService(serviceDescriptor) {
