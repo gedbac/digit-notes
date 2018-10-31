@@ -22,30 +22,22 @@ import ServiceLifetimes from "./service-lifetimes";
 
 export default class ServiceProvider {
 
-  constructor(props) {
-    this._serviceInjections = null;
-    if (props && "serviceInjections" in props) {
-      this._serviceInjections = props.serviceInjections;
-    }
-    this._serviceProvider = null;
-    if (props && "serviceProvider" in props) {
-      this._serviceProvider = props.serviceProvider;
-    }
-    this._serviceDescriptors = null;
-    if (props && "serviceDescriptors" in props) {
-      this._serviceDescriptors = props.serviceDescriptors;
-    }
+  constructor(serviceDescriptors, serviceInjections, serviceProvider) {
+    this._serviceDescriptors = serviceDescriptors;
+    this._serviceInjections = serviceInjections;
+    this._serviceProvider = serviceProvider;
     this._services = new Map();
+    if (!this._serviceDescriptors) {
+      throw {
+        message: "Service descriptors is null"
+      };
+    }
   }
 
   createScope() {
-    return new ServiceScope({
-      serviceProvider: new ServiceProvider({
-        serviceProvider: this,
-        serviceInjections: this._serviceInjections,
-        serviceDescriptors: this._serviceDescriptors
-      })
-    });
+    return new ServiceScope(
+      new ServiceProvider(this._serviceDescriptors, this._serviceInjections, this)
+    );
   }
 
   getService(name) {
@@ -80,13 +72,13 @@ export default class ServiceProvider {
     if (this._serviceProvider) {
       service = this._serviceProvider.getService(serviceDescriptor.name);
     } else {
-      if (serviceDescriptor.instance) {
-        service = serviceDescriptor.instance;
+      if (serviceDescriptor.type) {
+        service = this._createService(serviceDescriptor.type);
       } else if (serviceDescriptor.factory) {
         service = serviceDescriptor.factory(this);
         this._injectDependencies(service);
-      } else if (serviceDescriptor.type) {
-        service = this._createService(serviceDescriptor.type);
+      } else if (serviceDescriptor.instance) {
+        service = serviceDescriptor.instance;
       }
     }
     if (service) {
@@ -97,22 +89,22 @@ export default class ServiceProvider {
 
   _createTransientService(serviceDescriptor) {
     var service = null;
-    if (serviceDescriptor.factory) {
+    if (serviceDescriptor.type) {
+      service = this._createService(serviceDescriptor.type);
+    } else if (serviceDescriptor.factory) {
       service = serviceDescriptor.factory(this);
       this._injectDependencies(service);
-    } else if (serviceDescriptor.type) {
-      service = this._createService(serviceDescriptor.type);
     }
     return service;
   }
 
   _createScopedService(serviceDescriptor) {
     var service = null;
-    if (serviceDescriptor.factory) {
+    if (serviceDescriptor.type) {
+      service = this._createService(serviceDescriptor.type);
+    } else if (serviceDescriptor.factory) {
       service = serviceDescriptor.factory(this);
       this._injectDependencies(service);
-    } else if (serviceDescriptor.type) {
-      service = this._createService(serviceDescriptor.type);
     }
     if (service) {
       this._services.set(this._getServiceKey(serviceDescriptor.name), service);

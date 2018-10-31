@@ -19,28 +19,14 @@
 
 export default class ServiceDescriptor {
 
-  constructor(props) {
-    this._name = null;
-    if (props && "name" in props) {
-      this._name = props.name;
-    }
-    this._lifetime = null;
-    if (props && "lifetime" in props) {
-      this._lifetime = props.lifetime;
-    }
-    this._instance = null;
-    if (props && "instance" in props) {
-      this._instance = props.instance;
-    }
-    this._type = null;
-    if (props && "type" in props) {
-      this._type = props.type;
-    }
-    this._factory = null;
-    if (props && "factory" in props) {
-      this._factory = props.factory;
-    }
+  constructor(name, lifetime, type, factory, instance) {
+    this._name = name;
+    this._lifetime = lifetime;
+    this._type = type;
+    this._factory = factory;
+    this._instance = instance;
   }
+
   get name() {
     return this._name;
   }
@@ -49,16 +35,16 @@ export default class ServiceDescriptor {
     return this._lifetime;
   }
 
-  get instance() {
-    return this._instance;
-  }
-
   get type() {
     return this._type;
   }
 
   get factory() {
     return this._factory;
+  }
+
+  get instance() {
+    return this._instance;
   }
 
 }

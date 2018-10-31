@@ -18,10 +18,17 @@
  */
 
 export default class LogLevels {
+
   static get Debug() { return 0; }
+
   static get Information() { return 1; }
+
   static get Warning() { return 2; }
+
   static get Error() { return 3; }
+
   static get Critical() { return 4; }
+
   static get None() { return 5; }
+
 }

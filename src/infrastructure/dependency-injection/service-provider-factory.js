@@ -29,10 +29,7 @@ export default class ServiceProviderFactory {
   }
 
   create() {
-    return new ServiceProvider({
-      serviceInjections: this._serviceInjections,
-      serviceDescriptors: this._serviceDescriptors
-    });
+    return new ServiceProvider(this._serviceDescriptors, this._serviceInjections);
   }
 
   addModule(configuration) {
@@ -124,49 +121,49 @@ export default class ServiceProviderFactory {
     return this;
   }
 
-  addSingleton(name, props = {}) {
-    if (name && typeof name === "function" && !props.instance && !props.factory && !props.type) {
-      props.type = name;
-    } else if (name && typeof props === "function") {
-      props.type = props;
+  addSingleton(name, options = {}) {
+    if (name && typeof name === "function" && !options.instance && !options.factory && !options.type) {
+      options.type = name;
+    } else if (name && typeof options === "function") {
+      options.type = options;
     }
-    return this.addService(new ServiceDescriptor({
-      name: name,
-      lifetime: ServiceLifetimes.Singleton,
-      instance: props.instance,
-      factory: props.factory,
-      type: props.type
-    }));
+    return this.addService(new ServiceDescriptor(
+      name,
+      ServiceLifetimes.Singleton,
+      options.type,
+      options.factory,
+      options.instance
+    ));
   }
 
-  addTransient(name, props = {}) {
-    if (name && typeof name === "function" && !props.instance && !props.factory && !props.type) {
-      props.type = name;
-    } else if (name && typeof props === "function") {
-      props.type = props;
+  addTransient(name, options = {}) {
+    if (name && typeof name === "function" && !options.instance && !options.factory && !options.type) {
+      options.type = name;
+    } else if (name && typeof options === "function") {
+      options.type = options;
     }
-    return this.addService(new ServiceDescriptor({
-      name: name,
-      lifetime: ServiceLifetimes.Transient,
-      instance: props.instance,
-      factory: props.factory,
-      type: props.type
-    }));
+    return this.addService(new ServiceDescriptor(
+      name,
+      ServiceLifetimes.Transient,
+      options.type,
+      options.factory,
+      options.instance
+    ));
   }
 
-  addScoped(name, props = {}) {
-    if (name && typeof name === "function" && !props.instance && !props.factory && !props.type) {
-      props.type = name;
-    } else if (name && typeof props === "function") {
-      props.type = props;
+  addScoped(name, options = {}) {
+    if (name && typeof name === "function" && !options.instance && !options.factory && !options.type) {
+      options.type = name;
+    } else if (name && typeof options === "function") {
+      options.type = options;
     }
-    return this.addService(new ServiceDescriptor({
-      name: name,
-      lifetime: ServiceLifetimes.Scoped,
-      instance: props.instance,
-      factory: props.factory,
-      type: props.type
-    }));
+    return this.addService(new ServiceDescriptor(
+      name,
+      ServiceLifetimes.Scoped,
+      options.type,
+      options.factory,
+      options.instance
+    ));
   }
 
   _getServiceName(name) {

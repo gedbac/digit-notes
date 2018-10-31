@@ -19,10 +19,12 @@
 
 export default class ServiceScope {
 
-  constructor(props) {
-    this._serviceProvider = null;
-    if (props && "serviceProvider" in props) {
-      this._serviceProvider = props.serviceProvider;
+  constructor(serviceProvider) {
+    this._serviceProvider = serviceProvider;
+    if (!this._serviceProvider) {
+      throw {
+        message: "Service provider is null"
+      };
     }
   }
 

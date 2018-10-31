@@ -19,7 +19,7 @@
 
 export default class ServiceInjection {
 
-  constructor(props) {
+  constructor() {
     if (new.target === ServiceInjection) {
       throw {
         message: "Can't construct abstract instances directly"

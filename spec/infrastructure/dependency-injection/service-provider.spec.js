@@ -33,24 +33,6 @@ describe("Service Provider", () => {
     expect(service).not.to.be.null;
   });
 
-  it("should get singleton service registered as instance", () => {
-    var serviceProvider = serviceProviderFactory
-      .addSingleton(FooService, {
-        instance: new FooService()
-      })
-      .create();
-    var service1 = serviceProvider.getService(FooService);
-    var service2 = serviceProvider.getService(FooService);
-    var scope = serviceProvider.createScope();
-    var service3 = scope.serviceProvider.getService(FooService);
-    expect(service1).not.to.be.null;
-    expect(service2).not.to.be.null;
-    expect(service3).not.to.be.null;
-    expect(service1).is.equals(service2);
-    expect(service1).is.equals(service3);
-    expect(service2).is.equals(service3);
-  });
-
   it("should get singleton service registered as factory", () => {
     var serviceProvider = serviceProviderFactory
       .addSingleton(FooService, {
@@ -73,6 +55,24 @@ describe("Service Provider", () => {
     var serviceProvider = serviceProviderFactory
       .addSingleton(FooService, {
         type: FooService
+      })
+      .create();
+    var service1 = serviceProvider.getService(FooService);
+    var service2 = serviceProvider.getService(FooService);
+    var scope = serviceProvider.createScope();
+    var service3 = scope.serviceProvider.getService(FooService);
+    expect(service1).not.to.be.null;
+    expect(service2).not.to.be.null;
+    expect(service3).not.to.be.null;
+    expect(service1).is.equals(service2);
+    expect(service1).is.equals(service3);
+    expect(service2).is.equals(service3);
+  });
+
+  it("should get singleton service registered as instance", () => {
+    var serviceProvider = serviceProviderFactory
+      .addSingleton(FooService, {
+        instance: new FooService()
       })
       .create();
     var service1 = serviceProvider.getService(FooService);
@@ -207,19 +207,14 @@ describe("Service Provider", () => {
 
   it("should throw an error due missing service lifetime", () => {
     expect(() => {
-      serviceProviderFactory.addService(new ServiceDescriptor({
-        name: FooService
-      }));
+      serviceProviderFactory.addService(new ServiceDescriptor(FooService));
     })
     .throw().with.property("message", "Lifetime of service 'FooService' is null");
   });
 
   it("should throw an error due invalid lifetime", () => {
     expect(() => {
-      serviceProviderFactory.addService(new ServiceDescriptor({
-        name: FooService,
-        lifetime: "Foo"
-      }));
+      serviceProviderFactory.addService(new ServiceDescriptor(FooService, "Foo"));
     })
     .throw().with.property("message", "Lifetime 'Foo' of service 'FooService' is not supported");
   });
