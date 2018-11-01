@@ -18,7 +18,7 @@
     "node": ">=8.9.0"
   },
   "scripts": {
-    "dev": "./node_modules/.bin/webpack-dev-server --config webapp.config.js --mode development",
+    "develop": "./node_modules/.bin/webpack-dev-server --config webapp.config.js --mode development",
     "build": "yarn build-specs && yarn build-webapp",
     "build-specs": "./node_modules/.bin/webpack --config spec.config.js --mode development",
     "build-webapp": "./node_modules/.bin/webpack --config webapp.config.js --mode development",

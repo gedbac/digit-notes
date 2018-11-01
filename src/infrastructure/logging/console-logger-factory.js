@@ -27,10 +27,7 @@ export default class ConsoleLoggerFactory extends LoggerFactory {
   }
 
   _onCreateLogger(name) {
-    return new ConsoleLogger({
-      name: name,
-      logLevel: this.logLevel
-    });
+    return new ConsoleLogger(name, this.logLevel);
   }
 
 }

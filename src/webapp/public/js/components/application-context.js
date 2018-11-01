@@ -17,29 +17,10 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, { Component } from "react";
-import { ApplicationContextConsumer } from "./application-context";
+import React from "react";
 
-export default class Application extends Component {
-
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return (
-      <ApplicationContextConsumer>
-        {
-          context => {
-            return (
-              <div className="application">
-                {this.props.children}
-              </div>
-            );
-          }
-        }
-      </ApplicationContextConsumer>
-    );
-  }
-
-}
+export const ApplicationContext = React.createContext({
+  serviceProvider: null
+});
+export const ApplicationContextProvider = ApplicationContext.Provider;
+export const ApplicationContextConsumer = ApplicationContext.Consumer;

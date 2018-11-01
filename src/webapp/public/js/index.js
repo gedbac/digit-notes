@@ -19,7 +19,31 @@
 
 import React from "react";
 import ReactDOM from "react-dom";
+import { ServiceProviderFactory } from "infrastructure-dependency-injection";
+import Startup from "./startup";
+import { ApplicationContextProvider } from "./components/application-context";
 import Application from "./components/application";
+import LaunchPage from "./components/launch-page";
 import "../css/style.scss";
 
-ReactDOM.render(<Application />, document.getElementById("container"));
+var serviceProviderFactory = new ServiceProviderFactory();
+
+var startup = new Startup();
+
+startup.configureServices(serviceProviderFactory);
+
+var serviceProvider = serviceProviderFactory.create();
+
+var logger = serviceProvider.getService("logger");
+
+var jsx = (
+  <ApplicationContextProvider value={{ serviceProvider: serviceProvider }}>
+    <Application>
+      <LaunchPage />
+    </Application>
+  </ApplicationContextProvider>
+);
+
+ReactDOM.render(jsx, document.getElementById("container"));
+
+logger.logInformation("Application started");

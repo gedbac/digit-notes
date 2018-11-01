@@ -6,9 +6,7 @@ class Foo {}
 describe("Console Logger Factory", () => {
 
   it("should write to log", () => {
-    var loggerFactory = new ConsoleLoggerFactory({
-      logLevel: LogLevels.Debug
-    });
+    var loggerFactory = new ConsoleLoggerFactory(LogLevels.Debug);
     var logger = loggerFactory.createLogger("Spec");
     logger.logDebug("Application started [application=amber-notes]");
     logger.logInformation("Application started [application=amber-notes]");

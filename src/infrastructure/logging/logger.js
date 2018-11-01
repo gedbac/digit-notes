@@ -21,18 +21,13 @@ import LogLevel from "./log-levels";
 
 export default class Logger {
 
-  constructor(props) {
-    this._name = null;
-    if (props && "name" in props) {
-      this._name = props.name;
-    } else {
+  constructor(name, logLevel = LogLevel.None) {
+    this._name = name;
+    this._logLevel = logLevel;
+    if (!this._name) {
       throw {
         message: "Logger's name is null"
       };
-    }
-    this._logLevel = LogLevel.None;
-    if (props && "logLevel" in props) {
-      this._logLevel = props.logLevel;
     }
   }
 

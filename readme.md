@@ -22,7 +22,7 @@ To run specs, run:
 
 To start developing, run:
 
-    yarn dev
+    yarn develop
 
 ## License
 

@@ -21,11 +21,8 @@ import LogLevels from "./log-levels";
 
 export default class LoggerFactory {
 
-  constructor(props) {
-    this._logLevel = LogLevels.None;
-    if (props && "logLevel" in props) {
-      this._logLevel = props.logLevel;
-    }
+  constructor(logLevel) {
+    this._logLevel = logLevel;
   }
 
   get logLevel() {
@@ -50,10 +47,7 @@ export default class LoggerFactory {
   }
 
   _onCreateLogger(name) {
-    return new Logger({
-      name: name,
-      logLevel: this.logLevel
-    });
+    return new Logger(name, this.logLevel);
   }
 
 }

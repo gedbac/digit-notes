@@ -17,29 +17,13 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, { Component } from "react";
-import { ApplicationContextConsumer } from "./application-context";
+import { Component } from "react";
+import "../../css/page.scss";
 
-export default class Application extends Component {
+export default class Page extends Component {
 
   constructor(props) {
     super(props);
-  }
-
-  render() {
-    return (
-      <ApplicationContextConsumer>
-        {
-          context => {
-            return (
-              <div className="application">
-                {this.props.children}
-              </div>
-            );
-          }
-        }
-      </ApplicationContextConsumer>
-    );
   }
 
 }

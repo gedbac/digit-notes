@@ -38,7 +38,7 @@ export default class ServiceProviderFactory {
         message: "Configuration is null"
       };
     }
-    if (configuration && configuration === "function") {
+    if (configuration && typeof configuration === "function") {
       configuration(this);
     } else if ("configure" in configuration) {
       configuration.configure(this);

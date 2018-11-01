@@ -22,8 +22,8 @@ import LogLevels from "./log-levels";
 
 export default class ConsoleLogger extends Logger {
 
-  constructor(props) {
-    super(props);
+  constructor(name, logLevel) {
+    super(name, logLevel);
   }
 
   logDebug(message) {

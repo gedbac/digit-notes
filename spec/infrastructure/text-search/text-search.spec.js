@@ -5,9 +5,7 @@ import { ConsoleLoggerFactory, LogLevels } from "infrastructure-logging";
 describe("Text Search", () => {
 
   it("should find by keywoard", async () => {
-    var loggerFactory = new ConsoleLoggerFactory({
-      logLevel: LogLevels.Information
-    });
+    var loggerFactory = new ConsoleLoggerFactory(LogLevels.Information);
 
     var terms = [];
     var str  = [ "a", "b", "c", "d", "e", "f", "g", "h", "l", "j" ];

@@ -17,29 +17,24 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, { Component } from "react";
-import { ApplicationContextConsumer } from "./application-context";
+import { ConsoleLoggerFactory, LogLevels } from "infrastructure-logging";
 
-export default class Application extends Component {
+export default class Startup {
 
-  constructor(props) {
-    super(props);
+  configureServices(serviceProviderFactory) {
+    serviceProviderFactory
+      .addModule(this._configureLogging);
   }
 
-  render() {
-    return (
-      <ApplicationContextConsumer>
-        {
-          context => {
-            return (
-              <div className="application">
-                {this.props.children}
-              </div>
-            );
-          }
-        }
-      </ApplicationContextConsumer>
-    );
+  _configureLogging(serviceProviderFactory) {
+    serviceProviderFactory
+      .addSingleton("consoleLoggerFactory", () => new ConsoleLoggerFactory(LogLevels.Debug))
+      .addSingleton("logger", {
+        factory: serviceProvider =>
+          serviceProvider
+            .getService("consoleLoggerFactory")
+            .createLogger("default")
+      });
   }
 
 }

@@ -65,7 +65,7 @@ var specWebConfig = {
     filename: "amber-notes-infrastructure.spec.js"
   },
   externals: {
-    chai: "chai"
+    "chai": "chai"
   },
   resolve: {
     extensions: [ ".web.js", ".js" ],
