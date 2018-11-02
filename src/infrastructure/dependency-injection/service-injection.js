@@ -21,9 +21,7 @@ export default class ServiceInjection {
 
   constructor() {
     if (new.target === ServiceInjection) {
-      throw {
-        message: "Can't construct abstract instances directly"
-      };
+      throw new Error("Can't construct abstract instances directly");
     }
   }
 
@@ -33,4 +31,4 @@ export default class ServiceInjection {
 
   injectDependencies(service, serviceProvider) {}
 
- }
+}

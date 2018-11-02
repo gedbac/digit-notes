@@ -72,8 +72,8 @@ export default class Dispatcher {
         this._payload = null;
         this._dispatching = false;
       }
-    } catch (e) {
-      this.logger.logError(`An error occured while dispatching.\n${e}`);
+    } catch (error) {
+      this.logger.logError(`An error occured while dispatching.\n${error}`);
     }
   }
 
@@ -93,8 +93,8 @@ export default class Dispatcher {
           this._invokeCallback(dispatcherToken, payload);
         }
       }
-    } catch (e) {
-      this.logger.logError(`An error occured while waiting.\n${e}`);
+    } catch (error) {
+      this.logger.logError(`An error occured while waiting.\n${error}`);
     }
   }
 

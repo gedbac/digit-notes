@@ -25,9 +25,7 @@ export default class Logger {
     this._name = name;
     this._logLevel = logLevel;
     if (!this._name) {
-      throw {
-        message: "Logger's name is null"
-      };
+      throw new Error("Logger's name is null");
     }
   }
 

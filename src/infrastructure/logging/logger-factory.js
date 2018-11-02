@@ -17,8 +17,6 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import LogLevels from "./log-levels";
-
 export default class LoggerFactory {
 
   constructor(logLevel) {
@@ -31,17 +29,13 @@ export default class LoggerFactory {
 
   createLogger(name) {
     if (!name) {
-      throw {
-        message: "Logger's name is null"
-      };
+      throw new Error("Logger's name is null");
     }
     if (typeof name === "function") {
       name = name.name;
     }
     if (typeof name !== "string") {
-      throw {
-        message: "Logger's name is not a string"
-      };
+      throw new Error("Logger's name is not a string");
     }
     return this._onCreateLogger(name);
   }

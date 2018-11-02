@@ -28,9 +28,7 @@ export default class ServiceProvider {
     this._serviceProvider = serviceProvider;
     this._services = new Map();
     if (!this._serviceDescriptors) {
-      throw {
-        message: "Service descriptors is null"
-      };
+      throw new Error("Service descriptors is null");
     }
   }
 

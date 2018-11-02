@@ -34,9 +34,7 @@ export default class ServiceProviderFactory {
 
   addModule(configuration) {
     if (!configuration) {
-      throw {
-        message: "Configuration is null"
-      };
+      throw new Error("Configuration is null");
     }
     if (configuration && typeof configuration === "function") {
       configuration(this);
@@ -48,9 +46,7 @@ export default class ServiceProviderFactory {
 
   use(serviceInjection) {
     if (!serviceInjection) {
-      throw {
-        message: "Service injection is null"
-      };
+      throw new Error("Service injection is null");
     }
     this._serviceInjections.push(serviceInjection);
     return this;
@@ -58,64 +54,42 @@ export default class ServiceProviderFactory {
 
   addService(serviceDescriptor) {
     if (!serviceDescriptor) {
-      throw {
-        message: "Service descriptor is null"
-      };
+      throw new Error("Service descriptor is null");
     }
     if (!serviceDescriptor.name) {
-      throw {
-        message: "Service name is null"
-      };
+      throw new Error("Service name is null");
     }
     if (typeof serviceDescriptor.name !== "string" && typeof serviceDescriptor.name !== "function") {
-      throw {
-        message: "Service name's type is invalid"
-      };
+      throw new Error("Service name's type is invalid");
     }
     var serviceName = this._getServiceName(serviceDescriptor.name);
     if (!serviceDescriptor.lifetime) {
-      throw {
-        message: `Lifetime of service '${serviceName}' is null`
-      };
+      throw new Error(`Lifetime of service '${serviceName}' is null`);
     }
     if (
       serviceDescriptor.lifetime !== ServiceLifetimes.Singleton &&
       serviceDescriptor.lifetime !== ServiceLifetimes.Transient &&
       serviceDescriptor.lifetime !== ServiceLifetimes.Scoped
     ) {
-      throw {
-        message: `Lifetime '${serviceDescriptor.lifetime}' of service '${serviceName}' is not supported`
-      };
+      throw new Error(`Lifetime '${serviceDescriptor.lifetime}' of service '${serviceName}' is not supported`);
     }
     if (!serviceDescriptor.instance && !serviceDescriptor.factory && !serviceDescriptor.type) {
-      throw {
-        message: `Type of service '${serviceName}' is null`
-      };
+      throw new Error(`Type of service '${serviceName}' is null`);
     }
     if (serviceDescriptor.lifetime === ServiceLifetimes.Transient && serviceDescriptor.instance) {
-      throw {
-        message: `Instance can't be set for transient service '${serviceName}'`
-      };
+      throw new Error(`Instance can't be set for transient service '${serviceName}'`);
     }
     if (serviceDescriptor.lifetime === ServiceLifetimes.Scoped && serviceDescriptor.instance) {
-      throw {
-        message: `Instance can't be set for scoped service '${serviceName}'`
-      };
+      throw new Error(`Instance can't be set for scoped service '${serviceName}'`);
     }
     if (serviceDescriptor.instance && serviceDescriptor.factory) {
-      throw {
-        message: `Instance and factory can't be set at the same time for service '${serviceName}'`
-      };
+      throw new Error(`Instance and factory can't be set at the same time for service '${serviceName}'`);
     }
     if (serviceDescriptor.instance && serviceDescriptor.type) {
-      throw {
-        message: `Instance and type can't be set at the same time for service '${serviceName}'`
-      };
+      throw new Error(`Instance and type can't be set at the same time for service '${serviceName}'`);
     }
     if (serviceDescriptor.factory && serviceDescriptor.type) {
-      throw {
-        message: `Factory and type can't be set at the same time for service '${serviceName}'`
-      };
+      throw new Error(`Factory and type can't be set at the same time for service '${serviceName}'`);
     }
     this._serviceDescriptors.set(this._getServiceKey(serviceDescriptor.name), serviceDescriptor);
     return this;

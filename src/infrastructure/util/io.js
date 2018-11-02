@@ -1,8 +1,8 @@
 import * as fs from "fs";
 
 export function directoryExists(pathToDirectory) {
-  return new Promise((resolve, reject) => {
-    fs.access(pathToDirectory, (error) => {
+  return new Promise((resolve) => {
+    fs.access(pathToDirectory, error => {
       if (!error) {
         resolve(true);
       } else {
@@ -14,7 +14,7 @@ export function directoryExists(pathToDirectory) {
 
 export function createDirectory(pathToDirectory) {
   return new Promise((resolve, reject) => {
-    fs.mkdir(pathToDirectory, (error) => {
+    fs.mkdir(pathToDirectory, error => {
       if (!error) {
         resolve();
       } else {
@@ -25,8 +25,8 @@ export function createDirectory(pathToDirectory) {
 }
 
 export function fileExists(pathToFile) {
-  return new Promise((resolve, reject) => {
-    fs.access(pathToFile, (error) => {
+  return new Promise((resolve) => {
+    fs.access(pathToFile, error => {
       if (!error) {
         resolve(true);
       } else {
@@ -50,7 +50,7 @@ export function readFile(pathToFile, options) {
 
 export function writeFile(pathToFile, options, content) {
   return new Promise((resolve, reject) => {
-    fs.writeFile(pathToFile, content, options, (error) => {
+    fs.writeFile(pathToFile, content, options, error => {
       if (!error) {
         resolve();
       } else {
@@ -62,7 +62,7 @@ export function writeFile(pathToFile, options, content) {
 
 export function deleteFile(pathToFile) {
   return new Promise((resolve, reject) => {
-    fs.unlink(pathToFile, (error) => {
+    fs.unlink(pathToFile, error => {
       if (!error) {
         resolve();
       } else {

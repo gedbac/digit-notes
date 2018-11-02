@@ -47,9 +47,9 @@ export default class ConstructorInjection extends ServiceInjection {
           .match(/constructor[^(]*\(([^)]*)\)/);
         if (matches && matches.length > 1) {
           params = matches[1]
-              .replace(/\/\/.*?[\r\n]|\/\*(?:.|[\r\n])*?\*\//g, '')
-              .replace(/\s+/g, '')
-              .split(",");
+            .replace(/\/\/.*?[\r\n]|\/\*(?:.|[\r\n])*?\*\//g, '')
+            .replace(/\s+/g, '')
+            .split(",");
         }
         this._serviceParameters.set(serviceType, params);
       } else {

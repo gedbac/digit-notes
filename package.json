@@ -15,7 +15,7 @@
     "url": "https://github.com/gedbac/amber-notes-prototype.git"
   },
   "engines": {
-    "node": ">=8.9.0"
+    "node": ">=10.13.0"
   },
   "scripts": {
     "develop": "./node_modules/.bin/webpack-dev-server --config webapp.config.js --mode development",

@@ -22,9 +22,7 @@ export default class ServiceScope {
   constructor(serviceProvider) {
     this._serviceProvider = serviceProvider;
     if (!this._serviceProvider) {
-      throw {
-        message: "Service provider is null"
-      };
+      throw new Error("Service provider is null");
     }
   }
 
@@ -32,4 +30,4 @@ export default class ServiceScope {
     return this._serviceProvider;
   }
 
- }
+}
