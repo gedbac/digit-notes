@@ -18,22 +18,32 @@
  */
 
 import { ConsoleLoggerFactory, LogLevels } from "infrastructure-logging";
+import Dispatcher from "./shared/dispatcher";
 
 export default class Startup {
 
   configureServices(serviceProviderFactory) {
     serviceProviderFactory
-      .addModule(this._configureLogging);
+      .addModule(this._configureLogging)
+      .addSingleton("dispatcherLogger", {
+        factory: x => x
+          .getService("consoleLoggerFactory")
+          .createLogger("dispatcherLogger")
+      })
+      .addSingleton("dispatcher", {
+        factory: x => new Dispatcher(
+          x.getService("dispatcherLogger")
+        )
+      });
   }
 
   _configureLogging(serviceProviderFactory) {
     serviceProviderFactory
       .addSingleton("consoleLoggerFactory", () => new ConsoleLoggerFactory(LogLevels.Debug))
       .addSingleton("logger", {
-        factory: serviceProvider =>
-          serviceProvider
-            .getService("consoleLoggerFactory")
-            .createLogger("default")
+        factory: x => x
+          .getService("consoleLoggerFactory")
+          .createLogger("application")
       });
   }
 

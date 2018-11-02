@@ -23,7 +23,6 @@ import { ServiceProviderFactory } from "infrastructure-dependency-injection";
 import Startup from "./startup";
 import { ApplicationContextProvider } from "./components/application-context";
 import Application from "./components/application";
-import LaunchPage from "./components/launch-page";
 import "../css/style.scss";
 
 var serviceProviderFactory = new ServiceProviderFactory();
@@ -36,14 +35,10 @@ var serviceProvider = serviceProviderFactory.create();
 
 var logger = serviceProvider.getService("logger");
 
-var jsx = (
+ReactDOM.render((
   <ApplicationContextProvider value={{ serviceProvider: serviceProvider }}>
-    <Application>
-      <LaunchPage />
-    </Application>
+    <Application />
   </ApplicationContextProvider>
-);
-
-ReactDOM.render(jsx, document.getElementById("container"));
+), document.getElementById("viewport"));
 
 logger.logInformation("Application started");

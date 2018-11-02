@@ -17,8 +17,13 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-html {
+html, body, #viewport {
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
   background-color: black;
-  color: white;
   font-family: 'Courier New', monospace;
 }
+
+@import "application";
+@import "startup-view";

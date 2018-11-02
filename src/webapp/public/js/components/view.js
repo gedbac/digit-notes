@@ -17,22 +17,12 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from "react";
-import Page from "./page";
-import "../../css/launch-page.scss";
+import { Component } from "react";
 
-export default class LaunchPage extends Page {
+export default class View extends Component {
 
   constructor(props) {
     super(props);
-  }
-
-  render() {
-    return (
-      <div className="launch-page">
-        ...
-      </div>
-    );
   }
 
 }

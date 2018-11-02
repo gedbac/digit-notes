@@ -17,28 +17,26 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, { Component } from "react";
-import { ApplicationContextConsumer } from "./application-context";
-import StartupView from "./startup-view";
+@import "./view";
 
-export default class Application extends Component {
+.startup-view {
 
-  constructor(props) {
-    super(props);
-  }
+  @extend .view;
 
-  render() {
-    return (
-      <ApplicationContextConsumer>
-        {
-          context => {
-            return (
-              <StartupView></StartupView>
-            );
-          }
-        }
-      </ApplicationContextConsumer>
-    );
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .name {
+    width: 320px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
   }
 
 }

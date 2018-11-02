@@ -17,9 +17,8 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-@import "./page";
-
-.launch-page {
-  @extend .page;
-  color: white;
+#viewport {
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
 }
