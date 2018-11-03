@@ -42,15 +42,17 @@ export default class ConstructorInjection extends ServiceInjection {
     var params = null;
     if (serviceType && typeof serviceType === "function") {
       if (!this._serviceParameters.has(serviceType)) {
+
         var matches = serviceType
           .toString()
-          .match(/constructor[^(]*\(([^)]*)\)/);
+          .match(/(?:constructor|function)[^(]*\(([^)]*)\)/);
         if (matches && matches.length > 1) {
           params = matches[1]
             .replace(/\/\/.*?[\r\n]|\/\*(?:.|[\r\n])*?\*\//g, '')
             .replace(/\s+/g, '')
             .split(",");
         }
+
         this._serviceParameters.set(serviceType, params);
       } else {
         params = this._serviceParameters.get(serviceType);
