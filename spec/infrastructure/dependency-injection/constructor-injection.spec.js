@@ -76,4 +76,21 @@ describe("Constructor injection", () => {
     expect(service.serviceProvider).to.be.equals(serviceProvider);
   });
 
+  it("should detect circular dependencies", () => {
+    class Foo {
+      constructor(bar) {}
+    }
+    class Bar {
+      constructor(foo) {}
+    }
+    var serviceProvider = serviceProviderFactory
+      .use(new ConstructorInjection())
+      .addSingleton(Foo)
+      .addSingleton(Bar)
+      .create();
+    expect(() => {
+      serviceProvider.getService(Foo);
+    }).throw().with.property("message", "Can not resolve circular dependency 'foo'");
+  });
+
 });

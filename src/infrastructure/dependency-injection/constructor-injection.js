@@ -26,7 +26,7 @@ export default class ConstructorInjection extends ServiceInjection {
     this._serviceParameters = new Map();
   }
 
-  getConstructorParameters(serviceType, serviceProvider) {
+  getConstructorParameters(serviceType, serviceProvider, context) {
     var parameterValues = null;
     var parameterNames = this._getParameterNames(serviceType);
     if (parameterNames && parameterNames.length > 0) {
@@ -35,7 +35,7 @@ export default class ConstructorInjection extends ServiceInjection {
         if(parameterNames[i] === "serviceProvider") {
           parameterValues[i] = serviceProvider;
         } else {
-          parameterValues[i] = serviceProvider.getService(parameterNames[i]);
+          parameterValues[i] = serviceProvider.getService(parameterNames[i], context);
         }
       }
     }

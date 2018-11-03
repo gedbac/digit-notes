@@ -38,43 +38,52 @@ export default class ServiceProvider {
     );
   }
 
-  getService(name) {
+  getService(name, context) {
     var service = null;
     if (name) {
       var serviceKey = this._getServiceKey(name);
       if (serviceKey) {
         service = this._services.get(serviceKey);
         if (!service) {
+          context = context || { resolving: new Map() };
+          if (context.resolving.has(serviceKey)) {
+            throw new Error(`Can not resolve circular dependency '${serviceKey}'`);
+          }
+          if (!context.resolving) {
+            context.resolving = new Map();
+          }
+          context.resolving.set(serviceKey, true);
           var serviceDescriptor = this._serviceDescriptors.get(serviceKey);
           if (serviceDescriptor) {
             switch(serviceDescriptor.lifetime) {
               case ServiceLifetimes.Singleton:
-                service = this._createSingletonService(serviceDescriptor);
+                service = this._createSingletonService(serviceDescriptor, context);
                 break;
               case ServiceLifetimes.Transient:
-                service = this._createTransientService(serviceDescriptor);
+                service = this._createTransientService(serviceDescriptor, context);
                 break;
               case ServiceLifetimes.Scoped:
-                service = this._createScopedService(serviceDescriptor);
+                service = this._createScopedService(serviceDescriptor, context);
                 break;
             }
           }
+          context.resolving.delete(serviceKey);
         }
       }
     }
     return service;
   }
 
-  _createSingletonService(serviceDescriptor) {
+  _createSingletonService(serviceDescriptor, context) {
     var service = null;
     if (this._serviceProvider) {
-      service = this._serviceProvider.getService(serviceDescriptor.name);
+      service = this._serviceProvider.getService(serviceDescriptor.name, context);
     } else {
       if (serviceDescriptor.type) {
-        service = this._createService(serviceDescriptor.type);
+        service = this._createService(serviceDescriptor.type, context);
       } else if (serviceDescriptor.factory) {
         service = serviceDescriptor.factory(this);
-        this._injectDependencies(service);
+        this._injectDependencies(service, context);
       } else if (serviceDescriptor.instance) {
         service = serviceDescriptor.instance;
       }
@@ -85,24 +94,24 @@ export default class ServiceProvider {
     return service;
   }
 
-  _createTransientService(serviceDescriptor) {
+  _createTransientService(serviceDescriptor, context) {
     var service = null;
     if (serviceDescriptor.type) {
-      service = this._createService(serviceDescriptor.type);
+      service = this._createService(serviceDescriptor.type, context);
     } else if (serviceDescriptor.factory) {
       service = serviceDescriptor.factory(this);
-      this._injectDependencies(service);
+      this._injectDependencies(service, context);
     }
     return service;
   }
 
-  _createScopedService(serviceDescriptor) {
+  _createScopedService(serviceDescriptor, context) {
     var service = null;
     if (serviceDescriptor.type) {
-      service = this._createService(serviceDescriptor.type);
+      service = this._createService(serviceDescriptor.type, context);
     } else if (serviceDescriptor.factory) {
       service = serviceDescriptor.factory(this);
-      this._injectDependencies(service);
+      this._injectDependencies(service, context);
     }
     if (service) {
       this._services.set(this._getServiceKey(serviceDescriptor.name), service);
@@ -110,12 +119,12 @@ export default class ServiceProvider {
     return service;
   }
 
-  _createService(serviceType) {
+  _createService(serviceType, context) {
     var service, params = null;
     if (this._serviceInjections) {
       this._serviceInjections.forEach(x => {
         if (!params) {
-          params = x.getConstructorParameters(serviceType, this);
+          params = x.getConstructorParameters(serviceType, this, context);
         }
       });
     }
@@ -127,9 +136,9 @@ export default class ServiceProvider {
     return service;
   }
 
-  _injectDependencies(service) {
+  _injectDependencies(service, context) {
     if (service && this._serviceInjections) {
-      this._serviceInjections.forEach(x => x.injectDependencies(service, this));
+      this._serviceInjections.forEach(x => x.injectDependencies(service, this, context));
     }
   }
 
