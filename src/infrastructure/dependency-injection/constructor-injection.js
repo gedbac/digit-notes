@@ -32,7 +32,11 @@ export default class ConstructorInjection extends ServiceInjection {
     if (parameterNames && parameterNames.length > 0) {
       parameterValues = [];
       for (var i = 0; i < parameterNames.length; i++) {
-        parameterValues[i] = serviceProvider.getService(parameterNames[i]);
+        if(parameterNames[i] === "serviceProvider") {
+          parameterValues[i] = serviceProvider;
+        } else {
+          parameterValues[i] = serviceProvider.getService(parameterNames[i]);
+        }
       }
     }
     return parameterValues;
@@ -42,7 +46,6 @@ export default class ConstructorInjection extends ServiceInjection {
     var params = null;
     if (serviceType && typeof serviceType === "function") {
       if (!this._serviceParameters.has(serviceType)) {
-
         var matches = serviceType
           .toString()
           .match(/(?:constructor|function)[^(]*\(([^)]*)\)/);
@@ -52,7 +55,6 @@ export default class ConstructorInjection extends ServiceInjection {
             .replace(/\s+/g, '')
             .split(",");
         }
-
         this._serviceParameters.set(serviceType, params);
       } else {
         params = this._serviceParameters.get(serviceType);

@@ -61,4 +61,19 @@ describe("Constructor injection", () => {
     expect(service.bar).not.to.be.null;
   });
 
+  it("should inject service provider to constructor", () => {
+    class BooService {
+      constructor(serviceProvider) {
+        this.serviceProvider = serviceProvider;
+      }
+    }
+    var serviceProvider = serviceProviderFactory
+      .use(new ConstructorInjection())
+      .addSingleton(BooService)
+      .create();
+    var service = serviceProvider.getService(BooService);
+    expect(service).not.to.be.null;
+    expect(service.serviceProvider).to.be.equals(serviceProvider);
+  });
+
 });

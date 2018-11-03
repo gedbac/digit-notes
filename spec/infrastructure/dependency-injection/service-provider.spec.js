@@ -194,29 +194,25 @@ describe("Service Provider", () => {
   it("should throw an error due missing service descriptor", () => {
     expect(() => {
       serviceProviderFactory.addService(null);
-    })
-    .throw().with.property("message", "Service descriptor is null");
+    }).throw().with.property("message", "Service descriptor is null");
   });
 
   it("should throw an error due missing service name", () => {
     expect(() => {
       serviceProviderFactory.addTransient();
-    })
-    .throw().with.property("message", "Service name is null");
+    }).throw().with.property("message", "Service name is null");
   });
 
   it("should throw an error due missing service lifetime", () => {
     expect(() => {
       serviceProviderFactory.addService(new ServiceDescriptor(FooService));
-    })
-    .throw().with.property("message", "Lifetime of service 'FooService' is null");
+    }).throw().with.property("message", "Lifetime of service 'FooService' is null");
   });
 
   it("should throw an error due invalid lifetime", () => {
     expect(() => {
       serviceProviderFactory.addService(new ServiceDescriptor(FooService, "Foo"));
-    })
-    .throw().with.property("message", "Lifetime 'Foo' of service 'FooService' is not supported");
+    }).throw().with.property("message", "Lifetime 'Foo' of service 'FooService' is not supported");
   });
 
   it("should throw an error due provided instance for transient service", () => {
@@ -224,8 +220,7 @@ describe("Service Provider", () => {
       serviceProviderFactory.addTransient(FooService, {
         instance: new FooService()
       });
-    })
-    .throw().with.property("message", "Instance can't be set for transient service 'FooService'");
+    }).throw().with.property("message", "Instance can't be set for transient service 'FooService'");
   });
 
   it("should throw an error due provided instance for scoped service", () => {
@@ -233,22 +228,19 @@ describe("Service Provider", () => {
       serviceProviderFactory.addScoped(FooService, {
         instance: new FooService()
       });
-    })
-    .throw().with.property("message", "Instance can't be set for scoped service 'FooService'");
+    }).throw().with.property("message", "Instance can't be set for scoped service 'FooService'");
   });
 
   it("should throw an error due provided invalid service name", () => {
     expect(() => {
       serviceProviderFactory.addScoped({});
-    })
-    .throw().with.property("message", "Service name's type is invalid");
+    }).throw().with.property("message", "Service name's type is invalid");
   });
 
   it("should throw an error due not provided type", () => {
     expect(() => {
       serviceProviderFactory.addTransient("foo");
-    })
-    .throw().with.property("message", "Type of service 'foo' is null");
+    }).throw().with.property("message", "Type of service 'foo' is null");
   });
 
   it("should throw an error due provided instance and factory at the same time", () => {
@@ -257,8 +249,7 @@ describe("Service Provider", () => {
         instance: new FooService(),
         factory: () => new FooService()
       });
-    })
-    .throw().with.property("message", "Instance and factory can't be set at the same time for service 'foo'");
+    }).throw().with.property("message", "Instance and factory can't be set at the same time for service 'foo'");
   });
 
   it("should throw an error due provided instance and type at the same time", () => {
@@ -267,8 +258,7 @@ describe("Service Provider", () => {
         instance: new FooService(),
         type: FooService
       });
-    })
-    .throw().with.property("message", "Instance and type can't be set at the same time for service 'foo'");
+    }).throw().with.property("message", "Instance and type can't be set at the same time for service 'foo'");
   });
 
   it("should throw an error due provided instance and factory at the same time", () => {
@@ -277,8 +267,7 @@ describe("Service Provider", () => {
         factory: () => new FooService(),
         type: FooService
       });
-    })
-    .throw().with.property("message", "Factory and type can't be set at the same time for service 'foo'");
+    }).throw().with.property("message", "Factory and type can't be set at the same time for service 'foo'");
   });
 
 });
