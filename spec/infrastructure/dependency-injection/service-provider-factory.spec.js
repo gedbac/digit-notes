@@ -42,8 +42,7 @@ describe("Service Provider Factory", () => {
   it("should throw an error due missing configuration", () => {
     expect(() => {
       serviceProviderFactory.addModule();
-    })
-    .throw().with.property("message", "Configuration is null");
+    }).throw().with.property("message", "Configuration is null");
   });
 
 });

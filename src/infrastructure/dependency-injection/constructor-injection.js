@@ -26,7 +26,7 @@ export default class ConstructorInjection extends ServiceInjection {
     this._serviceParameters = new Map();
   }
 
-  getConstructorParameters(serviceType, serviceProvider, context) {
+  getParameters(serviceType, serviceProvider, context) {
     var parameterValues = null;
     var parameterNames = this._getParameterNames(serviceType);
     if (parameterNames && parameterNames.length > 0) {

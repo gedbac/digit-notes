@@ -270,4 +270,22 @@ describe("Service Provider", () => {
     }).throw().with.property("message", "Factory and type can't be set at the same time for service 'foo'");
   });
 
+  it("should get singleton services", () => {
+    var service1 = new FooService();
+    var service2 = new FooService();
+    var serviceProvider = serviceProviderFactory
+      .addSingleton("foo", {
+        instance: service1
+      })
+      .addSingleton("foo", {
+        instance: service2
+      })
+      .create();
+    var services = serviceProvider.getServices("foo");
+    expect(services).not.to.be.null;
+    expect(services.length).to.be.equals(2);
+    expect(services).to.include(service1);
+    expect(services).to.include(service2);
+  });
+
 });

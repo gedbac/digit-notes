@@ -25,10 +25,10 @@ export default class ServiceInjection {
     }
   }
 
-  getConstructorParameters(serviceType, serviceProvider, context) {
+  getParameters(serviceType, serviceProvider, context) {
     return null;
   }
 
-  injectDependencies(service, serviceProvider, context) {}
+  inject(service, serviceProvider, context) {}
 
 }

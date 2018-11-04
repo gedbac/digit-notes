@@ -90,7 +90,7 @@ describe("Constructor injection", () => {
       .create();
     expect(() => {
       serviceProvider.getService(Foo);
-    }).throw().with.property("message", "Can not resolve circular dependency 'foo'");
+    }).throw().with.property("message", "Can not resolve circular dependency 'Foo'");
   });
 
 });

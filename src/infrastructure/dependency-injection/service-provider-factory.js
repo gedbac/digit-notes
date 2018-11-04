@@ -64,34 +64,43 @@ export default class ServiceProviderFactory {
     }
     var serviceName = this._getServiceName(serviceDescriptor.name);
     if (!serviceDescriptor.lifetime) {
-      throw new Error(`Lifetime of service '${serviceName}' is null`);
+      throw new Error(`Lifetime of service '${this._toString(serviceDescriptor.name)}' is null`);
     }
     if (
-      serviceDescriptor.lifetime !== ServiceLifetimes.Singleton &&
-      serviceDescriptor.lifetime !== ServiceLifetimes.Transient &&
-      serviceDescriptor.lifetime !== ServiceLifetimes.Scoped
+      serviceDescriptor.lifetime !== ServiceLifetimes.SINGLETON &&
+      serviceDescriptor.lifetime !== ServiceLifetimes.TRANSIENT &&
+      serviceDescriptor.lifetime !== ServiceLifetimes.SCOPED
     ) {
-      throw new Error(`Lifetime '${serviceDescriptor.lifetime}' of service '${serviceName}' is not supported`);
+      throw new Error(`Lifetime '${serviceDescriptor.lifetime}' of service '${this._toString(serviceDescriptor.name)}' is not supported`);
     }
     if (!serviceDescriptor.instance && !serviceDescriptor.factory && !serviceDescriptor.type) {
-      throw new Error(`Type of service '${serviceName}' is null`);
+      throw new Error(`Type of service '${this._toString(serviceDescriptor.name)}' is null`);
     }
-    if (serviceDescriptor.lifetime === ServiceLifetimes.Transient && serviceDescriptor.instance) {
-      throw new Error(`Instance can't be set for transient service '${serviceName}'`);
+    if (serviceDescriptor.lifetime === ServiceLifetimes.TRANSIENT && serviceDescriptor.instance) {
+      throw new Error(`Instance can't be set for transient service '${this._toString(serviceDescriptor.name)}'`);
     }
-    if (serviceDescriptor.lifetime === ServiceLifetimes.Scoped && serviceDescriptor.instance) {
-      throw new Error(`Instance can't be set for scoped service '${serviceName}'`);
+    if (serviceDescriptor.lifetime === ServiceLifetimes.SCOPED && serviceDescriptor.instance) {
+      throw new Error(`Instance can't be set for scoped service '${this._toString(serviceDescriptor.name)}'`);
     }
     if (serviceDescriptor.instance && serviceDescriptor.factory) {
-      throw new Error(`Instance and factory can't be set at the same time for service '${serviceName}'`);
+      throw new Error(`Instance and factory can't be set at the same time for service '${this._toString(serviceDescriptor.name)}'`);
     }
     if (serviceDescriptor.instance && serviceDescriptor.type) {
-      throw new Error(`Instance and type can't be set at the same time for service '${serviceName}'`);
+      throw new Error(`Instance and type can't be set at the same time for service '${this._toString(serviceDescriptor.name)}'`);
     }
     if (serviceDescriptor.factory && serviceDescriptor.type) {
-      throw new Error(`Factory and type can't be set at the same time for service '${serviceName}'`);
+      throw new Error(`Factory and type can't be set at the same time for service '${this._toString(serviceDescriptor.name)}'`);
     }
-    this._serviceDescriptors.set(this._getServiceKey(serviceDescriptor.name), serviceDescriptor);
+    if (!this._serviceDescriptors.has(serviceName)) {
+      this._serviceDescriptors.set(serviceName, [ serviceDescriptor ]);
+    } else {
+      var serviceDescriptors = this._serviceDescriptors.get(serviceName);
+      if (serviceDescriptors) {
+        serviceDescriptors.splice(0, 0, serviceDescriptor);
+      } else {
+        this._serviceDescriptors.set(serviceName, [ serviceDescriptor ]);
+      }
+    }
     return this;
   }
 
@@ -103,7 +112,7 @@ export default class ServiceProviderFactory {
     }
     return this.addService(new ServiceDescriptor(
       name,
-      ServiceLifetimes.Singleton,
+      ServiceLifetimes.SINGLETON,
       options.type,
       options.factory,
       options.instance
@@ -118,7 +127,7 @@ export default class ServiceProviderFactory {
     }
     return this.addService(new ServiceDescriptor(
       name,
-      ServiceLifetimes.Transient,
+      ServiceLifetimes.TRANSIENT,
       options.type,
       options.factory,
       options.instance
@@ -133,38 +142,38 @@ export default class ServiceProviderFactory {
     }
     return this.addService(new ServiceDescriptor(
       name,
-      ServiceLifetimes.Scoped,
+      ServiceLifetimes.SCOPED,
       options.type,
       options.factory,
       options.instance
     ));
   }
 
-  _getServiceName(name) {
+  _getServiceName(value) {
     var serviceName = null;
-    if (name) {
-      if (typeof name === "string") {
-        serviceName = name;
-      } else if (typeof name === "function") {
-        serviceName = name.name;
+    if (value) {
+      if (typeof value === "string") {
+        serviceName = value;
+      } else if (typeof value === "function") {
+        serviceName = value.name;
+      }
+      if (serviceName) {
+        serviceName = serviceName.toLowerCase();
       }
     }
     return serviceName;
   }
 
-  _getServiceKey(serviceName) {
-    var serviceKey = null;
-    if (serviceName) {
-      if (typeof serviceName === "string") {
-        serviceKey = serviceName;
-      } else if (typeof serviceName === "function") {
-        serviceKey = serviceName.name;
-      }
-      if (serviceKey) {
-        serviceKey = serviceKey.toLowerCase();
+  _toString(value) {
+    var serviceName = null;
+    if (value) {
+      if (typeof value === "string") {
+        serviceName = value;
+      } else if (typeof value === "function") {
+        serviceName = value.name;
       }
     }
-    return serviceKey;
+    return serviceName;
   }
 
 }

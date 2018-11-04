@@ -19,10 +19,10 @@
 
 export default class ServiceLifetimes {
 
-  static get Singleton() { return "Singleton"; }
+  static get SINGLETON() { return "SINGLETON"; }
 
-  static get Transient() { return "Transient"; }
+  static get TRANSIENT() { return "TRANSIENT"; }
 
-  static get Scoped() { return "Scoped"; }
+  static get SCOPED() { return "SCOPED"; }
 
 }
