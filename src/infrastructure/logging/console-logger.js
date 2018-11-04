@@ -27,52 +27,37 @@ export default class ConsoleLogger extends Logger {
   }
 
   logDebug(message) {
-    if (this.isEnabled(LogLevels.Debug)) {
-      console.log(this._formatMessage(LogLevels.Debug, message));
+    if (this.isEnabled(LogLevels.DEBUG)) {
+      console.log(this._formatMessage(LogLevels.DEBUG, message));
     }
   }
 
   logInformation(message) {
-    if (this.isEnabled(LogLevels.Information)) {
-      console.info(this._formatMessage(LogLevels.Information, message));
+    if (this.isEnabled(LogLevels.INFORMATION)) {
+      console.info(this._formatMessage(LogLevels.INFORMATION, message));
     }
   }
 
   logWarning(message) {
-    if (this.isEnabled(LogLevels.Warning)) {
-      console.warn(this._formatMessage(LogLevels.Warning, message));
+    if (this.isEnabled(LogLevels.WARNING)) {
+      console.warn(this._formatMessage(LogLevels.WARNING, message));
     }
   }
 
   logError(message) {
-    if (this.isEnabled(LogLevels.Error)) {
-      console.error(this._formatMessage(LogLevels.Error, message));
+    if (this.isEnabled(LogLevels.ERROR)) {
+      console.error(this._formatMessage(LogLevels.ERROR, message));
     }
   }
 
   logCritical(message) {
-    if (this.isEnabled(LogLevels.Critical)) {
-      console.error(this._formatMessage(LogLevels.Critical, message));
+    if (this.isEnabled(LogLevels.CRITICAL)) {
+      console.error(this._formatMessage(LogLevels.CRITICAL, message));
     }
   }
 
   _formatMessage(logLevel, message) {
-    return `${new Date().toISOString()} ${this.name} ${this._formatLogLevel(logLevel)}: ${message}`;
-  }
-
-  _formatLogLevel(logLevel) {
-    if (logLevel === LogLevels.Debug) {
-      return "DEBUG";
-    } else if (logLevel === LogLevels.Information) {
-      return "INFO";
-    } else if (logLevel === LogLevels.Warning) {
-      return "WARN";
-    } else if (logLevel === LogLevels.Error) {
-      return "ERROR";
-    } else if (logLevel === LogLevels.Critical) {
-      return "CRITICAL";
-    }
-    return null;
+    return `${new Date().toISOString()} ${this.name} ${logLevel}: ${message}`;
   }
 
 }

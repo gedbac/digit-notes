@@ -18,6 +18,7 @@
  */
 
 import LogLevel from "./log-levels";
+import LogLevels from "./log-levels";
 
 export default class Logger {
 
@@ -38,7 +39,7 @@ export default class Logger {
   }
 
   isEnabled(logLevel) {
-    return this._logLevel <= logLevel;
+    return this._logLevelToNumber(this._logLevel) <= this._logLevelToNumber(logLevel);
   }
 
   logDebug(message) {}
@@ -50,5 +51,22 @@ export default class Logger {
   logError(message) {}
 
   logCritical(message) {}
+
+  _logLevelToNumber(logLevel) {
+    if (logLevel === LogLevels.DEBUG) {
+      return 0;
+    } else if (logLevel === LogLevels.INFORMATION) {
+      return 1;
+    } else if (logLevel === LogLevels.WARNING) {
+      return 2;
+    } else if (logLevel === LogLevels.ERROR) {
+      return 3;
+    } else if (logLevel === LogLevels.CRITICAL) {
+      return 4;
+    } else if (logLevel === LogLevels.NONE) {
+      return 5;
+    }
+    throw new Error(`Log '${logLevel}' level is not supported`);
+  }
 
 }

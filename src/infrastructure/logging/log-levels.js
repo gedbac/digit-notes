@@ -19,16 +19,16 @@
 
 export default class LogLevels {
 
-  static get Debug() { return 0; }
+  static get DEBUG() { return "DEBUG"; }
 
-  static get Information() { return 1; }
+  static get INFORMATION() { return "INFORMATION"; }
 
-  static get Warning() { return 2; }
+  static get WARNING() { return "WARNING"; }
 
-  static get Error() { return 3; }
+  static get ERROR() { return "ERROR"; }
 
-  static get Critical() { return 4; }
+  static get CRITICAL() { return "CRITICAL"; }
 
-  static get None() { return 5; }
+  static get NONE() { return "NONE"; }
 
 }
