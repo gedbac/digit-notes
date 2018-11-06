@@ -36,9 +36,7 @@ export default class InMemoryEventStream extends EventStream {
 
   async read() {
     if (this.closed) {
-      throw {
-        message: "Stream is closed"
-      };
+      throw new Error("Stream is closed");
     }
     var event = null;
     if (this._position >= 0 && this._position < this._events.length) {
@@ -49,24 +47,16 @@ export default class InMemoryEventStream extends EventStream {
 
   async write(event) {
     if (!event) {
-      throw {
-        message: "Event is null"
-      };
+      throw new Error("Event is null");
     }
     if (!(event instanceof Event)) {
-      throw {
-        message: "Type of event is invalid"
-      };
+      throw new Error("Type of event is invalid");
     }
     if (!this.supportedEventTypes.has(event.name)) {
-      throw {
-        message: `Event '${event.name}' is not supported`
-      };
+      throw new Error(`Event '${event.name}' is not supported`);
     }
     if (this.closed) {
-      throw {
-        message: "Stream is closed"
-      };
+      throw new Error("Stream is closed");
     }
     this._events.push(event);
   }

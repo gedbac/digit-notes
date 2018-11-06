@@ -25,9 +25,7 @@ export default class EventSourcedAggregate extends AggregateRoot {
   constructor(props) {
     super(props);
     if (new.target === EventSourcedAggregate) {
-      throw {
-        message: "Can't construct abstract instances directly"
-      };
+      throw new Error("Can't construct abstract instances directly");
     }
     this._version = 0;
     if (props && "verion" in props) {
@@ -49,22 +47,16 @@ export default class EventSourcedAggregate extends AggregateRoot {
 
   apply(event) {
     if (!event) {
-      throw {
-        message: "Event is null"
-      };
+      throw new Error("Event is null");
     }
     if (!(event instanceof Event)) {
-      throw {
-        message: "Type of event is invalid"
-      };
+      throw new Error("Type of event is invalid");
     }
     var eventHandlerName = `_on${event.name}`;
     if (eventHandlerName in this) {
       this[eventHandlerName](event);
     } else {
-      throw {
-        message: `Method '${eventHandlerName}' not found in class '${this.constructor.name}'`
-      };
+      throw new Error(`Method '${eventHandlerName}' not found in class '${this.constructor.name}'`);
     }
     this._version++;
     this._modifiedOn = event.timestamp;
@@ -72,14 +64,10 @@ export default class EventSourcedAggregate extends AggregateRoot {
 
   raise(event) {
     if (!event) {
-      throw {
-        message: "Event is null"
-      };
+      throw new Error("Event is null");
     }
     if (!(event instanceof Event)) {
-      throw {
-        message: "Type of event is invalid"
-      };
+      throw new Error("Type of event is invalid");
     }
     this._uncommittedEvents.push(event);
     this.apply(event);

@@ -25,9 +25,7 @@ export default class AggregateRoot extends Entity {
   constructor(props) {
     super(props);
     if (new.target === AggregateRoot) {
-      throw {
-        message: "Can't construct abstract instances directly"
-      };
+      throw new Error("Can't construct abstract instances directly");
     }
     this._createdOn = timestamp();
     if (props && "createdOn" in props) {

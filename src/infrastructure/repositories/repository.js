@@ -21,34 +21,24 @@ export default class Repository {
 
   constructor(props) {
     if (new.target === Repository) {
-      throw {
-        message: "Can't construct abstract instances directly"
-      };
+      throw new Error("Can't construct abstract instances directly");
     }
   }
 
   findBy(id) {
-    throw {
-      message: "Method 'findBy' is not implemented"
-    };
+    throw new Error("Method 'findBy' is not implemented");
   }
 
   save(aggregate) {
-    throw {
-      message: "Method 'save' is not implemented"
-    };
+    throw new Error("Method 'save' is not implemented");
   }
 
   update(aggregate) {
-    throw {
-      message: "Method 'update' is not implemented"
-    };
+    throw new Error("Method 'update' is not implemented");
   }
 
   delete(id) {
-    throw {
-      message: "Method 'delete' is not implemented"
-    };
+    throw new Error("Method 'delete' is not implemented");
   }
 
 }

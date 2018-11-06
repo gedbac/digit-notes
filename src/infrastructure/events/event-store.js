@@ -23,9 +23,7 @@ export default class EventStore {
 
   constructor(props) {
     if (new.target === EventStream) {
-      throw {
-        message: "Can't construct abstract instances directly"
-      };
+      throw new Error("Can't construct abstract instances directly");
     }
     this._supportedEventTypes = new Map();
     if (props && "supportedEventTypes" in props) {
@@ -51,27 +49,19 @@ export default class EventStore {
   }
 
   async hasStream(name) {
-    throw {
-      message: "Method 'hasStream' is not implemented"
-    };
+    throw new Error("Method 'hasStream' is not implemented");
   }
 
   async getStream(name) {
-    throw {
-      message: "Method 'getStream' is not implemented"
-    };
+    throw new Error("Method 'getStream' is not implemented");
   }
 
   async createStream(name) {
-    throw {
-      message: "Method 'createStream' is not implemented"
-    };
+    throw new Error("Method 'createStream' is not implemented");
   }
 
   async deleteStream(name) {
-    throw {
-      message: "Method 'deleteStream' is not implemented"
-    };
+    throw new Error("Method 'deleteStream' is not implemented");
   }
 
 }

@@ -25,9 +25,7 @@ export default class EventSourcedEntity extends Entity {
   constructor(props) {
     super(props);
     if (new.target === EventSourcedEntity) {
-      throw {
-        message: "Can't construct abstract instances directly"
-      };
+      throw new Error("Can't construct abstract instances directly");
     }
     this._aggregateRoot = null;
     if (props && "aggregateRoot" in props) {
@@ -41,30 +39,22 @@ export default class EventSourcedEntity extends Entity {
 
   apply(event) {
     if (!event) {
-      throw {
-        message: "Event is null"
-      };
+      throw new Error("Event is null");
     }
     if (!(event instanceof Event)) {
-      throw {
-        message: "Type of event is invalid"
-      };
+      throw new Error("Type of event is invalid");
     }
     var eventHandlerName = `_on${event.name}`;
     if (eventHandlerName in this) {
       this[eventHandlerName](event);
     } else {
-      throw {
-        message: `Method '${eventHandlerName}' not found in class '${this.constructor.name}'`
-      };
+      throw new Error(`Method '${eventHandlerName}' not found in class '${this.constructor.name}'`);
     }
   }
 
   raise(event) {
     if (!this._aggregateRoot) {
-      throw {
-        message: "Aggregate root is null"
-      };
+      throw new Error("Aggregate root is null");
     }
     this._aggregateRoot.raise(event);
   }

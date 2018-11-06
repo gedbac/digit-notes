@@ -35,9 +35,7 @@ export default class TextSearch {
   createIndex(indexName, options) {
     try {
       if (!indexName) {
-        throw {
-          message: "Index's name is null"
-        };
+        throw new Error("Index's name is null");
       }
       this._indexes.set(indexName, new TextIndex(options));
       if (this._logger) {
@@ -54,9 +52,7 @@ export default class TextSearch {
   deleteIndex(indexName) {
     try {
       if (!indexName) {
-        throw {
-          message: "Index's name is null"
-        };
+        throw new Error("Index's name is null");
       }
       if (this._indexes.has(indexName)) {
         this._indexes.delete(indexName);
@@ -75,9 +71,7 @@ export default class TextSearch {
   put(indexName, document) {
     try {
       if (!indexName) {
-        throw {
-          message: "Index's name is null"
-        };
+        throw new Error("Index's name is null");
       }
       if (this._indexes.has(indexName)) {
         var index = this._indexes.get(indexName);
@@ -86,9 +80,7 @@ export default class TextSearch {
           this._logger.logDebug(`Document has been added to index [indexName=${indexName}]`);
         }
       } else {
-        throw {
-          message: `Index '${indexName}' not found`
-        };
+        throw new Error(`Index '${indexName}' not found`);
       }
     } catch(ex) {
       if (this.logger) {
@@ -101,9 +93,7 @@ export default class TextSearch {
   search(indexName, keyword) {
     try {
       if (!indexName) {
-        throw {
-          message: "Index's name is null"
-        };
+        throw new Error("Index's name is null");
       }
       var result = null;
       if (this._indexes.has(indexName)) {
@@ -121,9 +111,7 @@ export default class TextSearch {
             `[indexName=${indexName}, keyword=${keyword}, took=${result.took}]`);
         }
       } else {
-        throw {
-          message: `Index '${indexName}' not found`
-        };
+        throw new Error(`Index '${indexName}' not found`);
       }
     } catch (ex) {
       if (this._logger) {

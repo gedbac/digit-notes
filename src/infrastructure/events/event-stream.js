@@ -21,9 +21,7 @@ export default class EventStream {
 
   constructor(props) {
     if (new.target === EventStream) {
-      throw {
-        message: "Can't construct abstract instances directly"
-      };
+      throw new Error("Can't construct abstract instances directly");
     }
     this._name = new.target.name;
     if (props && "name" in props) {
@@ -53,9 +51,7 @@ export default class EventStream {
   }
 
   get length() {
-    throw {
-      message: "Property 'length' is not implemented"
-    };
+    throw new Error("Property 'length' is not implemented");
   }
 
   get supportedEventTypes() {
@@ -67,15 +63,11 @@ export default class EventStream {
   }
 
   async read() {
-    throw {
-      message: "Method 'read' is not implemented"
-    };
+    throw new Error("Method 'read' is not implemented");
   }
 
   async write(event) {
-    throw {
-      message: "Method 'read' is not implemented"
-    };
+    throw new Error("Method 'read' is not implemented");
   }
 
   async open() {

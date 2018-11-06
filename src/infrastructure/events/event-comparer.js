@@ -23,9 +23,7 @@ export default class EventComparer {
 
   compare(event1, event2) {
     if (!event1 || !event2) {
-      throw {
-        message: "Event is null"
-      };
+      throw new Error("Event is null");
     }
     if (event1.id === event2.id) {
       return 0;

@@ -42,14 +42,10 @@ export default class FileEventStore extends EventStore {
 
   async hasStream(name) {
     if (!name) {
-      throw {
-        message: "Stream name is null"
-      };
+      throw new Error("Stream name is null");
     }
     if (this.closed) {
-      throw {
-        message: "Event store is closed"
-      };
+      throw new Error("Event store is closed");
     }
     var pathToFile = this.getPathToStream(name);
     if (pathToFile) {
@@ -60,19 +56,13 @@ export default class FileEventStore extends EventStore {
 
   async createStream(name) {
     if (!name) {
-      throw {
-        message: "Stream name is null"
-      };
+      throw new Error("Stream name is null");
     }
     if (this.closed) {
-      throw {
-        message: "Event store is closed"
-      };
+      throw new Error("Event store is closed");
     }
     if (await this.hasStream(name)) {
-      throw {
-        message: "Stream with same name can't be created"
-      };
+      throw new Error("Stream with same name can't be created");
     }
     var stream = new FileEventStream({
       name: name,
@@ -84,14 +74,10 @@ export default class FileEventStore extends EventStore {
 
   async getStream(name) {
     if (!name) {
-      throw {
-        message: "Stream name is null"
-      };
+      throw new Error("Stream name is null");
     }
     if (this.closed) {
-      throw {
-        message: "Event store is closed"
-      };
+      throw new Error("Event store is closed");
     }
     if (await this.hasStream(name)) {
       return new FileEventStream({
@@ -105,14 +91,10 @@ export default class FileEventStore extends EventStore {
 
   async deleteStream(name) {
     if (!name) {
-      throw {
-        message: "Stream name is null"
-      };
+      throw new Error("Stream name is null");
     }
     if (this.closed) {
-      throw {
-        message: "Event store is closed"
-      };
+      throw new Error("Event store is closed");
     }
     if (await this.hasStream(name)) {
       var pathToFile = this.getPathToStream(name);

@@ -27,16 +27,12 @@ export default class EventStreamEncryptor extends EventStream {
     if (props && "stream" in props) {
       this._stream = props.stream;
     } else {
-      throw {
-        message: "Event stream is null"
-      };
+      throw new Error("Event stream is null");
     }
     if (props && "options" in props) {
       this._options = props.options;
     } else {
-      throw {
-        message: "Event stream encryptor options is null"
-      };
+      throw new Error("Event stream encryptor options is null");
     }
     this._privateKey = null;
   }
@@ -89,19 +85,13 @@ export default class EventStreamEncryptor extends EventStream {
 
   async write(event) {
     if (!event) {
-      throw {
-        message: "Event is null"
-      };
+      throw new Error("Event is null");
     }
     if (!(event instanceof Event)) {
-      throw {
-        message: "Type of event is invalid"
-      };
+      throw new Error("Type of event is invalid");
     }
     if (!event.name) {
-      throw {
-        message: "Event's name is not set"
-      };
+      throw new Error("Event's name is not set");
     }
     var encryptedEvent = await this.encrypt(event);
     await this._stream.write(encryptedEvent);
@@ -109,14 +99,10 @@ export default class EventStreamEncryptor extends EventStream {
 
   async encrypt(event) {
     if (!event) {
-      throw {
-        message: "Event is null"
-      };
+      throw new Error("Event is null");
     }
     if (!this.options || !this.options.privateKey) {
-      throw {
-        message: "Private key is not set"
-      };
+      throw new Error("Private key is not set");
     }
     var nonce = crypto.randomBytes(16);
     event.nonce = nonce.toString("base64");
@@ -136,14 +122,10 @@ export default class EventStreamEncryptor extends EventStream {
 
   async decrypt(event) {
     if (!event) {
-      throw {
-        message: "Event is null"
-      };
+      throw new Error("Event is null");
     }
     if (!this.options || !this.options.privateKey) {
-      throw {
-        message: "Private key is not set"
-      };
+      throw new Error("Private key is not set");
     }
     var nonce = Buffer.from(event.nonce, "base64");
     var propertyNames = this._getPropertyNames(event);
@@ -172,9 +154,7 @@ export default class EventStreamEncryptor extends EventStream {
 
   async _decryptText(encryptedText, nonce) {
     if (!this.options || !this.options.privateKey) {
-      throw {
-        message: "Private key is not set"
-      };
+      throw new Error("Private key is not set");
     }
     var text = null;
     if (encryptedText && typeof encryptedText === "string") {

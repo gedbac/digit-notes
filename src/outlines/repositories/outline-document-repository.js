@@ -28,17 +28,13 @@ export default class OutlineDocumentRepository extends Repository {
     if (props && "eventStore" in props) {
       this._eventStore = props.eventStore;
     } else {
-      throw {
-        message: "Event store is null"
-      };
+      throw new Error("Event store is null");
     }
   }
 
   async findBy(id) {
     if (!id) {
-      throw {
-        message: "id is null"
-      };
+      throw new Error("id is null");
     }
     var streamName = this.streamNameFor(id);
     var stream = await this._eventStore.getStream(streamName);
@@ -50,18 +46,14 @@ export default class OutlineDocumentRepository extends Repository {
       }
       await stream.close();
     } else {
-      throw {
-        message: `Stream '${streamName}' not found`
-      };
+      throw new Error(`Stream '${streamName}' not found`);
     }
     return document;
   }
 
   async save(outlineDocument) {
     if (!outlineDocument) {
-      throw {
-        message: "Outline document is null"
-      };
+      throw new Error("Outline document is null");
     }
     var streamName = this.streamNameFor(outlineDocument.id);
     var stream = await this._eventStore.createStream(streamName);
@@ -75,17 +67,13 @@ export default class OutlineDocumentRepository extends Repository {
         await stream.close();
       }
     } else {
-      throw {
-        message: `Failed to create stream '${streamName}'`
-      };
+      throw new Error(`Failed to create stream '${streamName}'`);
     }
   }
 
   async update(outlineDocument) {
     if (!outlineDocument) {
-      throw {
-        message: "Outline document is null"
-      };
+      throw new Error("Outline document is null");
     }
     var streamName = this.streamNameFor(outlineDocument.id);
     var stream = await this._eventStore.getStream(streamName);
@@ -99,17 +87,13 @@ export default class OutlineDocumentRepository extends Repository {
         await stream.close();
       }
     } else {
-      throw {
-        message: `Failed to get stream '${streamName}'`
-      };
+      throw new Error(`Failed to get stream '${streamName}'`);
     }
   }
 
   async delete(id) {
     if (!id) {
-      throw {
-        message: "id is null"
-      };
+      throw new Error("id is null");
     }
     var streamName = this.streamNameFor(id);
     await this._eventStore.deleteStream(streamName);

@@ -21,9 +21,7 @@ export default class ValueObject {
 
   constructor(props) {
     if (new.target === ValueObject) {
-      throw {
-        message: "Can't construct abstract instances directly"
-      };
+      throw new Error("Can't construct abstract instances directly");
     }
   }
 

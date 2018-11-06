@@ -100,9 +100,7 @@ export default class Outline extends EventSourcedEntity {
 
   addOutline(id, text) {
     if (!id) {
-      throw {
-        message: "Outline's id is null"
-      };
+      throw new Error("Outline's id is null");
     }
     this.raise(new OutlineAdded({
       outlineDocumentId: this.aggregateRoot.id,
@@ -114,9 +112,7 @@ export default class Outline extends EventSourcedEntity {
 
   removeOutline(id) {
     if (!id) {
-      throw {
-        message: "Outline's id is null"
-      };
+      throw new Error("Outline's id is null");
     }
     this.raise(new OutlineRemoved({
       outlineDocumentId: this.aggregateRoot.id,
@@ -145,9 +141,7 @@ export default class Outline extends EventSourcedEntity {
 
   addTag(tag) {
     if (!tag) {
-      throw {
-        message: "Outline's tag is null"
-      };
+      throw new Error("Outline's tag is null");
     }
     if (!this._tags.includes(tag)) {
       this.raise(new OutlineTagAdded({
@@ -160,9 +154,7 @@ export default class Outline extends EventSourcedEntity {
 
   removeTag(tag) {
     if (!tag) {
-      throw {
-        message: "Outline's tag is null"
-      };
+      throw new Error("Outline's tag is null");
     }
     if (this._tags.includes(tag)) {
       this.raise(new OutlineTagRemoved({

@@ -24,25 +24,19 @@ export default class EventStreamMerger {
     if (props && "streamFactory" in props) {
       this._streamFactory = props.streamFactory;
     } else {
-      throw {
-        message: "Event stream factory is null"
-      };
+      throw new Error("Event stream factory is null");
     }
     this._eventComparer = null;
     if (props && "eventComparer" in props) {
       this._eventComparer = props.eventComparer;
     } else {
-      throw {
-        message: "Event comparer is null"
-      };
+      throw new Error("Event comparer is null");
     }
   }
 
   async merge(stream1, stream2) {
     if (!stream1 || !stream2) {
-      throw {
-        message: "Stream is null"
-      };
+      throw new Error("Stream is null");
     }
     stream1.position = 0;
     stream2.position = 0;

@@ -21,9 +21,7 @@ export default class EventStreamFactory {
 
   constructor(props) {
     if (new.target === EventStreamFactory) {
-      throw {
-        message: "Can't construct abstract instances directly"
-      };
+      throw new Error("Can't construct abstract instances directly");
     }
     this._supportedEventTypes = new Map();
     if (props && "supportedEventTypes" in props) {
@@ -36,9 +34,7 @@ export default class EventStreamFactory {
   }
 
   create(name) {
-    throw {
-      message: "Method 'create' is not implemented"
-    };
+    throw new Error("Method 'create' is not implemented");
   }
 
 }

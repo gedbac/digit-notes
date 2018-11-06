@@ -48,19 +48,13 @@ export default class TextIndex {
 
   put(document) {
     if (!document) {
-      throw {
-        message: "Document is not set"
-      };
+      throw new Error("Document is not set");
     }
     if (!this.propertyName) {
-      throw {
-        message: "Property name is not set"
-      };
+      throw new Error("Property name is not set");
     }
     if (!this.analyzer) {
-      throw {
-        message: "Analyzer is not set"
-      };
+      throw new Error("Analyzer is not set");
     }
     if (document && this.propertyName && this.propertyName in document) {
       var propertyValue = document[this.propertyName];

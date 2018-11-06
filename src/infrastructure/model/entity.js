@@ -21,9 +21,7 @@ export default class Entity {
 
   constructor(props) {
     if (new.target === Entity) {
-      throw {
-        message: "Can't construct abstract instances directly"
-      };
+      throw new Error("Can't construct abstract instances directly");
     }
     this._id = null;
     if (props && "id" in props) {

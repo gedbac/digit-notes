@@ -23,9 +23,7 @@ export default class Event {
 
   constructor(props) {
     if (new.target === Event) {
-      throw {
-        message: "Can't construct abstract instances directly"
-      };
+      throw new Error("Can't construct abstract instances directly");
     }
     this._id = uuid();
     if (props && "id" in props) {

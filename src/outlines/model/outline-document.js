@@ -62,9 +62,7 @@ export default class OutlineDocument extends EventSourcedAggregate {
 
   addOutline(id, text) {
     if (!id) {
-      throw {
-        message: "Outline's id is null"
-      };
+      throw new Error("Outline's id is null");
     }
     this.raise(new OutlineAdded({
       outlineDocumentId: this.id,
@@ -76,9 +74,7 @@ export default class OutlineDocument extends EventSourcedAggregate {
 
   removeOutline(id) {
     if (!id) {
-      throw {
-        message: "Outline's id is null"
-      };
+      throw new Error("Outline's id is null");
     }
     this.raise(new OutlineRemoved({
       outlineDocumentId: this.id,

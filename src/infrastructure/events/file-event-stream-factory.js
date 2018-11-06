@@ -40,9 +40,7 @@ export default class FileEventStreamFactory extends EventStreamFactory {
 
   create(name) {
     if (!name) {
-      throw {
-        message: "Stream name is null"
-      };
+      throw new Error("Stream name is null");
     }
     return new FileEventStream({
       name: name,

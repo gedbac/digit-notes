@@ -24,9 +24,7 @@ export default class OutlineDocumentEvent extends Event {
   constructor(props) {
     super(props);
     if (new.target === OutlineDocumentEvent) {
-      throw {
-        message: "Can't construct abstract instances directly"
-      };
+      throw new Error("Can't construct abstract instances directly");
     }
     this._outlineDocumentId = null;
     if (props && "outlineDocumentId" in props) {

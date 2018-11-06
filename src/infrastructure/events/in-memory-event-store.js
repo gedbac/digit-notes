@@ -32,33 +32,23 @@ export default class InMemoryEventStore extends EventStore {
 
   async hasStream(name) {
     if (!name) {
-      throw {
-        message: "Stream name is null"
-      };
+      throw new Error("Stream name is null");
     }
     if (this.closed) {
-      throw {
-        message: "Event store is closed"
-      };
+      throw new Error("Event store is closed");
     }
     return this._streams.has(name);
   }
 
   async createStream(name) {
     if (!name) {
-      throw {
-        message: "Stream name is null"
-      };
+      throw new Error("Stream name is null");
     }
     if (this.closed) {
-      throw {
-        message: "Event store is closed"
-      };
+      throw new Error("Event store is closed");
     }
     if (await this.hasStream(name)) {
-      throw {
-        message: `Stream with name '${name}' already exists`
-      };
+      throw new Error(`Stream with name '${name}' already exists`);
     }
     var stream = new InMemoryEventStream({
       name: name,
@@ -71,14 +61,10 @@ export default class InMemoryEventStore extends EventStore {
 
   async getStream(name) {
     if (!name) {
-      throw {
-        message: "Stream name is null"
-      };
+      throw new Error("Stream name is null");
     }
     if (this.closed) {
-      throw {
-        message: "Event store is closed"
-      };
+      throw new Error("Event store is closed");
     }
     var stream = this._streams.get(name);
     if (stream) {
@@ -89,14 +75,10 @@ export default class InMemoryEventStore extends EventStore {
 
   async deleteStream(name) {
     if (!name) {
-      throw {
-        message: "Stream name is null"
-      };
+      throw new Error("Stream name is null");
     }
     if (this.closed) {
-      throw {
-        message: "Event store is closed"
-      };
+      throw new Error("Event store is closed");
     }
     this._streams.delete(name);
   }
