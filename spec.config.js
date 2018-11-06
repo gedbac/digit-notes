@@ -44,6 +44,7 @@ var specNodeConfig = {
       test: /\.js$/,
       exclude: /node_modules/,
       use: [
+        "babel-loader",
         "eslint-loader"
       ]
     }]
@@ -98,6 +99,7 @@ var specWebConfig = {
       test: /\.js$/,
       exclude: /node_modules/,
       use: [
+        "babel-loader",
         "eslint-loader"
       ]
     }]
