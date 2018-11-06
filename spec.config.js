@@ -39,6 +39,15 @@ var specNodeConfig = {
       "outlines-repositories$": path.resolve(__dirname, "./src/outlines/repositories/index.js")
     }
   },
+  module: {
+    rules: [{
+      test: /\.js$/,
+      exclude: /node_modules/,
+      use: [
+        "eslint-loader"
+      ]
+    }]
+  },
   plugins: [
     new DefinePlugin({
       DEBUG: true
@@ -83,6 +92,15 @@ var specWebConfig = {
       "outlines-factories$": path.resolve(__dirname, "./src/outlines/factories/index.js"),
       "outlines-repositories$": path.resolve(__dirname, "./src/outlines/repositories/index.js")
     }
+  },
+  module: {
+    rules: [{
+      test: /\.js$/,
+      exclude: /node_modules/,
+      use: [
+        "eslint-loader"
+      ]
+    }]
   },
   plugins: [
     new DefinePlugin({
