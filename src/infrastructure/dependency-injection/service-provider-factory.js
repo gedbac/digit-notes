@@ -20,6 +20,7 @@
 import ServiceDescriptor from "./service-descriptor";
 import ServiceLifetimes from "./service-lifetimes";
 import ServiceProvider from "./service-provider";
+import ServiceNameFormatter from "./service-name-formatter";
 
 export default class ServiceProviderFactory {
 
@@ -62,43 +63,44 @@ export default class ServiceProviderFactory {
     if (typeof serviceDescriptor.name !== "string" && typeof serviceDescriptor.name !== "function") {
       throw new Error("Service name's type is invalid");
     }
-    var serviceName = this._getServiceName(serviceDescriptor.name);
+    var serviceName = ServiceNameFormatter.format(serviceDescriptor.name);
     if (!serviceDescriptor.lifetime) {
-      throw new Error(`Lifetime of service '${this._toString(serviceDescriptor.name)}' is null`);
+      throw new Error(`Lifetime of service '${serviceName}' is null`);
     }
     if (
       serviceDescriptor.lifetime !== ServiceLifetimes.SINGLETON &&
       serviceDescriptor.lifetime !== ServiceLifetimes.TRANSIENT &&
       serviceDescriptor.lifetime !== ServiceLifetimes.SCOPED
     ) {
-      throw new Error(`Lifetime '${serviceDescriptor.lifetime}' of service '${this._toString(serviceDescriptor.name)}' is not supported`);
+      throw new Error(`Lifetime '${serviceDescriptor.lifetime}' of service '${serviceName}' is not supported`);
     }
     if (!serviceDescriptor.instance && !serviceDescriptor.factory && !serviceDescriptor.type) {
-      throw new Error(`Type of service '${this._toString(serviceDescriptor.name)}' is null`);
+      throw new Error(`Type of service '${serviceName}' is null`);
     }
     if (serviceDescriptor.lifetime === ServiceLifetimes.TRANSIENT && serviceDescriptor.instance) {
-      throw new Error(`Instance can't be set for transient service '${this._toString(serviceDescriptor.name)}'`);
+      throw new Error(`Instance can't be set for transient service '${serviceName}'`);
     }
     if (serviceDescriptor.lifetime === ServiceLifetimes.SCOPED && serviceDescriptor.instance) {
-      throw new Error(`Instance can't be set for scoped service '${this._toString(serviceDescriptor.name)}'`);
+      throw new Error(`Instance can't be set for scoped service '${serviceName}'`);
     }
     if (serviceDescriptor.instance && serviceDescriptor.factory) {
-      throw new Error(`Instance and factory can't be set at the same time for service '${this._toString(serviceDescriptor.name)}'`);
+      throw new Error(`Instance and factory can't be set at the same time for service '${serviceName}'`);
     }
     if (serviceDescriptor.instance && serviceDescriptor.type) {
-      throw new Error(`Instance and type can't be set at the same time for service '${this._toString(serviceDescriptor.name)}'`);
+      throw new Error(`Instance and type can't be set at the same time for service '${serviceName}'`);
     }
     if (serviceDescriptor.factory && serviceDescriptor.type) {
-      throw new Error(`Factory and type can't be set at the same time for service '${this._toString(serviceDescriptor.name)}'`);
+      throw new Error(`Factory and type can't be set at the same time for service '${serviceName}'`);
     }
-    if (!this._serviceDescriptors.has(serviceName)) {
-      this._serviceDescriptors.set(serviceName, [ serviceDescriptor ]);
+    var key = serviceName.toLowerCase();
+    if (!this._serviceDescriptors.has(key)) {
+      this._serviceDescriptors.set(key, [ serviceDescriptor ]);
     } else {
-      var serviceDescriptors = this._serviceDescriptors.get(serviceName);
+      var serviceDescriptors = this._serviceDescriptors.get(key);
       if (serviceDescriptors) {
         serviceDescriptors.splice(0, 0, serviceDescriptor);
       } else {
-        this._serviceDescriptors.set(serviceName, [ serviceDescriptor ]);
+        this._serviceDescriptors.set(key, [ serviceDescriptor ]);
       }
     }
     return this;
@@ -147,33 +149,6 @@ export default class ServiceProviderFactory {
       options.factory,
       options.instance
     ));
-  }
-
-  _getServiceName(value) {
-    var serviceName = null;
-    if (value) {
-      if (typeof value === "string") {
-        serviceName = value;
-      } else if (typeof value === "function") {
-        serviceName = value.name;
-      }
-      if (serviceName) {
-        serviceName = serviceName.toLowerCase();
-      }
-    }
-    return serviceName;
-  }
-
-  _toString(value) {
-    var serviceName = null;
-    if (value) {
-      if (typeof value === "string") {
-        serviceName = value;
-      } else if (typeof value === "function") {
-        serviceName = value.name;
-      }
-    }
-    return serviceName;
   }
 
 }

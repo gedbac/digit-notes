@@ -23,44 +23,44 @@ export default class ConstructorInjection extends ServiceInjection {
 
   constructor() {
     super();
-    this._serviceParameters = new Map();
+    this._serviceParameterNames = new Map();
   }
 
   getParameters(serviceType, serviceProvider, context) {
-    var parameterValues = null;
-    var parameterNames = this._getParameterNames(serviceType);
-    if (parameterNames && parameterNames.length > 0) {
-      parameterValues = [];
-      for (var i = 0; i < parameterNames.length; i++) {
-        if(parameterNames[i] === "serviceProvider") {
-          parameterValues[i] = serviceProvider;
-        } else {
-          parameterValues[i] = serviceProvider.getService(parameterNames[i], context);
+    var serviceParameterValues = [];
+    if (serviceType) {
+      var serviceParameterNames = this._serviceParameterNames.get(serviceType);
+      if (!serviceParameterNames) {
+        serviceParameterNames = this._getServiceParameterNames(serviceType);
+        this._serviceParameterNames.set(serviceType, serviceParameterNames);
+      }
+      if (serviceParameterNames && serviceParameterNames.length > 0) {
+        for (var i = 0; i < serviceParameterNames.length; i++) {
+          if(serviceParameterNames[i] === "serviceProvider") {
+            serviceParameterValues[i] = serviceProvider;
+          } else {
+            serviceParameterValues[i] = serviceProvider.getService(serviceParameterNames[i], context);
+          }
         }
       }
     }
-    return parameterValues;
+    return serviceParameterValues;
   }
 
-  _getParameterNames(serviceType) {
-    var params = null;
+  _getServiceParameterNames(serviceType) {
+    var serviceParameterNames = null;
     if (serviceType && typeof serviceType === "function") {
-      if (!this._serviceParameters.has(serviceType)) {
-        var matches = serviceType
-          .toString()
-          .match(/(?:constructor|function)[^(]*\(([^)]*)\)/);
-        if (matches && matches.length > 1) {
-          params = matches[1]
-            .replace(/\/\/.*?[\r\n]|\/\*(?:.|[\r\n])*?\*\//g, '')
-            .replace(/\s+/g, '')
-            .split(",");
-        }
-        this._serviceParameters.set(serviceType, params);
-      } else {
-        params = this._serviceParameters.get(serviceType);
+      var matches = serviceType
+        .toString()
+        .match(/(?:constructor|function)[^(]*\(([^)]*)\)/);
+      if (matches && matches.length > 1) {
+        serviceParameterNames = matches[1]
+          .replace(/\/\/.*?[\r\n]|\/\*(?:.|[\r\n])*?\*\//g, '')
+          .replace(/\s+/g, '')
+          .split(",");
       }
     }
-    return params;
+    return serviceParameterNames;
   }
 
 }

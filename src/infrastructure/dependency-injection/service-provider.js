@@ -19,6 +19,7 @@
 
 import ServiceScope from "./service-scope";
 import ServiceLifetimes from "./service-lifetimes";
+import ServiceNameFormatter from "./service-name-formatter";
 
 export default class ServiceProvider {
 
@@ -41,11 +42,17 @@ export default class ServiceProvider {
   getService(name, context) {
     var serviceInstance = null;
     if (name) {
-      var serviceName = this._getServiceName(name);
+      var serviceName = ServiceNameFormatter.format(name);
       if (serviceName) {
-        var serviceDescriptors = this._serviceDescriptors.get(serviceName);
+        var key = serviceName.toLowerCase();
+        var serviceDescriptors = this._serviceDescriptors.get(key);
         if (serviceDescriptors && serviceDescriptors.length > 0) {
-          serviceInstance = this._resolveService(serviceName, serviceDescriptors[0], context);
+          var serviceDescriptor = serviceDescriptors[0];
+          serviceInstance = this._resolveService(
+            ServiceNameFormatter.format(serviceDescriptor.name),
+            serviceDescriptor,
+            context
+          );
         }
       }
     }
@@ -55,13 +62,20 @@ export default class ServiceProvider {
   getServices(name, context) {
     var serviceInstances = null;
     if (name) {
-      var serviceName = this._getServiceName(name);
+      var serviceName = ServiceNameFormatter.format(name);
       if (serviceName) {
-        var serviceDescriptors = this._serviceDescriptors.get(serviceName);
+        var key = serviceName.toLowerCase();
+        var serviceDescriptors = this._serviceDescriptors.get(key);
         if (serviceDescriptors && serviceDescriptors.length > 0) {
           serviceInstances = [];
           for (var serviceDescriptor of serviceDescriptors) {
-            serviceInstances.push(this._resolveService(serviceInstances, serviceDescriptor, context));
+            serviceInstances.push(
+              this._resolveService(
+                ServiceNameFormatter.format(serviceDescriptor.name),
+                serviceDescriptor,
+                context
+              )
+            );
           }
         }
       }
@@ -81,10 +95,11 @@ export default class ServiceProvider {
     if (!context.resolving) {
       context.resolving = new Map();
     }
-    if (context.resolving.has(serviceName)) {
-      throw new Error(`Can not resolve circular dependency '${this._toString(serviceDescriptor.name)}'`);
+    var key = serviceName.toLowerCase();
+    if (context.resolving.has(key)) {
+      throw new Error(`Can not resolve circular dependency '${serviceName}'`);
     }
-    var resolvedService = this._resolvedServices.get(serviceName);
+    var resolvedService = this._resolvedServices.get(key);
     if (resolvedService && resolvedService.has(serviceDescriptor)) {
       serviceInstance = resolvedService.get(serviceDescriptor);
     } else {
@@ -108,16 +123,16 @@ export default class ServiceProvider {
     if (this._serviceProvider) {
       serviceInstance = this._serviceProvider.getService(serviceDescriptor.name, context);
     } else {
-      context.resolving.set(serviceName, true);
+      var key = serviceName.toLowerCase();
+      context.resolving.set(key, true);
       if (serviceDescriptor.type) {
-        serviceInstance = this._createService(serviceDescriptor.type, context);
+        serviceInstance = this._createServiceFromType(serviceDescriptor.type, context);
       } else if (serviceDescriptor.factory) {
-        serviceInstance = serviceDescriptor.factory(this);
-        this.inject(serviceInstance, context);
+        serviceInstance = this._createServiceFromFactory(serviceDescriptor.factory, context);
       } else if (serviceDescriptor.instance) {
         serviceInstance = serviceDescriptor.instance;
       }
-      context.resolving.delete(serviceName);
+      context.resolving.delete(key);
     }
     this._setService(serviceName, serviceInstance, serviceDescriptor);
     return serviceInstance;
@@ -125,32 +140,32 @@ export default class ServiceProvider {
 
   _createTransientService(serviceName, serviceDescriptor, context) {
     var serviceInstance = null;
-    context.resolving.set(serviceName, true);
+    var key = serviceName.toLowerCase();
+    context.resolving.set(key, true);
     if (serviceDescriptor.type) {
-      serviceInstance = this._createService(serviceDescriptor.type, context);
+      serviceInstance = this._createServiceFromType(serviceDescriptor.type, context);
     } else if (serviceDescriptor.factory) {
-      serviceInstance = serviceDescriptor.factory(this);
-      this.inject(serviceInstance, context);
+      serviceInstance = this._createServiceFromFactory(serviceDescriptor.factory, context);
     }
-    context.resolving.delete(serviceName);
+    context.resolving.delete(key);
     return serviceInstance;
   }
 
   _createScopedService(serviceName, serviceDescriptor, context) {
     var serviceInstance = null;
-    context.resolving.set(serviceName, true);
+    var key = serviceName.toLowerCase();
+    context.resolving.set(key, true);
     if (serviceDescriptor.type) {
-      serviceInstance = this._createService(serviceDescriptor.type, context);
+      serviceInstance = this._createServiceFromType(serviceDescriptor.type, context);
     } else if (serviceDescriptor.factory) {
-      serviceInstance = serviceDescriptor.factory(this);
-      this.inject(serviceInstance, context);
+      serviceInstance = this._createServiceFromFactory(serviceDescriptor.factory, context);
     }
     this._setService(serviceName, serviceInstance, serviceDescriptor);
-    context.resolving.set(serviceName, true);
+    context.resolving.set(key, true);
     return serviceInstance;
   }
 
-  _createService(serviceType, context) {
+  _createServiceFromType(serviceType, context) {
     var serviceInstance, params = null;
     if (this._serviceInjections) {
       this._serviceInjections.forEach(x => {
@@ -159,50 +174,31 @@ export default class ServiceProvider {
         }
       });
     }
-    if (params) {
+    if (params && params.length > 0) {
       serviceInstance = new serviceType(...params);
     } else {
       serviceInstance = new serviceType();
+      this.inject(serviceInstance);
     }
     return serviceInstance;
   }
 
+  _createServiceFromFactory(serviceFactory, context) {
+    var serviceInstance = serviceFactory(this);
+    this.inject(serviceInstance, context);
+    return serviceInstance;
+  }
+
   _setService(serviceName, serviceInstance, serviceDescriptor) {
-    var resolvedService = this._resolvedServices.get(serviceName);
+    var key = serviceName.toLowerCase();
+    var resolvedService = this._resolvedServices.get(key);
     if (!resolvedService) {
-      this._resolvedServices.set(serviceName, new Map([
+      this._resolvedServices.set(key, new Map([
         [ serviceDescriptor, serviceInstance ]
       ]));
     } else {
       resolvedService.set(serviceDescriptor, serviceInstance);
     }
-  }
-
-  _getServiceName(value) {
-    var serviceName = null;
-    if (value) {
-      if (typeof value === "string") {
-        serviceName = value;
-      } else if (typeof value === "function") {
-        serviceName = value.name;
-      }
-      if (value) {
-        serviceName = serviceName.toLowerCase();
-      }
-    }
-    return serviceName;
-  }
-
-  _toString(value) {
-    var serviceName = null;
-    if (value) {
-      if (typeof value === "string") {
-        serviceName = value;
-      } else if (typeof value === "function") {
-        serviceName = value.name;
-      }
-    }
-    return serviceName;
   }
 
 }
