@@ -75,7 +75,8 @@ var specWebConfig = {
     filename: "amber-notes-infrastructure.spec.js"
   },
   externals: {
-    "chai": "chai"
+    "chai": "chai",
+    "sinon": "sinon"
   },
   resolve: {
     extensions: [ ".web.js", ".js" ],
@@ -117,6 +118,9 @@ var specWebConfig = {
       to: path.resolve(__dirname, "./dist/spec/web/js")
     }, {
       from: path.resolve(__dirname, "./node_modules/chai/chai.js"),
+      to: path.resolve(__dirname, "./dist/spec/web/js")
+    }, {
+      from: path.resolve(__dirname, "./node_modules/sinon/pkg/sinon.js"),
       to: path.resolve(__dirname, "./dist/spec/web/js")
     }, {
       from: path.resolve(__dirname, "./spec/spec-runner.html"),
