@@ -59,4 +59,29 @@ describe("Property injection", () => {
     expect(service.bar).not.to.be.null;
   });
 
+  it("should inject service provider", () => {
+    class Foo {
+
+      constructor() {
+        this._serviceProvider = null;
+      }
+
+      get serviceProvider() {
+        return this._serviceProvider;
+      }
+
+      set serviceProvider(value) {
+        this._serviceProvider = value;
+      }
+
+    }
+    var serviceProvider = serviceProviderFactory
+      .use(new PropertyInjection())
+      .addSingleton(Foo)
+      .create();
+    var service = serviceProvider.getService(Foo);
+    expect(service).not.to.be.null;
+    expect(service.serviceProvider).to.be.equals(serviceProvider);
+  });
+
 });

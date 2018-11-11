@@ -36,7 +36,11 @@ export default class PropertyInjection extends ServiceInjection {
       }
       if (servicePropertyNames) {
         for(var propertyName of servicePropertyNames) {
-          service[propertyName] = serviceProvider.getService(propertyName);
+          if (propertyName === "serviceProvider") {
+            service[propertyName] = serviceProvider;
+          } else {
+            service[propertyName] = serviceProvider.getService(propertyName);
+          }
         }
       }
     }
