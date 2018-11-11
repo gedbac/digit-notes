@@ -92,6 +92,9 @@ export default class ServiceProviderFactory {
     if (serviceDescriptor.factory && serviceDescriptor.type) {
       throw new Error(`Factory and type can't be set at the same time for service '${serviceName}'`);
     }
+    if (serviceDescriptor.type && typeof serviceDescriptor.type !== "function") {
+      throw new Error(`Service '${serviceName}' type is invalid`);
+    }
     var key = serviceName.toLowerCase();
     if (!this._serviceDescriptors.has(key)) {
       this._serviceDescriptors.set(key, [ serviceDescriptor ]);
@@ -106,49 +109,47 @@ export default class ServiceProviderFactory {
     return this;
   }
 
-  addSingleton(name, options = {}) {
-    if (name && typeof name === "function" && !options.instance && !options.factory && !options.type) {
-      options.type = name;
-    } else if (name && typeof options === "function") {
-      options.type = options;
-    }
-    return this.addService(new ServiceDescriptor(
-      name,
-      ServiceLifetimes.SINGLETON,
-      options.type,
-      options.factory,
-      options.instance
-    ));
+  addSingleton(name, options) {
+    return this.addService(
+      this._createServiceDescriptor(name, ServiceLifetimes.SINGLETON, options)
+    );
   }
 
-  addTransient(name, options = {}) {
-    if (name && typeof name === "function" && !options.instance && !options.factory && !options.type) {
-      options.type = name;
-    } else if (name && typeof options === "function") {
-      options.type = options;
-    }
-    return this.addService(new ServiceDescriptor(
-      name,
-      ServiceLifetimes.TRANSIENT,
-      options.type,
-      options.factory,
-      options.instance
-    ));
+  addTransient(name, options) {
+    return this.addService(
+      this._createServiceDescriptor(name, ServiceLifetimes.TRANSIENT, options)
+    );
   }
 
-  addScoped(name, options = {}) {
-    if (name && typeof name === "function" && !options.instance && !options.factory && !options.type) {
-      options.type = name;
-    } else if (name && typeof options === "function") {
-      options.type = options;
+  addScoped(name, options) {
+    return this.addService(
+      this._createServiceDescriptor(name, ServiceLifetimes.SCOPED, options)
+    );
+  }
+
+  _createServiceDescriptor(name, lifetime, options) {
+    if (name && !options && typeof name === "function") {
+      options = {
+        type: name
+      };
+    } else if (name && options && !options.instance && !options.factory && !options.type) {
+      if (typeof options === "function" && options.prototype) {
+        options = {
+          type: options
+        };
+      } else if (typeof options === "function" && !options.prototype) {
+        options = {
+          factory: options
+        };
+      } else if (typeof options === "object") {
+        options = {
+          instance: options
+        };
+      }
+    } else {
+      options = options || {};
     }
-    return this.addService(new ServiceDescriptor(
-      name,
-      ServiceLifetimes.SCOPED,
-      options.type,
-      options.factory,
-      options.instance
-    ));
+    return new ServiceDescriptor(name, lifetime, options.type, options.factory, options.instance);
   }
 
 }
