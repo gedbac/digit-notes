@@ -22,7 +22,7 @@ import LogLevels from "./log-levels";
 
 export default class ConsoleLogger extends Logger {
 
-  constructor(name, logLevel) {
+  constructor(name, logLevel = LogLevels.NONE) {
     super(name, logLevel);
   }
 

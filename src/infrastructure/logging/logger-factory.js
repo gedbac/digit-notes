@@ -17,9 +17,11 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import LogLevels from "./log-levels";
+
 export default class LoggerFactory {
 
-  constructor(logLevel) {
+  constructor(logLevel = LogLevels.NONE) {
     this._logLevel = logLevel;
   }
 

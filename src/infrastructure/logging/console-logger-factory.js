@@ -17,13 +17,14 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import LogLevels from "./log-levels";
 import LoggerFactory from "./logger-factory";
 import ConsoleLogger from "./console-logger";
 
 export default class ConsoleLoggerFactory extends LoggerFactory {
 
-  constructor(props) {
-    super(props);
+  constructor(logLevel = LogLevels.NONE) {
+    super(logLevel);
   }
 
   _onCreateLogger(name) {

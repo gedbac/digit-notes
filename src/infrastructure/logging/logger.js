@@ -17,12 +17,11 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import LogLevel from "./log-levels";
 import LogLevels from "./log-levels";
 
 export default class Logger {
 
-  constructor(name, logLevel = LogLevel.None) {
+  constructor(name, logLevel = LogLevels.NONE) {
     this._name = name;
     this._logLevel = logLevel;
     if (!this._name) {
