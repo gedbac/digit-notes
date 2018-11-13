@@ -43,14 +43,14 @@ module.exports = {
     }]
   },
   plugins: [
+    new CleanupPlugin(),
     new MiniCssExtractPlugin({
-      filename: "css/style.css"
+      filename: "css/style.[chunkhash].css"
     }),
     new HtmlWebPackPlugin({
       template: path.resolve(__dirname, "./src/webapp/public/index.html"),
       filename: path.resolve(__dirname, "./dist/webapp/public/index.html")
-    }),
-    new CleanupPlugin()
+    })
   ],
   devtool: "source-map",
   devServer: {

@@ -17,20 +17,26 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from "react";
-import ReactDOM from "react-dom";
-import Startup from "./startup";
-import DependencyInjection from "./shared/dependency-injection";
-import Application from "./components/application";
-import "../css/style";
+import ApplicationActionTypes from "./application-action-types";
 
-var serviceProvider = new Startup()
-  .configure()
-  .createServiceProvider();
+export default class ApplicationActions {
 
-var WrappedApplication = DependencyInjection.inject(Application, serviceProvider);
+  constructor(dispatcher) {
+    this._dispathcer = dispatcher;
+    if (!this._dispathcer) {
+      throw new Error("Dispatcher is null");
+    }
+  }
 
-ReactDOM.render(
-  <WrappedApplication />,
-  document.getElementById("viewport")
-);
+  get dispatcher() {
+    return this._dispathcer;
+  }
+
+  navigateToView(viewName) {
+    this.dispatcher.dispatch({
+      actionType: ApplicationActionTypes.NAVIGATE_TO_VIEW,
+      viewName: viewName
+    });
+  }
+
+}

@@ -17,34 +17,57 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { ServiceProviderFactory, ConstructorInjection, PropertyInjection } from "infrastructure-dependency-injection";
 import { ConsoleLoggerFactory, LogLevels } from "infrastructure-logging";
 import Dispatcher from "./shared/dispatcher";
+import ApplicationActions from "./actions/application-actions";
+import ApplicationStore from "./stores/application-store";
 
 export default class Startup {
 
-  configureServices(serviceProviderFactory) {
-    serviceProviderFactory
-      .addModule(this._configureLogging)
-      .addSingleton("dispatcherLogger", {
-        factory: x => x
-          .getService("consoleLoggerFactory")
-          .createLogger("dispatcherLogger")
-      })
-      .addSingleton("dispatcher", {
-        factory: x => new Dispatcher(
-          x.getService("dispatcherLogger")
-        )
-      });
+  constructor() {
+    this._serviceProviderFactory = new ServiceProviderFactory();
   }
 
-  _configureLogging(serviceProviderFactory) {
+  configure() {
+    this.configureServices(this._serviceProviderFactory);
+    return this;
+  }
+
+  createServiceProvider() {
+    return this._serviceProviderFactory.create();
+  }
+
+  configureServices(serviceProviderFactory) {
     serviceProviderFactory
-      .addSingleton("consoleLoggerFactory", () => new ConsoleLoggerFactory(LogLevels.Debug))
-      .addSingleton("logger", {
-        factory: x => x
-          .getService("consoleLoggerFactory")
-          .createLogger("application")
-      });
+      .use(new ConstructorInjection())
+      .use(new PropertyInjection())
+      .addModule(x => this.configureLogging(x))
+      .addModule(x => this.configureApplication(x));
+  }
+
+  configureLogging(serviceProviderFactory) {
+    serviceProviderFactory
+      .addScoped("consoleLoggerFactory", () => new ConsoleLoggerFactory(LogLevels.DEBUG))
+      .addScoped("logger", x => x
+        .getService("consoleLoggerFactory")
+        .createLogger("application")
+      );
+  }
+
+  configureApplication(serviceProviderFactory) {
+    serviceProviderFactory
+      .addScoped("dispatcherLogger", x => x
+        .getService("consoleLoggerFactory")
+        .createLogger("dispatcherLogger")
+      )
+      .addScoped("dispatcher", x =>
+        new Dispatcher(
+          x.getService("dispatcherLogger")
+        )
+      )
+      .addScoped(ApplicationActions)
+      .addScoped(ApplicationStore);
   }
 
 }

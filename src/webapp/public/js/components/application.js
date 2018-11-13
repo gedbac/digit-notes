@@ -18,27 +18,63 @@
  */
 
 import React, { Component } from "react";
-import { ApplicationContextConsumer } from "./application-context";
-import StartupView from "./startup-view";
+import ApplicationStore from "../stores/application-store";
 
 export default class Application extends Component {
 
   constructor(props) {
     super(props);
+    this._applicationStore = null;
+    this._applicationActions = null;
+    this._onChangedEventHandler = null;
+  }
+
+  get applicationStore() {
+    return this._applicationStore;
+  }
+
+  set applicationStore(value) {
+    this._applicationStore = value;
+  }
+
+  get applicationActions() {
+    return this._applicationActions;
+  }
+
+  set applicationActions(value) {
+    this._applicationActions = value;
+  }
+
+  componentDidMount() {
+    this._onChangedEventHandler = () => this._onChange();
+    this.applicationStore.on(ApplicationStore.CHANGED, this._onChangedEventHandler);
+    this.applicationActions.navigateToView("startup-view");
+    setTimeout(() => {
+      this.applicationActions.navigateToView("outliner-view");
+    }, 5000);
+  }
+
+  componentWillUnmount() {
+    if (this._onChangedEventHandler) {
+      this.applicationStore.off(ApplicationStore.CHANGED, this._onChangedEventHandler);
+    }
   }
 
   render() {
-    return (
-      <ApplicationContextConsumer>
-        {
-          context => {
-            return (
-              <StartupView></StartupView>
-            );
-          }
-        }
-      </ApplicationContextConsumer>
-    );
+    if (this.state) {
+      var View = this.state.view;
+      return (
+        <View></View>
+      );
+    } else {
+      return null;
+    }
+  }
+
+  _onChange() {
+    this.setState({
+      view: this.applicationStore.currentView
+    });
   }
 
 }

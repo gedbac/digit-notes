@@ -1,0 +1,45 @@
+$white: rgb(255,255,255);
+$black: rgb(0,0,0);
+
+$gray50: rgb(250,250,250);
+$gray100: rgb(245,245,245);
+$gray200: rgb(238,238,238);
+$gray300: rgb(224,224,224);
+$gray400: rgb(189,189,189);
+$gray500: rgb(158,158,158);
+$gray600: rgb(117,117,117);
+$gray700: rgb(97,97,97);
+$gray800: rgb(66,66,66);
+$gray900: rgb(33,33,33);
+
+$amber50: rgb(255,248,225);
+$amber100: rgb(255,236,179);
+$amber200: rgb(255,224,130);
+$amber300: rgb(255,213,79);
+$amber400: rgb(255,202,40);
+$amber500: rgb(255,193,7);
+$amber600: rgb(255,179,0);
+$amber700: rgb(255,160,0);
+$amber800: rgb(255,143,0);
+$amber900: rgb(255,111,0);
+
+$cyan50: rgb(224,247,250);
+$cyan100: rgb(178,235,242);
+$cyan200: rgb(128,222,234);
+$cyan300: rgb(77,208,225);
+$cyan400: rgb(38,198,218);
+$cyan500: rgb(0,188,212);
+$cyan600: rgb(0,172,193);
+$cyan700: rgb(0,172,193);
+$cyan800: rgb(0,131,143);
+$cyan900: rgb(0,96,100);
+
+$background-color: $white;
+$surface-color: $white;
+$primary-color: $amber500;
+$secondary-color: $cyan500;
+$error-color: rgb(176,0,32);
+
+$high-emphasis-text-opacity: 1;
+$medium-emphasis-text-opacity: 0.6;
+$disabled-text-opacity: 0.38;

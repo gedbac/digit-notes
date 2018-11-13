@@ -23,7 +23,8 @@
 
   @extend .view;
 
-  color: white;
+  background-color: $amber600;
+  color: $white;
   display: flex;
   align-items: center;
   justify-content: center;

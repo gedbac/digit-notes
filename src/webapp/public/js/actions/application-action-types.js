@@ -17,20 +17,8 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from "react";
-import ReactDOM from "react-dom";
-import Startup from "./startup";
-import DependencyInjection from "./shared/dependency-injection";
-import Application from "./components/application";
-import "../css/style";
+export default class ApplicationActionsTypes {
 
-var serviceProvider = new Startup()
-  .configure()
-  .createServiceProvider();
+  static get NAVIGATE_TO_VIEW() { return "NAVIGATE_TO_VIEW"; }
 
-var WrappedApplication = DependencyInjection.inject(Application, serviceProvider);
-
-ReactDOM.render(
-  <WrappedApplication />,
-  document.getElementById("viewport")
-);
+}

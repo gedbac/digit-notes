@@ -1,0 +1,61 @@
+@import "colors.scss";
+
+.grid-4pt {
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 15px,
+      $gray200 15px,
+      $gray200 16px
+    ),
+    repeating-linear-gradient(
+      transparent,
+      transparent 15px,
+      $gray200 15px,
+      $gray200 16px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 3px,
+      $gray50 3px,
+      $gray50 4px
+    ),
+    repeating-linear-gradient(
+      transparent,
+      transparent 3px,
+      $gray50 3px,
+      $gray50 4px
+    );
+}
+
+.grid-8pt {
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 31px,
+      $gray200 31px,
+      $gray200 32px
+    ),
+    repeating-linear-gradient(
+      transparent,
+      transparent 31px,
+      $gray200 31px,
+      $gray200 32px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 7px,
+      $gray50 7px,
+      $gray50 8px
+    ),
+    repeating-linear-gradient(
+      transparent,
+      transparent 7px,
+      $gray50 7px,
+      $gray50 8px
+    );
+}

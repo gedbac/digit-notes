@@ -18,19 +18,18 @@
  */
 
 import React from "react";
-import ReactDOM from "react-dom";
-import Startup from "./startup";
-import DependencyInjection from "./shared/dependency-injection";
-import Application from "./components/application";
-import "../css/style";
+import View from "./view";
 
-var serviceProvider = new Startup()
-  .configure()
-  .createServiceProvider();
+export default class OutlinerView extends View {
 
-var WrappedApplication = DependencyInjection.inject(Application, serviceProvider);
+  constructor(props) {
+    super(props);
+  }
 
-ReactDOM.render(
-  <WrappedApplication />,
-  document.getElementById("viewport")
-);
+  render() {
+    return (
+      <div className="outliner-view grid-4pt"></div>
+    );
+  }
+
+}

@@ -17,20 +17,17 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from "react";
-import ReactDOM from "react-dom";
-import Startup from "./startup";
-import DependencyInjection from "./shared/dependency-injection";
-import Application from "./components/application";
-import "../css/style";
+export default class DependencyInjection {
 
-var serviceProvider = new Startup()
-  .configure()
-  .createServiceProvider();
+  static inject(componentType, serviceProvider) {
+    var decoratedComponentType = class DecoratedComponent extends componentType {
+      constructor(props) {
+        super(props);
+        serviceProvider.inject(this);
+      }
+    };
+    decoratedComponentType.displayName = componentType.name;
+    return decoratedComponentType;
+  }
 
-var WrappedApplication = DependencyInjection.inject(Application, serviceProvider);
-
-ReactDOM.render(
-  <WrappedApplication />,
-  document.getElementById("viewport")
-);
+}
