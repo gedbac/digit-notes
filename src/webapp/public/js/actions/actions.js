@@ -17,28 +17,17 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-export default class Repository {
+export default class Actions {
 
-  constructor() {
-    if (new.target === Repository) {
-      throw new Error("Can't construct abstract instances directly");
+  constructor(dispatcher) {
+    this._dispathcer = dispatcher;
+    if (!this._dispathcer) {
+      throw new Error("Dispatcher is null");
     }
   }
 
-  findBy(id) {
-    throw new Error("Method 'findBy' is not implemented");
-  }
-
-  save(aggregate) {
-    throw new Error("Method 'save' is not implemented");
-  }
-
-  update(aggregate) {
-    throw new Error("Method 'update' is not implemented");
-  }
-
-  delete(id) {
-    throw new Error("Method 'delete' is not implemented");
+  get dispatcher() {
+    return this._dispathcer;
   }
 
 }

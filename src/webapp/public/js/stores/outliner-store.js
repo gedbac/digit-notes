@@ -17,28 +17,19 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-export default class Repository {
+import Store from "./store";
 
-  constructor() {
-    if (new.target === Repository) {
-      throw new Error("Can't construct abstract instances directly");
-    }
+export default class OutlinerStore extends Store {
+
+  constructor(dispatcher, serviceProvider) {
+    super(dispatcher, serviceProvider);
+    this._document = null;
   }
 
-  findBy(id) {
-    throw new Error("Method 'findBy' is not implemented");
+  get document() {
+    return this._document;
   }
 
-  save(aggregate) {
-    throw new Error("Method 'save' is not implemented");
-  }
-
-  update(aggregate) {
-    throw new Error("Method 'update' is not implemented");
-  }
-
-  delete(id) {
-    throw new Error("Method 'delete' is not implemented");
-  }
+  _onAction(payload) {}
 
 }

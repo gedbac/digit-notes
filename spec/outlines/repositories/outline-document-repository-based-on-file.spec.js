@@ -16,9 +16,7 @@ describe("Outline Document Repository", () => {
       supportedEventTypes: new Map([[ "OutlineDocumentCreated", OutlineDocumentCreated ]])
     });
     await eventStore.open();
-    var repository = new OutlineDocumentRepository({
-      eventStore: eventStore
-    });
+    var repository = new OutlineDocumentRepository(eventStore);
     await repository.save(document);
     await eventStore.close();
     var streamName = `${OutlineDocument.name}::${document.id}`;
@@ -42,9 +40,7 @@ describe("Outline Document Repository", () => {
       ])
     });
     await eventStore.open();
-    var repository = new OutlineDocumentRepository({
-      eventStore: eventStore
-    });
+    var repository = new OutlineDocumentRepository(eventStore);
     var document = await repository.findBy(id);
     await eventStore.close();
     expect(document).to.be.not.null;
@@ -69,9 +65,7 @@ describe("Outline Document Repository", () => {
       ])
     });
     await eventStore.open();
-    var repository = new OutlineDocumentRepository({
-      eventStore: eventStore
-    });
+    var repository = new OutlineDocumentRepository(eventStore);
     var document = await repository.findBy(id);
     document.title = "My Document";
     await repository.update(document);
@@ -94,9 +88,7 @@ describe("Outline Document Repository", () => {
       path: "./streams"
     });
     await eventStore.open();
-    var repository = new OutlineDocumentRepository({
-      eventStore: eventStore
-    });
+    var repository = new OutlineDocumentRepository(eventStore);
     await repository.delete(id);
     await eventStore.close();
     expect(await fileExists(`./dist/${streamName}`)).to.be.false;

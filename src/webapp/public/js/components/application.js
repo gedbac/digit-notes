@@ -50,7 +50,7 @@ export default class Application extends Component {
     this.applicationStore.on(ApplicationStore.CHANGED, this._onChangedEventHandler);
     this.applicationActions.navigateToView("startup-view");
     setTimeout(() => {
-      this.applicationActions.navigateToView("outliner-view");
+      this.applicationActions.navigateToView("outlines-view");
     }, 5000);
   }
 

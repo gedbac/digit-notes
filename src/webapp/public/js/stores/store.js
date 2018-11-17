@@ -17,28 +17,35 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-export default class Repository {
+import { Event } from "infrastructure-util";
 
-  constructor() {
-    if (new.target === Repository) {
-      throw new Error("Can't construct abstract instances directly");
+export default class Store {
+
+  constructor(dispatcher, serviceProvider) {
+    Event.attach(this);
+    this._dispatcher = dispatcher;
+    this._serviceProvider = serviceProvider;
+    if (!this._dispatcher) {
+      throw new Error("Dispatcher is null");
     }
+    if (!this._serviceProvider) {
+      throw new Error("Service provider is null");
+    }
+    this._dispatchToken = this.dispatcher.register(payload => this._onAction(payload));
   }
 
-  findBy(id) {
-    throw new Error("Method 'findBy' is not implemented");
+  get dispatcher() {
+    return this._dispatcher;
   }
 
-  save(aggregate) {
-    throw new Error("Method 'save' is not implemented");
+  get serviceProvider() {
+    return this._serviceProvider;
   }
 
-  update(aggregate) {
-    throw new Error("Method 'update' is not implemented");
+  get dispatchToken() {
+    return this._dispatchToken;
   }
 
-  delete(id) {
-    throw new Error("Method 'delete' is not implemented");
-  }
+  _onAction(payload) {}
 
 }

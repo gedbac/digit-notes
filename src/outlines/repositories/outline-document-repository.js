@@ -22,12 +22,10 @@ import { OutlineDocument } from "outlines-model";
 
 export default class OutlineDocumentRepository extends Repository {
 
-  constructor(props) {
-    super(props);
-    this._eventStore = null;
-    if (props && "eventStore" in props) {
-      this._eventStore = props.eventStore;
-    } else {
+  constructor(eventStore) {
+    super();
+    this._eventStore = eventStore;
+    if (!eventStore) {
       throw new Error("Event store is null");
     }
   }

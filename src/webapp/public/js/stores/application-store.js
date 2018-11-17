@@ -17,40 +17,19 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Event } from "infrastructure-util";
+import Store from "./store";
 import DependencyInjection from "../shared/dependency-injection";
 import NavigationActionTypes from "../actions/application-action-types";
 import StartupView from "../components/startup-view";
 import OutlinerView from "../components/outliner-view";
 
-export default class ApplicationStore {
+export default class ApplicationStore extends Store {
 
   static get CHANGED() { return "CHANGED"; }
 
   constructor(dispatcher, serviceProvider) {
-    Event.attach(this);
-    this._dispatcher = dispatcher;
-    this._serviceProvider = serviceProvider;
-    if (!this._dispatcher) {
-      throw new Error("Dispatcher is null");
-    }
-    if (!this._serviceProvider) {
-      throw new Error("Service provider is null");
-    }
-    this._dispatchToken = this.dispatcher.register(payload => this._onAction(payload));
+    super(dispatcher, serviceProvider);
     this._currentView = null;
-  }
-
-  get dispatcher() {
-    return this._dispatcher;
-  }
-
-  get serviceProvider() {
-    return this._serviceProvider;
-  }
-
-  get dispatchToken() {
-    return this._dispatchToken;
   }
 
   get currentView() {
@@ -73,7 +52,7 @@ export default class ApplicationStore {
     if (viewName) {
       if (viewName === "startup-view") {
         this._currentView = DependencyInjection.inject(StartupView, this.serviceProvider);
-      } else if (viewName === "outliner-view") {
+      } else if (viewName === "outlines-view") {
         this._currentView = DependencyInjection.inject(OutlinerView, this.serviceProvider);
       } else {
         this._currentView = null;

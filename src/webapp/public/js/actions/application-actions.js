@@ -17,19 +17,13 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import Actions from "./actions";
 import ApplicationActionTypes from "./application-action-types";
 
-export default class ApplicationActions {
+export default class ApplicationActions extends Actions {
 
   constructor(dispatcher) {
-    this._dispathcer = dispatcher;
-    if (!this._dispathcer) {
-      throw new Error("Dispatcher is null");
-    }
-  }
-
-  get dispatcher() {
-    return this._dispathcer;
+    super(dispatcher);
   }
 
   navigateToView(viewName) {
