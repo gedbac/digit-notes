@@ -22,6 +22,8 @@ import { ConsoleLoggerFactory, LogLevels } from "infrastructure-logging";
 import Dispatcher from "./shared/dispatcher";
 import ApplicationActions from "./actions/application-actions";
 import ApplicationStore from "./stores/application-store";
+import OutlinerActions from "./actions/outliner-actions";
+import OutlinerStore from "./stores/outliner-store";
 
 export default class Startup {
 
@@ -43,7 +45,8 @@ export default class Startup {
       .use(new ConstructorInjection())
       .use(new PropertyInjection())
       .addModule(x => this.configureLogging(x))
-      .addModule(x => this.configureApplication(x));
+      .addModule(x => this.configureApplication(x))
+      .addModule(x => this.configureOutlines(x));
   }
 
   configureLogging(serviceProviderFactory) {
@@ -68,6 +71,12 @@ export default class Startup {
       )
       .addScoped(ApplicationActions)
       .addScoped(ApplicationStore);
+  }
+
+  configureOutlines(serviceProviderFactory) {
+    serviceProviderFactory
+      .addScoped(OutlinerActions)
+      .addScoped(OutlinerStore);
   }
 
 }

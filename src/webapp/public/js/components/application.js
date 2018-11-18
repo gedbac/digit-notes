@@ -26,7 +26,7 @@ export default class Application extends Component {
     super(props);
     this._applicationStore = null;
     this._applicationActions = null;
-    this._onChangedEventHandler = null;
+    this._onChange = this._onChange.bind(this);
   }
 
   get applicationStore() {
@@ -47,17 +47,15 @@ export default class Application extends Component {
 
   componentDidMount() {
     this._onChangedEventHandler = () => this._onChange();
-    this.applicationStore.on(ApplicationStore.CHANGED, this._onChangedEventHandler);
+    this.applicationStore.on(ApplicationStore.CHANGED, this._onChange);
     this.applicationActions.navigateToView("startup-view");
     setTimeout(() => {
       this.applicationActions.navigateToView("outlines-view");
-    }, 5000);
+    }, 2000);
   }
 
   componentWillUnmount() {
-    if (this._onChangedEventHandler) {
-      this.applicationStore.off(ApplicationStore.CHANGED, this._onChangedEventHandler);
-    }
+    this.applicationStore.off(ApplicationStore.CHANGED, this._onChange);
   }
 
   render() {

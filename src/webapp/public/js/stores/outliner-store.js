@@ -18,8 +18,11 @@
  */
 
 import Store from "./store";
+import OutlinerActionTypes from "../actions/outliner-action-types";
 
 export default class OutlinerStore extends Store {
+
+  static get CHANGED() { return "CHANGED"; }
 
   constructor(dispatcher, serviceProvider) {
     super(dispatcher, serviceProvider);
@@ -30,6 +33,29 @@ export default class OutlinerStore extends Store {
     return this._document;
   }
 
-  _onAction(payload) {}
+  _onAction(payload) {
+    switch(payload.actionType) {
+      case OutlinerActionTypes.LOAD_OUTLINE_DOCUMENT:
+        this._onLoadOutlinesDocument(payload);
+        break;
+      default:
+        break;
+    }
+  }
+
+  _onLoadOutlinesDocument(payload) {
+    this._document = {
+      children: [{
+        uid: "b8b6dc54-f69b-46e2-b2f0-8baca6d4bf31",
+        text: "Buy milk",
+        notes: "You should by some milk or you will have to drink coffee without milk"
+      }, {
+        uid: "bfcd62da-2407-4927-8547-9d81f1a950d5",
+        text: "Buy coffee",
+        notes: "Notes goes here"
+      }]
+    };
+    this.trigger(OutlinerStore.CHANGED);
+  }
 
 }

@@ -19,17 +19,87 @@
 
 import React from "react";
 import View from "./view";
+import OutlinerStore from "../stores/outliner-store";
+import Outline from "./outline";
 
 export default class OutlinerView extends View {
 
   constructor(props) {
     super(props);
+    this._outlinerActions = null;
+    this._outlinerStore = null;
+    this._onChange = this._onChange.bind(this);
+    this.state = {
+      document: null
+    };
+  }
+
+  get outlinerActions() {
+    return this._outlinerActions;
+  }
+
+  set outlinerActions(value) {
+    this._outlinerActions = value;
+  }
+
+  get outlinerStore() {
+    return this._outlinerStore;
+  }
+
+  set outlinerStore(value) {
+    this._outlinerStore = value;
+  }
+
+  componentDidMount() {
+    this.outlinerStore.on(OutlinerStore.CHANGED, this._onChange);
+    setTimeout(() => {
+      this.outlinerActions.loadOutlineDocument();
+    }, 2000);
+  }
+
+  componentWillUnmount() {
+    this.outlinerStore.off(this.outlinerStore.CHANGED, this._onChange);
   }
 
   render() {
+    var content = null;
+    if (!this.state.document) {
+      content = this._renderOutlinesLoader();
+    } else {
+      content = this._renderOutlines(this.state.document);
+    }
     return (
-      <div className="outliner-view grid-4pt"></div>
+      <div className="outliner-view">
+        { content }
+      </div>
     );
+  }
+
+  _renderOutlinesLoader() {
+    return (
+      <div className="content-loader">
+        <div className="outline-text"></div>
+        <div className="outline-notes"></div>
+      </div>
+    );
+  }
+
+  _renderOutlines(document) {
+    if (document && document.children && document.children.length > 0) {
+      return document.children.map(outline => (
+        <Outline
+          key={outline.uid}
+          text={outline.text}
+        />
+      ));
+    }
+    return null;
+  }
+
+  _onChange() {
+    this.setState({
+      document: this.outlinerStore.document
+    });
   }
 
 }

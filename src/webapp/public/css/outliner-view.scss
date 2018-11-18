@@ -23,4 +23,44 @@
 
   @extend .view;
 
+  display: block;
+  box-sizing: border-box;
+  width: 600px;
+  padding: 16px;
+  font-size: 0;
+  overflow: hidden;
+
+  & > .content-loader {
+
+    .outline {
+
+
+      &-text {
+        display: block;
+        background-color: $gray100;
+        font-size: 0;
+        width: 240px;
+        height: 12px;
+        border-radius: 2px;
+      }
+
+      &-notes {
+        display: block;
+        background-color: $gray100;
+        font-size: 0;
+        width: 400px;
+        height: 12px;
+        margin-top: 4px;
+        border-radius: 2px;
+      }
+
+    }
+
+  }
+
+  .outline {
+    font-size: 14px;
+    color: $black;
+  }
+
 }

@@ -17,19 +17,18 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import Actions from "./actions";
-import OutlinerActionTypes from "./outliner-action-types";
+import React, { Component } from "react";
 
-export default class OutlinerActions extends Actions {
+export default class Outline extends Component {
 
-  constructor(dispatcher) {
-    super(dispatcher);
+  constructor(props) {
+    super(props);
   }
 
-  loadOutlineDocument() {
-    this.dispatcher.dispatch({
-      actionType: OutlinerActionTypes.LOAD_OUTLINE_DOCUMENT
-    });
+  render() {
+    return (
+      <div className="outline">{this.props.text}</div>
+    );
   }
 
 }
