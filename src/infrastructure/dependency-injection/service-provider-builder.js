@@ -22,14 +22,14 @@ import ServiceLifetimes from "./service-lifetimes";
 import ServiceProvider from "./service-provider";
 import ServiceNameFormatter from "./service-name-formatter";
 
-export default class ServiceProviderFactory {
+export default class ServiceProviderBuilder {
 
   constructor() {
     this._serviceDescriptors = new Map();
     this._serviceInjections = [];
   }
 
-  create() {
+  build() {
     return new ServiceProvider(this._serviceDescriptors, this._serviceInjections);
   }
 

@@ -1,9 +1,9 @@
 import { expect } from "chai";
-import { ServiceProviderFactory, PropertyInjection } from "infrastructure-dependency-injection";
+import { ServiceProviderBuilder, PropertyInjection } from "infrastructure-dependency-injection";
 
 describe("Property injection", () => {
 
-  var serviceProviderFactory = null;
+  var serviceProviderBuilder = null;
 
   class Parent {
 
@@ -39,20 +39,20 @@ describe("Property injection", () => {
   }
 
   beforeEach(() => {
-    serviceProviderFactory = new ServiceProviderFactory();
+    serviceProviderBuilder = new ServiceProviderBuilder();
   });
 
   afterEach(() => {
-    serviceProviderFactory = null;
+    serviceProviderBuilder = null;
   });
 
   it("should inject properties", () => {
-    var serviceProvider = serviceProviderFactory
+    var serviceProvider = serviceProviderBuilder
       .use(new PropertyInjection())
       .addSingleton("foo", { instance: {} })
       .addSingleton("bar", { instance: {} })
       .addSingleton(Child)
-      .create();
+      .build();
     var service = serviceProvider.getService(Child);
     expect(service).not.to.be.null;
     expect(service.foo).not.to.be.null;
@@ -75,10 +75,10 @@ describe("Property injection", () => {
       }
 
     }
-    var serviceProvider = serviceProviderFactory
+    var serviceProvider = serviceProviderBuilder
       .use(new PropertyInjection())
       .addSingleton(Foo)
-      .create();
+      .build();
     var service = serviceProvider.getService(Foo);
     expect(service).not.to.be.null;
     expect(service.serviceProvider).to.be.equals(serviceProvider);

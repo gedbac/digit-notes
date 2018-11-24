@@ -1,9 +1,9 @@
 import { expect } from "chai";
-import { ServiceProviderFactory, ConstructorInjection } from "infrastructure-dependency-injection";
+import { ServiceProviderBuilder, ConstructorInjection } from "infrastructure-dependency-injection";
 
 describe("Constructor injection", () => {
 
-  var serviceProviderFactory = null;
+  var serviceProviderBuilder = null;
 
   class FooService {
     constructor(
@@ -16,15 +16,15 @@ describe("Constructor injection", () => {
   }
 
   beforeEach(() => {
-    serviceProviderFactory = new ServiceProviderFactory();
+    serviceProviderBuilder = new ServiceProviderBuilder();
   });
 
   afterEach(() => {
-    serviceProviderFactory = null;
+    serviceProviderBuilder = null;
   });
 
   it("should inject to constructor", () => {
-    var serviceProvider = serviceProviderFactory
+    var serviceProvider = serviceProviderBuilder
       .use(new ConstructorInjection())
       .addSingleton("foo", {
         instance: {}
@@ -33,7 +33,7 @@ describe("Constructor injection", () => {
         instance: {}
       })
       .addSingleton(FooService)
-      .create();
+      .build();
     var service = serviceProvider.getService(FooService);
     expect(service).not.to.be.null;
     expect(service.foo).not.to.be.null;
@@ -45,7 +45,7 @@ describe("Constructor injection", () => {
       this.foo = foo;
       this.bar = bar;
     }
-    var serviceProvider = serviceProviderFactory
+    var serviceProvider = serviceProviderBuilder
       .use(new ConstructorInjection())
       .addSingleton("foo", {
         instance: {}
@@ -54,7 +54,7 @@ describe("Constructor injection", () => {
         instance: {}
       })
       .addSingleton(BarService)
-      .create();
+      .build();
     var service = serviceProvider.getService(BarService);
     expect(service).not.to.be.null;
     expect(service.foo).not.to.be.null;
@@ -67,10 +67,10 @@ describe("Constructor injection", () => {
         this.serviceProvider = serviceProvider;
       }
     }
-    var serviceProvider = serviceProviderFactory
+    var serviceProvider = serviceProviderBuilder
       .use(new ConstructorInjection())
       .addSingleton(BooService)
-      .create();
+      .build();
     var service = serviceProvider.getService(BooService);
     expect(service).not.to.be.null;
     expect(service.serviceProvider).to.be.equals(serviceProvider);
@@ -83,11 +83,11 @@ describe("Constructor injection", () => {
     class Bar {
       constructor(foo) {}
     }
-    var serviceProvider = serviceProviderFactory
+    var serviceProvider = serviceProviderBuilder
       .use(new ConstructorInjection())
       .addSingleton(Foo)
       .addSingleton(Bar)
-      .create();
+      .build();
     expect(() => {
       serviceProvider.getService(Foo);
     }).throw().with.property("message", "Can not resolve circular dependency 'Foo'");

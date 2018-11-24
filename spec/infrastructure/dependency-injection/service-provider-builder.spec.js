@@ -1,28 +1,28 @@
 import { expect } from "chai";
-import { ServiceProviderFactory } from "infrastructure-dependency-injection";
+import { ServiceProviderBuilder} from "infrastructure-dependency-injection";
 
-describe("Service Provider Factory", () => {
+describe("Service Provider Builder", () => {
 
-  var serviceProviderFactory = null;
+  var serviceProviderBuilder = null;
 
   beforeEach(() => {
-    serviceProviderFactory = new ServiceProviderFactory();
+    serviceProviderBuilder = new ServiceProviderBuilder();
   });
 
   afterEach(() => {
-    serviceProviderFactory = null;
+    serviceProviderBuilder = null;
   });
 
   it("should create service provider", () =>{
-    var serviceProvider = serviceProviderFactory.create();
+    var serviceProvider = serviceProviderBuilder.build();
     expect(serviceProvider).not.to.be.null;
   });
 
   it("should register module using function", () => {
-    serviceProviderFactory.addModule(x => {
+    serviceProviderBuilder.addModule(x => {
       x.addSingleton("foo", { instance: {} });
     });
-    var serviceProvider = serviceProviderFactory.create();
+    var serviceProvider = serviceProviderBuilder.build();
     var serviceDescriptor = serviceProvider.getService("foo");
     expect(serviceDescriptor).not.to.be.null;
   });
@@ -33,15 +33,15 @@ describe("Service Provider Factory", () => {
         x.addSingleton("foo", { instance: {} });
       }
     };
-    serviceProviderFactory.addModule(foo);
-    var serviceProvider = serviceProviderFactory.create();
+    serviceProviderBuilder.addModule(foo);
+    var serviceProvider = serviceProviderBuilder.build();
     var service = serviceProvider.getService("foo");
     expect(service).not.to.be.null;
   });
 
   it("should throw an error due missing configuration", () => {
     expect(() => {
-      serviceProviderFactory.addModule();
+      serviceProviderBuilder.addModule();
     }).throw().with.property("message", "Configuration is null");
   });
 

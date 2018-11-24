@@ -17,7 +17,7 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { ServiceProviderFactory, ConstructorInjection, PropertyInjection } from "infrastructure-dependency-injection";
+import { ServiceProviderBuilder, ConstructorInjection, PropertyInjection } from "infrastructure-dependency-injection";
 import { ConsoleLoggerFactory, LogLevels } from "infrastructure-logging";
 import Dispatcher from "./shared/dispatcher";
 import ApplicationActions from "./actions/application-actions";
@@ -28,20 +28,20 @@ import OutlinerStore from "./stores/outliner-store";
 export default class Startup {
 
   constructor() {
-    this._serviceProviderFactory = new ServiceProviderFactory();
+    this._serviceProviderBuilder= new ServiceProviderBuilder();
   }
 
   configure() {
-    this.configureServices(this._serviceProviderFactory);
+    this.configureServices(this._serviceProviderBuilder);
     return this;
   }
 
   createServiceProvider() {
-    return this._serviceProviderFactory.create();
+    return this._serviceProviderBuilder.build();
   }
 
-  configureServices(serviceProviderFactory) {
-    serviceProviderFactory
+  configureServices(serviceProviderBuilder) {
+    serviceProviderBuilder
       .use(new ConstructorInjection())
       .use(new PropertyInjection())
       .addModule(x => this.configureLogging(x))
@@ -49,8 +49,8 @@ export default class Startup {
       .addModule(x => this.configureOutlines(x));
   }
 
-  configureLogging(serviceProviderFactory) {
-    serviceProviderFactory
+  configureLogging(serviceProviderBuilder) {
+    serviceProviderBuilder
       .addScoped("consoleLoggerFactory", () => new ConsoleLoggerFactory(LogLevels.DEBUG))
       .addScoped("logger", x => x
         .getService("consoleLoggerFactory")
@@ -58,8 +58,8 @@ export default class Startup {
       );
   }
 
-  configureApplication(serviceProviderFactory) {
-    serviceProviderFactory
+  configureApplication(serviceProviderBuilder) {
+    serviceProviderBuilder
       .addScoped("dispatcherLogger", x => x
         .getService("consoleLoggerFactory")
         .createLogger("dispatcherLogger")
@@ -73,8 +73,8 @@ export default class Startup {
       .addScoped(ApplicationStore);
   }
 
-  configureOutlines(serviceProviderFactory) {
-    serviceProviderFactory
+  configureOutlines(serviceProviderBuilder) {
+    serviceProviderBuilder
       .addScoped(OutlinerActions)
       .addScoped(OutlinerStore);
   }
