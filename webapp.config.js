@@ -18,7 +18,8 @@ module.exports = {
     alias: {
       "infrastructure-logging$": path.resolve(__dirname, "./src/infrastructure/logging/index.js"),
       "infrastructure-util$": path.resolve(__dirname, "./src/infrastructure/util/index.web.js"),
-      "infrastructure-dependency-injection$": path.resolve(__dirname, "./src/infrastructure/dependency-injection/index.js")
+      "infrastructure-dependency-injection$": path.resolve(__dirname, "./src/infrastructure/dependency-injection/index.js"),
+      "infrastructure-cryptography$": path.resolve(__dirname, "./src/infrastructure/cryptography/index.js")
     }
   },
   module: {

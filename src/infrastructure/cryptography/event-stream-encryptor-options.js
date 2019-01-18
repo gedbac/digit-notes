@@ -1,7 +1,7 @@
 /*
  *  Amber Notes
  *
- *  Copyright (C) 2016 - 2018 The Amber Notes Authors
+ *  Copyright (C) 2016 - 2019 The Amber Notes Authors
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
@@ -19,10 +19,10 @@
 
 export default class EventStreamEncryptorOptions {
 
-  constructor(props) {
-    this._privateKey = null;
-    if (props && "privateKey" in props) {
-      this._privateKey = props.privateKey;
+  constructor(privateKey) {
+    this._privateKey = privateKey;
+    if (!this._privateKey) {
+      throw new Error("Private key is null");
     }
   }
 

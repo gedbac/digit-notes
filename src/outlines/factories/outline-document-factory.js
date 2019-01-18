@@ -1,7 +1,7 @@
 /*
  *  Amber Notes
  *
- *  Copyright (C) 2016 - 2018 The Amber Notes Authors
+ *  Copyright (C) 2016 - 2019 The Amber Notes Authors
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
@@ -23,11 +23,11 @@ import { OutlineDocumentCreated } from "outlines-events";
 
 export default class OutlineDocumentFactory {
 
-  constructor(props) {}
+  constructor() {}
 
   create() {
-    var document = new OutlineDocument();
-    document.raise(new OutlineDocumentCreated({
+    var document = OutlineDocument.createFrom();
+    document.raise(OutlineDocumentCreated.createFrom({
       outlineDocumentId: uuid()
     }));
     return document;

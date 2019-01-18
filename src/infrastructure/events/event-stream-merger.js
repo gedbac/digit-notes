@@ -1,7 +1,7 @@
 /*
  *  Amber Notes
  *
- *  Copyright (C) 2016 - 2018 The Amber Notes Authors
+ *  Copyright (C) 2016 - 2019 The Amber Notes Authors
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
@@ -19,17 +19,13 @@
 
 export default class EventStreamMerger {
 
-  constructor(props) {
-    this._streamFactory = null;
-    if (props && "streamFactory" in props) {
-      this._streamFactory = props.streamFactory;
-    } else {
+  constructor(streamFactory, eventComparer) {
+    this._streamFactory = streamFactory;
+    if (!this._streamFactory) {
       throw new Error("Event stream factory is null");
     }
-    this._eventComparer = null;
-    if (props && "eventComparer" in props) {
-      this._eventComparer = props.eventComparer;
-    } else {
+    this._eventComparer = eventComparer;
+    if (!this._eventComparer) {
       throw new Error("Event comparer is null");
     }
   }

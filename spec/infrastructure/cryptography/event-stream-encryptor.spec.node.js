@@ -1,15 +1,13 @@
 import { expect } from "chai";
-import { Event, InMemoryEventStream } from "infrastructure-events";
-import { EventStreamEncryptor, EventStreamEncryptorOptions } from "infrastructure-cryptography";
+import { getRandomValues } from "infrastructure-util";
+import { InMemoryEventStream } from "infrastructure-events";
+import { EncryptedEvent, EventStreamEncryptor, EventStreamEncryptorOptions } from "infrastructure-cryptography";
 
-class FooEvent extends Event {
+class Foo extends EncryptedEvent {
 
-  constructor(props) {
-    super(props);
-    this._text = null;
-    if (props && "text" in props) {
-      this._text = props.text;
-    }
+  constructor(id, name, timestamp, nonce, text) {
+    super(id, name, timestamp, nonce);
+    this._text = text;
   }
 
   get text() {
@@ -28,26 +26,24 @@ class FooEvent extends Event {
     return json;
   }
 
+  static createFrom({ id, name, timestamp, nonce, text } = {}) {
+    return new Foo(id, name, timestamp, nonce, text);
+  }
+
 }
 
 describe("Event Stream Encryptor", () => {
 
   it ("should encrypt and decrypt message", async () => {
-    var supportedEventTypes = [[ "FooEvent", FooEvent ]];
-    var encryptedStream = new EventStreamEncryptor({
-      stream: new InMemoryEventStream({
-        name: "foo",
-        text: "foo",
-        supportedEventTypes: supportedEventTypes
-      }),
-      options: new EventStreamEncryptorOptions({
-        privateKey: "fwtyt/x+HBAie1oHzUZ1zLId8EdCuLnoGeS+lj4bplM="
-      })
-    });
+    var supportedEventTypes = [[ "Foo", Foo ]];
+    var encryptedStream = new EventStreamEncryptor(
+      "EncryptedStream",
+      supportedEventTypes,
+      new InMemoryEventStream("foo", supportedEventTypes),
+      new EventStreamEncryptorOptions("fwtyt/x+HBAie1oHzUZ1zLId8EdCuLnoGeS+lj4bplM=")
+    );
     await encryptedStream.open();
-    await encryptedStream.write(new FooEvent({
-      text: "#text"
-    }));
+    await encryptedStream.write(new Foo(1, "Foo", 1001, getRandomValues(16), "#text"));
     var decryptedEvent = await encryptedStream.read();
     await encryptedStream.close();
     expect(decryptedEvent).to.not.be.null;

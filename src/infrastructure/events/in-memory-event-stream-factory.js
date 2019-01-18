@@ -1,7 +1,7 @@
 /*
  *  Amber Notes
  *
- *  Copyright (C) 2016 - 2018 The Amber Notes Authors
+ *  Copyright (C) 2016 - 2019 The Amber Notes Authors
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
@@ -22,18 +22,15 @@ import InMemoryEventStream from "./in-memory-event-stream";
 
 export default class InMemoryEventStreamFactory extends EventStreamFactory {
 
-  constructor(props) {
-    super(props);
+  constructor(supportedEventTypes) {
+    super(supportedEventTypes);
   }
 
   create(name) {
     if (!name) {
       throw new Error("Stream name is null");
     }
-    return new InMemoryEventStream({
-      name: name,
-      supportedEventTypes: this.supportedEventTypes
-    });
+    return new InMemoryEventStream(name, this.supportedEventTypes);
   }
 
 }

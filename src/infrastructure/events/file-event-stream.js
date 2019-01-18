@@ -1,7 +1,7 @@
 /*
  *  Amber Notes
  *
- *  Copyright (C) 2016 - 2018 The Amber Notes Authors
+ *  Copyright (C) 2016 - 2019 The Amber Notes Authors
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
@@ -25,16 +25,10 @@ import EventStream from "./event-stream";
 
 export default class FileEventStream extends EventStream {
 
-  constructor(props) {
-    super(props);
-    this._events = [];
-    if (props && "events" in props) {
-      this._events = props.events;
-    }
-    this._path = null;
-    if (props && "path" in props) {
-      this._path = props.path;
-    }
+  constructor(name, supportedEventTypes, path, events = []) {
+    super(name, supportedEventTypes);
+    this._path = path;
+    this._events = events;
   }
 
   get length() {
@@ -62,7 +56,10 @@ export default class FileEventStream extends EventStream {
             if ("name" in props) {
               if (this.supportedEventTypes.has(props.name)) {
                 var eventType = this.supportedEventTypes.get(props.name);
-                var event = new eventType(props);
+                if (!("createFrom" in eventType)) {
+                  throw new Error(`Static method 'createFrom' not found in class '${eventType.name}'`);
+                }
+                var event = eventType.createFrom(props);
                 this._events.push(event);
               } else {
                 throw new Error(`Event '${props.name}' is not supported`);

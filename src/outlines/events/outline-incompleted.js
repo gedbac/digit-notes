@@ -1,7 +1,7 @@
 /*
  *  Amber Notes
  *
- *  Copyright (C) 2016 - 2018 The Amber Notes Authors
+ *  Copyright (C) 2016 - 2019 The Amber Notes Authors
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
@@ -17,12 +17,18 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { uuid, getTimestamp, getRandomValues } from "infrastructure-util";
 import OutlineEvent from "./outline-event";
 
 export default class OutlineIncompleted extends OutlineEvent {
 
-  constructor(props) {
-    super(props);
+  constructor(id, name, timestamp, nonce, outlineDocumentId, outlineId) {
+    super(id, name, timestamp, nonce, outlineDocumentId, outlineId);
+  }
+
+  static createFrom({ id = uuid(), name = "OutlineIncompleted", timestamp = getTimestamp(), nonce = getRandomValues(16),
+    outlineDocumentId = null , outlineId = null } = {}) {
+    return new OutlineIncompleted(id, name, timestamp, nonce, outlineDocumentId, outlineId);
   }
 
 }

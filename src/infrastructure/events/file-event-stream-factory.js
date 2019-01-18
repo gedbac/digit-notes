@@ -1,7 +1,7 @@
 /*
  *  Amber Notes
  *
- *  Copyright (C) 2016 - 2018 The Amber Notes Authors
+ *  Copyright (C) 2016 - 2019 The Amber Notes Authors
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
@@ -22,12 +22,9 @@ import FileEventStream from "./file-event-stream";
 
 export default class FileEventStreamFactory extends EventStreamFactory {
 
-  constructor(props) {
-    super(props);
-    this._path = null;
-    if ("path" in props) {
-      this._path = props.path;
-    }
+  constructor(supportedEventTypes, path) {
+    super(supportedEventTypes);
+    this._path = path;
   }
 
   get path() {
@@ -42,11 +39,7 @@ export default class FileEventStreamFactory extends EventStreamFactory {
     if (!name) {
       throw new Error("Stream name is null");
     }
-    return new FileEventStream({
-      name: name,
-      path: this.path,
-      supportedEventTypes: this.supportedEventTypes
-    });
+    return new FileEventStream(name, this.supportedEventTypes, this.path);
   }
 
 }

@@ -1,7 +1,7 @@
 /*
  *  Amber Notes
  *
- *  Copyright (C) 2016 - 2018 The Amber Notes Authors
+ *  Copyright (C) 2016 - 2019 The Amber Notes Authors
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
@@ -17,29 +17,23 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { timestamp, uuid } from "infrastructure-util";
-
 export default class Event {
 
-  constructor(props) {
+  constructor(id, name, timestamp) {
     if (new.target === Event) {
       throw new Error("Can't construct abstract instances directly");
     }
-    this._id = uuid();
-    if (props && "id" in props) {
-      this._id = props.id;
+    this._id = id;
+    if (!this._id) {
+      throw new Error("Id is null");
     }
-    this._name = new.target.name;
-    if (props && "name" in props) {
-      this._name = props.name;
+    this._name = name;
+    if (!this._name) {
+      throw new Error("Name is null");
     }
-    this._timestamp = timestamp();
-    if (props && "timestamp" in props) {
-      this._timestamp = props.timestamp;
-    }
-    this._nonce = null;
-    if (props && "nonce" in props) {
-      this._nonce = props.nonce;
+    this._timestamp = timestamp;
+    if (!this._timestamp) {
+      throw new Error("Timestamp is null");
     }
   }
 
@@ -55,20 +49,11 @@ export default class Event {
     return this._timestamp;
   }
 
-  get nonce() {
-    return this._nonce;
-  }
-
-  set nonce(value) {
-    this._nonce = value;
-  }
-
   toJSON() {
     return {
       id: this.id,
       name: this.name,
-      timestamp: this.timestamp,
-      nonce: this._nonce
+      timestamp: this.timestamp
     };
   }
 

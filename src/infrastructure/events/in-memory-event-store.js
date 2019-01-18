@@ -1,7 +1,7 @@
 /*
  *  Amber Notes
  *
- *  Copyright (C) 2016 - 2018 The Amber Notes Authors
+ *  Copyright (C) 2016 - 2019 The Amber Notes Authors
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
@@ -17,16 +17,16 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import InMemoryEventStream from "./in-memory-event-stream";
 import EventStore from "./event-store";
 
 export default class InMemoryEventStore extends EventStore {
 
-  constructor(props) {
-    super(props);
-    this._streams = new Map();
-    if (props && "streams" in props) {
-      this._streams = new Map(props.streams);
+  constructor(eventStreamFactory, streams = new Map()) {
+    super(eventStreamFactory);
+    if (streams instanceof Array) {
+      this._streams = new Map(streams);
+    } else {
+      this._streams = streams;
     }
   }
 
@@ -50,10 +50,7 @@ export default class InMemoryEventStore extends EventStore {
     if (await this.hasStream(name)) {
       throw new Error(`Stream with name '${name}' already exists`);
     }
-    var stream = new InMemoryEventStream({
-      name: name,
-      supportedEventTypes: this.supportedEventTypes
-    });
+    var stream = this.eventStreamFactory.create(name);
     this._streams.set(name, stream);
     stream.open();
     return stream;

@@ -1,7 +1,7 @@
 /*
  *  Amber Notes
  *
- *  Copyright (C) 2016 - 2018 The Amber Notes Authors
+ *  Copyright (C) 2016 - 2019 The Amber Notes Authors
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
@@ -22,12 +22,9 @@ import EventStream from "./event-stream";
 
 export default class InMemoryEventStream extends EventStream {
 
-  constructor(props) {
-    super(props);
-    this._events = [];
-    if (props && "events" in props) {
-      this._events = props.events;
-    }
+  constructor(name, supportedEventTypes, events = []) {
+    super(name, supportedEventTypes);
+    this._events = events;
   }
 
   get length() {
@@ -39,8 +36,8 @@ export default class InMemoryEventStream extends EventStream {
       throw new Error("Stream is closed");
     }
     var event = null;
-    if (this._position >= 0 && this._position < this._events.length) {
-      event = this._events[this._position++];
+    if (this.position >= 0 && this.position < this._events.length) {
+      event = this._events[this.position++];
     }
     return event;
   }
@@ -64,8 +61,8 @@ export default class InMemoryEventStream extends EventStream {
   [Symbol.iterator]() {
     return {
       next: () => ({
-        value: this._events[this._position++],
-        done: this._position < 0 || this._position > this._events.length
+        value: this._events[this.position++],
+        done: this.position < 0 || this.position > this._events.length
       })
     };
   }

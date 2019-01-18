@@ -1,7 +1,7 @@
 /*
  *  Amber Notes
  *
- *  Copyright (C) 2016 - 2018 The Amber Notes Authors
+ *  Copyright (C) 2016 - 2019 The Amber Notes Authors
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
@@ -19,22 +19,20 @@
 
 export default class TextIndex {
 
-  constructor(props) {
-    this._fieldName = null;
-    if (props && "propertyName" in props) {
-      this._propertyName = props.propertyName;
+  constructor(propertyName, analyzer, map = null, data = new Map()) {
+    this._propertyName = propertyName;
+    if (!this._propertyName) {
+      throw new Error("Property name is null");
     }
-    this._analyzer = null;
-    if (props && "analyzer" in props) {
-      this._analyzer = props.analyzer;
+    this._analyzer = analyzer;
+    if (!this._analyzer) {
+      throw new Error("Analyzer is null");
     }
-    this._data = new Map();
-    if (props && "data" in props) {
-      this._data = props.data;
-    }
-    this._map = null;
-    if (props && "map" in props) {
-      this._map = props.map;
+    this._map = map;
+    if (data instanceof Array) {
+      this._data = new Map(data);
+    } else {
+      this._data = data;
     }
   }
 
@@ -46,15 +44,13 @@ export default class TextIndex {
     return this._analyzer;
   }
 
+  get map() {
+    return this._map;
+  }
+
   put(document) {
     if (!document) {
-      throw new Error("Document is not set");
-    }
-    if (!this.propertyName) {
-      throw new Error("Property name is not set");
-    }
-    if (!this.analyzer) {
-      throw new Error("Analyzer is not set");
+      throw new Error("Document is null");
     }
     if (document && this.propertyName && this.propertyName in document) {
       var propertyValue = document[this.propertyName];

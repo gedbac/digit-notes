@@ -1,7 +1,7 @@
 /*
  *  Amber Notes
  *
- *  Copyright (C) 2016 - 2018 The Amber Notes Authors
+ *  Copyright (C) 2016 - 2019 The Amber Notes Authors
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
@@ -17,30 +17,29 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { uuid, getTimestamp, getRandomValues } from "infrastructure-util";
 import OutlineEvent from "./outline-event";
 
 export default class OutlineNotesChanged extends OutlineEvent {
 
-  constructor(props) {
-    super(props);
-    this._outlineNotes = null;
-    if (props && "outlineNotes" in props) {
-      this._outlineNotes = props.outlineNotes;
-    }
+  constructor(id, name, timestamp, nonce, outlineDocumentId, outlineId, outlineNotes) {
+    super(id, name, timestamp, nonce, outlineDocumentId, outlineId);
+    this._outlineNotes = outlineNotes;
   }
 
   get outlineNotes() {
     return this._outlineNotes;
   }
 
-  set outlineNotes(value) {
-    this._outlineNotes = value;
-  }
-
   toJSON() {
     var json = super.toJSON();
     json.outlineNotes = this._outlineNotes;
     return json;
+  }
+
+  static createFrom({ id = uuid(), name = "OutlineNotesChanged", timestamp = getTimestamp(), nonce = getRandomValues(16),
+    outlineDocumentId = null, outlineId = null, outlineNotes = null } = {}) {
+    return new OutlineNotesChanged(id, name, timestamp, nonce, outlineDocumentId, outlineId, outlineNotes);
   }
 
 }

@@ -1,7 +1,7 @@
 /*
  *  Amber Notes
  *
- *  Copyright (C) 2016 - 2018 The Amber Notes Authors
+ *  Copyright (C) 2016 - 2019 The Amber Notes Authors
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
@@ -22,22 +22,21 @@ import TextIndex from "./text-index";
 
 export default class TextSearch {
 
-  constructor(props) {
+  constructor(logger) {
     this._indexes = new Map();
-    if (props && "indexes" in props) {
-      this._indexes = new Map(props.indexes);
-    }
-    if (props && "logger" in props) {
-      this._logger = props.logger;
+    this._logger = logger;
+    if (!this._logger) {
+      throw new Error("logger is null");
     }
   }
 
-  createIndex(indexName, options) {
+  createIndex(indexName, options = {}) {
     try {
       if (!indexName) {
         throw new Error("Index's name is null");
       }
-      this._indexes.set(indexName, new TextIndex(options));
+      var { propertyName, analyzer, map } = options;
+      this._indexes.set(indexName, new TextIndex(propertyName, analyzer, map));
       if (this._logger) {
         this._logger.logInformation(`Index has been created [indexName=${indexName}]`);
       }
@@ -102,10 +101,7 @@ export default class TextSearch {
         var hits = index.find(keyword);
         var end = Date.now();
         var took = end - start;
-        result = new TextSearchResult({
-          took: took,
-          hits: hits
-        });
+        result = new TextSearchResult(hits, took);
         if (this._logger) {
           this._logger.logInformation(`Text search has been completed ` +
             `[indexName=${indexName}, keyword=${keyword}, took=${result.took}]`);

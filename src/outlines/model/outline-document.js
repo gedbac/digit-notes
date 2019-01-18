@@ -1,7 +1,7 @@
 /*
  *  Amber Notes
  *
- *  Copyright (C) 2016 - 2018 The Amber Notes Authors
+ *  Copyright (C) 2016 - 2019 The Amber Notes Authors
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
@@ -17,28 +17,21 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { uuid, getTimestamp } from "infrastructure-util";
 import { EventSourcedAggregate } from "infrastructure-model";
-import {
-  OutlineDocumentTitleChanged,
-  OutlineDocumentDeleted,
-  OutlineAdded,
-  OutlineRemoved
-} from "outlines-events";
+import { OutlineDocumentTitleChanged, OutlineDocumentDeleted, OutlineAdded, OutlineRemoved } from "outlines-events";
 import Outline from "./outline";
 
 export default class OutlineDocument extends EventSourcedAggregate {
 
-  constructor(props) {
-    super(props);
-    this._title = null;
-    if (props && "title" in props) {
-      this._title = props.title;
-    }
-    this._children = [];
-    if (props && "children" in props) {
-      this._children = props.children.map(x => {
-        x.aggregateRoot = this;
-        return new Outline(x);
+  constructor(id, createdOn, modifiedOn, deleted, version, uncommittedEvents, title, children) {
+    super(id, createdOn, modifiedOn, deleted, version, uncommittedEvents);
+    this._title = title;
+    this._children = children;
+    if (this._children) {
+      this._children = children.map(props => {
+        props.aggregateRoot = this;
+        return Outline.createFrom(props);
       });
     }
   }
@@ -49,7 +42,7 @@ export default class OutlineDocument extends EventSourcedAggregate {
 
   set title(value) {
     if (this._title !== value) {
-      this.raise(new OutlineDocumentTitleChanged({
+      this.raise(OutlineDocumentTitleChanged.createFrom({
         outlineDocumentId: this.id,
         outlineDocumentTitle: value
       }));
@@ -64,7 +57,7 @@ export default class OutlineDocument extends EventSourcedAggregate {
     if (!id) {
       throw new Error("Outline's id is null");
     }
-    this.raise(new OutlineAdded({
+    this.raise(OutlineAdded.createFrom({
       outlineDocumentId: this.id,
       parentOutlineId: null,
       outlineId: id,
@@ -76,7 +69,7 @@ export default class OutlineDocument extends EventSourcedAggregate {
     if (!id) {
       throw new Error("Outline's id is null");
     }
-    this.raise(new OutlineRemoved({
+    this.raise(OutlineRemoved.createFrom({
       outlineDocumentId: this.id,
       parentOutlineId: null,
       outlineId: id
@@ -85,7 +78,7 @@ export default class OutlineDocument extends EventSourcedAggregate {
 
   delete() {
     if (!this.deleted) {
-      this.raise(new OutlineDocumentDeleted({
+      this.raise(OutlineDocumentDeleted.createFrom({
         outlineDocumentId: this.id
       }));
     }
@@ -108,6 +101,11 @@ export default class OutlineDocument extends EventSourcedAggregate {
       json.children = this._children.map(x => x.toJSON());
     }
     return json;
+  }
+
+  static createFrom({ id = uuid(), createdOn = getTimestamp(), modifiedOn = null, deleted = false, version = 0,
+    uncommittedEvents = [], title = null, children = []} = {}) {
+    return new OutlineDocument(id, createdOn, modifiedOn, deleted, version, uncommittedEvents, title, children);
   }
 
   _applyOutlineEvent(event) {
@@ -133,7 +131,7 @@ export default class OutlineDocument extends EventSourcedAggregate {
   _onOutlineAdded(event) {
     if (!event.parentOutlineId) {
       if (!this.hasOutline(event.outlineId)) {
-        this._children.push(new Outline({
+        this._children.push(Outline.createFrom({
           id: event.outlineId,
           aggregateRoot: this,
           text: event.outlineText

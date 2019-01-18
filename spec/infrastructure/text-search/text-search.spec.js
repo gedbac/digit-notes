@@ -26,9 +26,9 @@ describe("Text Search", () => {
 
     expect(term).not.to.be.null;
 
-    var textSearch = new TextSearch({
-      logger: loggerFactory.createLogger(TextSearch)
-    });
+    var textSearch = new TextSearch(
+      loggerFactory.createLogger(TextSearch)
+    );
 
     textSearch.createIndex("myterms", {
       propertyName: "text",

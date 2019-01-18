@@ -1,7 +1,7 @@
 /*
  *  Amber Notes
  *
- *  Copyright (C) 2016 - 2018 The Amber Notes Authors
+ *  Copyright (C) 2016 - 2019 The Amber Notes Authors
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
@@ -17,15 +17,16 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { uuid, getTimestamp, getRandomValues } from "infrastructure-util";
 import OutlineEvent from "./outline-event";
 
 export default class OutlineTagRemoved extends OutlineEvent {
 
-  constructor(props) {
-    super(props);
-    this._outlineTag = null;
-    if (props && "outlineTag" in props) {
-      this._outlineTag = props.outlineTag;
+  constructor(id, name, timestamp, nonce, outlineDocumentId, outlineId, outlineTag) {
+    super(id, name, timestamp, nonce, outlineDocumentId, outlineId);
+    this._outlineTag = outlineTag;
+    if (!this._outlineTag) {
+      throw new Error("Outline tag is null");
     }
   }
 
@@ -33,14 +34,15 @@ export default class OutlineTagRemoved extends OutlineEvent {
     return this._outlineTag;
   }
 
-  set outlineTag(value) {
-    this._outlineTag = value;
-  }
-
   toJSON() {
     var json = super.toJSON();
     json.outlineTag = this._outlineTag;
     return json;
+  }
+
+  static createFrom({ id = uuid(), name = "OutlineTagRemoved", timestamp = getTimestamp(), nonce = getRandomValues(16),
+    outlineDocumentId = null, outlineId = null, outlineTag = null } = {}) {
+    return new OutlineTagRemoved(id, name, timestamp, nonce, outlineDocumentId, outlineId, outlineTag);
   }
 
 }

@@ -4,10 +4,7 @@ import { TextIndex, WhitespaceTextAnalyzer } from "infrastructure-text-search";
 describe("Text Index", () => {
 
   it("should create index", () => {
-    var textIndex = new TextIndex({
-      propertyName: "text",
-      analyzer: new WhitespaceTextAnalyzer()
-    });
+    var textIndex = new TextIndex("text", new WhitespaceTextAnalyzer());
     var doc = {
       text: "black rabbit"
     };

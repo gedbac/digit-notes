@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { writeFile, deleteFile } from "infrastructure-util";
-import { FileEventStore } from "infrastructure-events";
+import { FileEventStreamFactory, FileEventStore } from "infrastructure-events";
 
 describe("File Event Store", () => {
 
@@ -9,9 +9,9 @@ describe("File Event Store", () => {
   });
 
   it("should create stream", async () => {
-    var eventStore = new FileEventStore({
-      path: "./streams"
-    });
+    var eventStore = new FileEventStore(
+      new FileEventStreamFactory(null, "./streams")
+    );
     await eventStore.open();
     var stream = await eventStore.createStream("foo3");
     await eventStore.close();
@@ -21,9 +21,9 @@ describe("File Event Store", () => {
 
   it("should get stream", async () => {
     await writeFile("./streams/foo4", { flag: "w", encoding: "utf8" }, null);
-    var eventStore = new FileEventStore({
-      path: "./streams"
-    });
+    var eventStore = new FileEventStore(
+      new FileEventStreamFactory(null, "./streams")
+    );
     await eventStore.open();
     var stream = await eventStore.getStream("foo4");
     await eventStore.close();
@@ -32,9 +32,9 @@ describe("File Event Store", () => {
 
   it("should delete stream", async () => {
     await writeFile("./streams/foo5", { flag: "w", encoding: "utf8" }, null);
-    var eventStore = new FileEventStore({
-      path: "./streams"
-    });
+    var eventStore = new FileEventStore(
+      new FileEventStreamFactory(null, "./streams")
+    );
     await eventStore.open();
     await eventStore.deleteStream("foo5");
     var stream = await eventStore.getStream("foo5");

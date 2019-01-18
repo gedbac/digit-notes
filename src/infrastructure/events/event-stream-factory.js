@@ -1,7 +1,7 @@
 /*
  *  Amber Notes
  *
- *  Copyright (C) 2016 - 2018 The Amber Notes Authors
+ *  Copyright (C) 2016 - 2019 The Amber Notes Authors
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
@@ -19,13 +19,14 @@
 
 export default class EventStreamFactory {
 
-  constructor(props) {
+  constructor(supportedEventTypes = new Map()) {
     if (new.target === EventStreamFactory) {
       throw new Error("Can't construct abstract instances directly");
     }
-    this._supportedEventTypes = new Map();
-    if (props && "supportedEventTypes" in props) {
-      this._supportedEventTypes = new Map(props.supportedEventTypes);
+    if (supportedEventTypes instanceof Array) {
+      this._supportedEventTypes = new Map(supportedEventTypes);
+    } else {
+      this._supportedEventTypes = supportedEventTypes;
     }
   }
 

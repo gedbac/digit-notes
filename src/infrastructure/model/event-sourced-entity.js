@@ -1,7 +1,7 @@
 /*
  *  Amber Notes
  *
- *  Copyright (C) 2016 - 2018 The Amber Notes Authors
+ *  Copyright (C) 2016 - 2019 The Amber Notes Authors
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
@@ -22,14 +22,14 @@ import Entity from "./entity";
 
 export default class EventSourcedEntity extends Entity {
 
-  constructor(props) {
-    super(props);
+  constructor(id, aggregateRoot) {
+    super(id);
     if (new.target === EventSourcedEntity) {
       throw new Error("Can't construct abstract instances directly");
     }
-    this._aggregateRoot = null;
-    if (props && "aggregateRoot" in props) {
-      this._aggregateRoot = props.aggregateRoot;
+    this._aggregateRoot = aggregateRoot;
+    if (!this._aggregateRoot) {
+      throw new Error("Aggregate root is null");
     }
   }
 

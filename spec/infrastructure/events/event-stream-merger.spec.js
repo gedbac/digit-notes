@@ -7,10 +7,10 @@ import {
   EventStreamMerger
 } from "infrastructure-events";
 
-class FooEvent extends Event {
+class Foo extends Event {
 
-  constructor(props) {
-    super(props);
+  constructor(id, name, timestamp) {
+    super(id, name, timestamp);
   }
 
 }
@@ -18,27 +18,19 @@ class FooEvent extends Event {
 describe("Event Stream Merger", () => {
 
   it("should merge to streams", async () => {
-    var supportedEventTypes = [[ "FooEvent", FooEvent ]];
-    var eventStreamMerger = new EventStreamMerger({
-      streamFactory: new InMemoryEventStreamFactory({
-        supportedEventTypes: supportedEventTypes
-      }),
-      eventComparer: new EventComparer()
-    });
-    var stream1 = new InMemoryEventStream({
-      name: "stream1",
-      supportedEventTypes: supportedEventTypes
-    });
+    var supportedEventTypes = [[ "Foo", Foo ]];
+    var eventStreamMerger = new EventStreamMerger(
+      new InMemoryEventStreamFactory(supportedEventTypes),
+      new EventComparer()
+    );
+    var stream1 = new InMemoryEventStream("stream1", supportedEventTypes,);
     await stream1.open();
-    await stream1.write(new FooEvent({ id: 1, name: "FooEvent", timestamp: 1001 }));
-    await stream1.write(new FooEvent({ id: 3, name: "FooEvent", timestamp: 1003 }));
-    var stream2 = new InMemoryEventStream({
-      name: "stream2",
-      supportedEventTypes: supportedEventTypes
-    });
+    await stream1.write(new Foo(1, "Foo", 1001));
+    await stream1.write(new Foo(3, "Foo", 1003));
+    var stream2 = new InMemoryEventStream("stream2", supportedEventTypes);
     stream2.open();
-    await stream2.write(new FooEvent({ id: 1, name: "FooEvent", timestamp: 1001 }));
-    await stream2.write(new FooEvent({ id: 2, name: "FooEvent", timestamp: 1002 }));
+    await stream2.write(new Foo(1, "Foo", 1001));
+    await stream2.write(new Foo(2, "Foo", 1002));
     var outputStream = await eventStreamMerger.merge(stream1, stream2);
     expect(outputStream).to.be.not.null;
     expect(outputStream.length).to.be.equal(3);

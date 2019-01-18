@@ -1,7 +1,7 @@
 /*
  *  Amber Notes
  *
- *  Copyright (C) 2016 - 2018 The Amber Notes Authors
+ *  Copyright (C) 2016 - 2019 The Amber Notes Authors
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
@@ -17,31 +17,36 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import OutlineDocumentEvent from "./outline-document-event";
+import { EncryptedEvent } from "infrastructure-cryptography";
 
-export default class OutlineEvent extends OutlineDocumentEvent {
+export default class OutlineEvent extends EncryptedEvent {
 
-  constructor(props) {
-    super(props);
+  constructor(id, name, timestamp, nonce, outlineDocumentId, outlineId) {
+    super(id, name, timestamp, nonce);
     if (new.target === OutlineEvent) {
       throw new Error("Can't construct abstract instances directly");
     }
-    this._outlineId = null;
-    if (props && "outlineId" in props) {
-      this._outlineId = props.outlineId;
+    this._outlineDocumentId = outlineDocumentId;
+    if (!this._outlineDocumentId) {
+      throw new Error("Outline document id is null");
     }
+    this._outlineId = outlineId;
+    if (!this._outlineId) {
+      throw new Error("Outline id is null");
+    }
+  }
+
+  get outlineDocumentId() {
+    return this._outlineDocumentId;
   }
 
   get outlineId() {
     return this._outlineId;
   }
 
-  set outlineId(value) {
-    this._outlineId = value;
-  }
-
   toJSON() {
     var json = super.toJSON();
+    json.outlineDocumentId = this._outlineDocumentId;
     json.outlineId = this._outlineId;
     return json;
   }

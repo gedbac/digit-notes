@@ -1,10 +1,12 @@
 import { expect } from "chai";
-import { InMemoryEventStream, InMemoryEventStore } from "infrastructure-events";
+import { InMemoryEventStream, InMemoryEventStreamFactory, InMemoryEventStore } from "infrastructure-events";
 
 describe("In Memory Event Store", () => {
 
   it("should create stream", async () => {
-    var eventStore = new InMemoryEventStore();
+    var eventStore = new InMemoryEventStore(
+      new InMemoryEventStreamFactory()
+    );
     await eventStore.open();
     var stream = await eventStore.createStream("foo");
     await eventStore.close();
@@ -13,11 +15,12 @@ describe("In Memory Event Store", () => {
   });
 
   it("should get stream", async () => {
-    var eventStore = new InMemoryEventStore({
-      streams: [
+    var eventStore = new InMemoryEventStore(
+      new InMemoryEventStreamFactory(),
+      [
         [ "foo", new InMemoryEventStream({ name: "foo" }) ]
       ]
-    });
+    );
     await eventStore.open();
     var stream = await eventStore.getStream("foo");
     await eventStore.close();
@@ -25,11 +28,12 @@ describe("In Memory Event Store", () => {
   });
 
   it("should delete stream", async () => {
-    var eventStore = new InMemoryEventStore({
-      streams: [
+    var eventStore = new InMemoryEventStore(
+      new InMemoryEventStreamFactory(),
+      [
         [ "foo", new InMemoryEventStream({ name: "foo" })]
       ]
-    });
+    );
     await eventStore.open();
     await eventStore.deleteStream("foo");
     var stream = await eventStore.getStream("foo");

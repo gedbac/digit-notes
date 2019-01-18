@@ -1,7 +1,7 @@
 /*
  *  Amber Notes
  *
- *  Copyright (C) 2016 - 2018 The Amber Notes Authors
+ *  Copyright (C) 2016 - 2019 The Amber Notes Authors
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
@@ -22,16 +22,14 @@ import { Event, EventStream } from "infrastructure-events";
 
 export default class EventStreamEncryptor extends EventStream {
 
-  constructor(props) {
-    super(props);
-    if (props && "stream" in props) {
-      this._stream = props.stream;
-    } else {
+  constructor(name, supportedEventTypes, stream, options) {
+    super(name, supportedEventTypes);
+    this._stream = stream;
+    if (!this._stream) {
       throw new Error("Event stream is null");
     }
-    if (props && "options" in props) {
-      this._options = props.options;
-    } else {
+    this._options = options;
+    if (!this._options) {
       throw new Error("Event stream encryptor options is null");
     }
     this._privateKey = null;
@@ -104,20 +102,19 @@ export default class EventStreamEncryptor extends EventStream {
     if (!this.options || !this.options.privateKey) {
       throw new Error("Private key is not set");
     }
-    var nonce = crypto.randomBytes(16);
-    event.nonce = nonce.toString("base64");
+    var props = event.toJSON();
     var propertyNames = this._getPropertyNames(event);
     if (propertyNames) {
       for (var propertyName of propertyNames) {
-        if (propertyName !== "nonce") {
-          var propertyValue = event[propertyName];
-          if (propertyValue && typeof propertyValue === "string") {
-            event[propertyName] = await this._encryptText(propertyValue, nonce);
-          }
+        var propertyValue = event[propertyName];
+        if (propertyName === "nonce") {
+          props[propertyName] = propertyValue.toString("base64");
+        } else if (propertyValue && typeof propertyValue === "string") {
+          props[propertyName] = await this._encryptText(propertyValue, event.nonce);
         }
       }
     }
-    return event;
+    return this._createEvent(props);
   }
 
   async decrypt(event) {
@@ -127,19 +124,19 @@ export default class EventStreamEncryptor extends EventStream {
     if (!this.options || !this.options.privateKey) {
       throw new Error("Private key is not set");
     }
-    var nonce = Buffer.from(event.nonce, "base64");
+    var props = event.toJSON();
     var propertyNames = this._getPropertyNames(event);
     if (propertyNames) {
       for (var propertyName of propertyNames) {
-        if (propertyName !== "nonce") {
-          var propertyValue = event[propertyName];
-          if (propertyValue && typeof propertyValue === "string") {
-            event[propertyName] = await this._decryptText(propertyValue, nonce);
-          }
+        var propertyValue = event[propertyName];
+        if (propertyName === "nonce") {
+          props[propertyName] = Buffer.from(propertyValue, "base64");
+        } else if (propertyValue && typeof propertyValue === "string") {
+          props[propertyName] = await this._decryptText(propertyValue, event.nonce);
         }
       }
     }
-    return event;
+    return this._createEvent(props);
   }
 
   async _encryptText(text, nonce) {
@@ -187,6 +184,24 @@ export default class EventStreamEncryptor extends EventStream {
       this._privateKey = Buffer.from(this.options.privateKey, "base64");
     }
     return this._privateKey;
+  }
+
+  _createEvent(props) {
+    var event = null;
+    if ("name" in props) {
+      if (this.supportedEventTypes.has(props.name)) {
+        var eventType = this.supportedEventTypes.get(props.name);
+        if (!("createFrom" in eventType)) {
+          throw new Error(`Static method 'createFrom' not found in class '${eventType.name}'`);
+        }
+        event = eventType.createFrom(props);
+      } else {
+        throw new Error(`Event '${props.name}' is not supported`);
+      }
+    } else {
+      throw new Error("Event's name is missing");
+    }
+    return event;
   }
 
 }

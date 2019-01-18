@@ -17,21 +17,6 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-export default class EventComparer {
-
-  constructor() {}
-
-  compare(event1, event2) {
-    if (!event1 || !event2) {
-      throw new Error("Event is null");
-    }
-    if (event1.id === event2.id) {
-      return 0;
-    } else if (event1.timestamp > event2.timestamp) {
-      return 1;
-    } else {
-      return -1;
-    }
-  }
-
+export default function getRandomValues(size) {
+  return crypto.getRandomValues(new Uint8Array(size));
 }

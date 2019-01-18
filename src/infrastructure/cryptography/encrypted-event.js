@@ -17,21 +17,29 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-export default class EventComparer {
+import { Event } from "infrastructure-events";
 
-  constructor() {}
+export default class EncryptedEvent extends Event {
 
-  compare(event1, event2) {
-    if (!event1 || !event2) {
-      throw new Error("Event is null");
+  constructor(id, name, timestamp, nonce) {
+    super(id, name, timestamp);
+    if (new.target === EncryptedEvent) {
+      throw new Error("Can't construct abstract instances directly");
     }
-    if (event1.id === event2.id) {
-      return 0;
-    } else if (event1.timestamp > event2.timestamp) {
-      return 1;
-    } else {
-      return -1;
+    this._nonce = nonce;
+    if (!this._nonce) {
+      throw new Error("Nonce is null");
     }
+  }
+
+  get nonce() {
+    return this._nonce;
+  }
+
+  toJSON() {
+    var json = super.toJSON();
+    json.nonce = this._nonce;
+    return json;
   }
 
 }

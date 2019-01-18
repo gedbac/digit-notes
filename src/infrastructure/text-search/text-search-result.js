@@ -1,7 +1,7 @@
 /*
  *  Amber Notes
  *
- *  Copyright (C) 2016 - 2018 The Amber Notes Authors
+ *  Copyright (C) 2016 - 2019 The Amber Notes Authors
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
@@ -19,14 +19,9 @@
 
 export default class TextSearchResult {
 
-  constructor(props) {
-    this._hits = [];
-    if (props && "hits" in props) {
-      this._hits = props.hits;
-    }
-    if (props && "took" in props) {
-      this._took = props.took;
-    }
+  constructor(hits = [], took = null) {
+    this._hits = hits;
+    this._took = took;
   }
 
   get took() {

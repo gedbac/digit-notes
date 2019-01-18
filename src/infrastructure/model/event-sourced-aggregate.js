@@ -1,7 +1,7 @@
 /*
  *  Amber Notes
  *
- *  Copyright (C) 2016 - 2018 The Amber Notes Authors
+ *  Copyright (C) 2016 - 2019 The Amber Notes Authors
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
@@ -22,19 +22,13 @@ import { Event } from "infrastructure-events";
 
 export default class EventSourcedAggregate extends AggregateRoot {
 
-  constructor(props) {
-    super(props);
+  constructor(id, createdOn, modifiedOn, deleted, version, uncommittedEvents) {
+    super(id, createdOn, modifiedOn, deleted);
     if (new.target === EventSourcedAggregate) {
       throw new Error("Can't construct abstract instances directly");
     }
-    this._version = 0;
-    if (props && "verion" in props) {
-      this._version = props.version;
-    }
-    this._uncommittedEvents = [];
-    if (props && "uncommittedEvents" in props) {
-      this._uncommittedEvents = props.uncommittedEvents;
-    }
+    this._version = version;
+    this._uncommittedEvents = uncommittedEvents;
   }
 
   get version() {

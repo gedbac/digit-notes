@@ -1,10 +1,10 @@
 import { expect } from "chai";
 import { Event, InMemoryEventStream } from "infrastructure-events";
 
-class FooEvent extends Event {
+class Foo extends Event {
 
-  constructor(props) {
-    super(props);
+  constructor(id, name, timestamp) {
+    super(id, name, timestamp);
   }
 
 }
@@ -12,12 +12,9 @@ class FooEvent extends Event {
 describe("In Memory Event Stream", () => {
 
   it("should write and read event from stream", async () => {
-    var stream = new InMemoryEventStream({
-      name: "foo",
-      supportedEventTypes: [[ "FooEvent", FooEvent ]]
-    });
+    var stream = new InMemoryEventStream("stream1", [[ "Foo", Foo ]]);
     await stream.open();
-    await stream.write(new FooEvent({ id: 1, name: "FooEvent", timestamp: 1000 }));
+    await stream.write(new Foo(1, "Foo", 1000));
     stream.position = 0;
     var event = await stream.read();
     await stream.close();
@@ -27,14 +24,11 @@ describe("In Memory Event Stream", () => {
   });
 
   it("should iterate over stream", async () => {
-    var stream = new InMemoryEventStream({
-      name: "foo",
-      events: [
-        new FooEvent({ id: 1, name: "FooEvent", timestamp: 1000 }),
-        new FooEvent({ id: 2, name: "FooEvent", timestamp: 1001 }),
-        new FooEvent({ id: 3, name: "FooEvent", timestamp: 1002 })
-      ]
-    });
+    var stream = new InMemoryEventStream("stream1", null, [
+      new Foo(1, "Foo", 1000),
+      new Foo(2, "Foo", 1001),
+      new Foo(3, "Foo", 1002)
+    ]);
     stream.open();
     stream.position = 0;
     var index = 1;

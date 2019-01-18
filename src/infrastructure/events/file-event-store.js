@@ -1,7 +1,7 @@
 /*
  *  Amber Notes
  *
- *  Copyright (C) 2016 - 2018 The Amber Notes Authors
+ *  Copyright (C) 2016 - 2019 The Amber Notes Authors
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
@@ -20,24 +20,11 @@
 import * as path from "path";
 import { fileExists, deleteFile } from "infrastructure-util";
 import EventStore from "./event-store";
-import FileEventStream from "./file-event-stream";
 
 export default class FileEventStore extends EventStore {
 
-  constructor(props) {
-    super(props);
-    this._path = null;
-    if (props && "path" in props) {
-      this._path = props.path;
-    }
-  }
-
-  get path() {
-    return this._path;
-  }
-
-  set path(value) {
-    this._path = value;
+  constructor(eventStreamFactory) {
+    super(eventStreamFactory);
   }
 
   async hasStream(name) {
@@ -64,12 +51,7 @@ export default class FileEventStore extends EventStore {
     if (await this.hasStream(name)) {
       throw new Error("Stream with same name can't be created");
     }
-    var stream = new FileEventStream({
-      name: name,
-      path: this.path,
-      supportedEventTypes: this.supportedEventTypes
-    });
-    return stream;
+    return this.eventStreamFactory.create(name);
   }
 
   async getStream(name) {
@@ -80,11 +62,7 @@ export default class FileEventStore extends EventStore {
       throw new Error("Event store is closed");
     }
     if (await this.hasStream(name)) {
-      return new FileEventStream({
-        name: name,
-        path: this.path,
-        supportedEventTypes: this.supportedEventTypes
-      });
+      return this.eventStreamFactory.create(name);
     }
     return null;
   }
@@ -105,8 +83,8 @@ export default class FileEventStore extends EventStore {
   }
 
   getPathToStream(name) {
-    if (this.path) {
-      return path.resolve(this.path, name);
+    if (this.eventStreamFactory.path) {
+      return path.resolve(this.eventStreamFactory.path, name);
     }
     return name;
   }

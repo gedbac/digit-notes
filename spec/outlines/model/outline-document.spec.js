@@ -6,7 +6,7 @@ import { OutlineDocumentFactory } from "outlines-factories";
 describe("Outlines", () => {
 
   it("should create outline document prefilled with default values", () => {
-    var document = new OutlineDocument();
+    var document = OutlineDocument.createFrom();
     expect(document.createdOn).to.be.not.null;
     expect(document.modifiedOn).to.be.null;
     expect(document.title).to.be.null;
@@ -31,7 +31,7 @@ describe("Outlines", () => {
   });
 
   it("should change outline's document title", () => {
-    var document = new OutlineDocument();
+    var document = OutlineDocument.createFrom();
     document.title = "My Document";
     expect(document.title).to.be.equal("My Document");
     expect(document.uncommittedEvents.length).to.be.equal(1);
@@ -40,7 +40,7 @@ describe("Outlines", () => {
   });
 
   it("should mark outline document as deleted", () => {
-    var document = new OutlineDocument();
+    var document = OutlineDocument.createFrom();
     document.delete();
     expect(document.deleted).to.be.true;
     expect(document.uncommittedEvents.length).to.be.equal(1);
@@ -49,7 +49,7 @@ describe("Outlines", () => {
   });
 
   it("should add outlines", () => {
-    var document = new OutlineDocument({
+    var document = OutlineDocument.createFrom({
       id: uuid
     });
     document.addOutline(uuid(), "text1");
@@ -72,7 +72,7 @@ describe("Outlines", () => {
   });
 
   it("it should remove outlines", () => {
-    var document = new OutlineDocument({
+    var document = OutlineDocument.createFrom({
       id: uuid,
       children: [{
         id: uuid(),
@@ -98,7 +98,7 @@ describe("Outlines", () => {
   });
 
   it("it should change outline text", () => {
-    var document = new OutlineDocument({
+    var document = OutlineDocument.createFrom({
       id: uuid(),
       children: [{
         id: uuid()
@@ -113,7 +113,7 @@ describe("Outlines", () => {
   });
 
   it("it should change outline notes", () => {
-    var document = new OutlineDocument({
+    var document = OutlineDocument.createFrom({
       id: uuid(),
       children: [{
         id: uuid()
@@ -128,7 +128,7 @@ describe("Outlines", () => {
   });
 
   it("it should complete outline", () => {
-    var document = new OutlineDocument({
+    var document = OutlineDocument.createFrom({
       id: uuid(),
       children: [{
         id: uuid()
@@ -143,7 +143,7 @@ describe("Outlines", () => {
   });
 
   it("it should incomplete outline", () => {
-    var document = new OutlineDocument({
+    var document = OutlineDocument.createFrom({
       id: uuid(),
       children: [{
         id: uuid(),
@@ -159,7 +159,7 @@ describe("Outlines", () => {
   });
 
   it("it should add tag", () => {
-    var document = new OutlineDocument({
+    var document = OutlineDocument.createFrom({
       id: uuid(),
       children: [{
         id: uuid()
@@ -174,7 +174,7 @@ describe("Outlines", () => {
   });
 
   it("it should remove tag", () => {
-    var document = new OutlineDocument({
+    var document = OutlineDocument.createFrom({
       id: uuid(),
       children: [{
         id: uuid(),

@@ -1,7 +1,7 @@
 /*
  *  Amber Notes
  *
- *  Copyright (C) 2016 - 2018 The Amber Notes Authors
+ *  Copyright (C) 2016 - 2019 The Amber Notes Authors
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
@@ -18,27 +18,17 @@
  */
 
 import Entity from "./entity";
-import { timestamp } from "infrastructure-util";
 
 export default class AggregateRoot extends Entity {
 
-  constructor(props) {
-    super(props);
+  constructor(id, createdOn, modifiedOn, deleted) {
+    super(id);
     if (new.target === AggregateRoot) {
       throw new Error("Can't construct abstract instances directly");
     }
-    this._createdOn = timestamp();
-    if (props && "createdOn" in props) {
-      this._createdOn = props.createOn;
-    }
-    this._modifiedOn = null;
-    if (props && "modifiedOn" in props) {
-      this._modifiedOn = props.modifiedOn;
-    }
-    this._deleted = false;
-    if (props && "deleted" in props) {
-      this._deleted = props._deleted;
-    }
+    this._createdOn = createdOn;
+    this._modifiedOn = modifiedOn;
+    this._deleted = deleted;
   }
 
   get createdOn() {
@@ -56,12 +46,8 @@ export default class AggregateRoot extends Entity {
   toJSON() {
     var json = super.toJSON();
     json.createOn = this.createOn;
-    if (this.modifiedOn) {
-      json.modifiedOn = this.modifiedOn;
-    }
-    if (this.deleted) {
-      json.deleted = this.deleted;
-    }
+    json.modifiedOn = this.modifiedOn;
+    json.deleted = this.deleted;
     return json;
   }
 
