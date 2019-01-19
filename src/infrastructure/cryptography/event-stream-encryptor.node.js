@@ -111,6 +111,16 @@ export default class EventStreamEncryptor extends EventStream {
           props[propertyName] = propertyValue.toString("base64");
         } else if (propertyValue && typeof propertyValue === "string") {
           props[propertyName] = await this._encryptText(propertyValue, event.nonce);
+        } else if (propertyValue && propertyValue instanceof Array) {
+          var values = [];
+          for(var item of propertyValue) {
+            if (typeof item === "string") {
+              values.push(await this._encryptText(item, event.nonce));
+            } else {
+              values.push(item);
+            }
+          }
+          props[propertyName] = values;
         }
       }
     }
@@ -133,6 +143,16 @@ export default class EventStreamEncryptor extends EventStream {
           props[propertyName] = Buffer.from(propertyValue, "base64");
         } else if (propertyValue && typeof propertyValue === "string") {
           props[propertyName] = await this._decryptText(propertyValue, event.nonce);
+        } else if (propertyValue instanceof Array) {
+          for (var item of propertyValue) {
+            var values = [];
+            if (typeof item === "string") {
+              values.push(await this._decryptText(item, event.nonce));
+            } else {
+              values.push(item);
+            }
+            props[propertyName] = values;
+          }
         }
       }
     }

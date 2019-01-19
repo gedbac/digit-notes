@@ -5,29 +5,29 @@ import { EncryptedEvent, EventStreamEncryptor, EventStreamEncryptorOptions } fro
 
 class Foo extends EncryptedEvent {
 
-  constructor(id, name, timestamp, nonce, text) {
+  constructor(id, name, timestamp, nonce, text, tags) {
     super(id, name, timestamp, nonce);
     this._text = text;
+    this._tags = tags;
   }
 
   get text() {
     return this._text;
   }
 
-  set text(value) {
-    this._text = value;
+  get tags() {
+    return this._tags;
   }
 
   toJSON() {
     var json = super.toJSON();
-    if (this.text) {
-      json.text = this.text;
-    }
+    json.text = this.text;
+    json.tags = this.tags;
     return json;
   }
 
-  static createFrom({ id, name, timestamp, nonce, text } = {}) {
-    return new Foo(id, name, timestamp, nonce, text);
+  static createFrom({ id, name, timestamp, nonce, text, tags } = {}) {
+    return new Foo(id, name, timestamp, nonce, text, tags);
   }
 
 }
@@ -43,11 +43,12 @@ describe("Event Stream Encryptor", () => {
       new EventStreamEncryptorOptions("fwtyt/x+HBAie1oHzUZ1zLId8EdCuLnoGeS+lj4bplM=")
     );
     await encryptedStream.open();
-    await encryptedStream.write(new Foo(1, "Foo", 1001, getRandomValues(16), "#text"));
+    await encryptedStream.write(new Foo(1, "Foo", 1001, getRandomValues(16), "#text", [ "#tag" ]));
     var decryptedEvent = await encryptedStream.read();
     await encryptedStream.close();
     expect(decryptedEvent).to.not.be.null;
     expect(decryptedEvent.text).to.be.equal("#text");
+    expect(decryptedEvent.tags[0]).to.be.equal("#tag");
   });
 
 });

@@ -111,6 +111,16 @@ export default class EventStreamEncryptor extends EventStream {
           props[propertyName] = this._toBase64(propertyValue);
         } else if (propertyValue && typeof propertyValue === "string") {
           props[propertyName] = await this._encryptText(propertyValue, event.nonce);
+        } else if (propertyValue && propertyValue instanceof Array) {
+          var values = [];
+          for(var item of propertyValue) {
+            if (typeof item === "string") {
+              values.push(await this._encryptText(item, event.nonce));
+            } else {
+              values.push(item);
+            }
+          }
+          props[propertyName] = values;
         }
       }
     }
