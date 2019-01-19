@@ -17,13 +17,13 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Event } from "infrastructure-events";
+import { AggregateRoot } from "infrastructure-model";
 
-export default class EncryptedEvent extends Event {
+export default class EncryptedAggregate extends AggregateRoot {
 
-  constructor(id, name, timestamp, nonce) {
-    super(id, name, timestamp);
-    if (new.target === EncryptedEvent) {
+  constructor(id, createdOn, modifiedOn, deleted, nonce) {
+    super(id, createdOn, modifiedOn, deleted);
+    if (new.target === EncryptedAggregate) {
       throw new Error("Can't construct abstract instances directly");
     }
     this._nonce = nonce;

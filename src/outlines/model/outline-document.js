@@ -17,15 +17,15 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { uuid, getTimestamp } from "infrastructure-util";
-import { EventSourcedAggregate } from "infrastructure-model";
+import { uuid, getTimestamp, getRandomValues } from "infrastructure-util";
+import { EncryptedEventSourcedAggregate } from "infrastructure-cryptography";
 import { OutlineDocumentTitleChanged, OutlineDocumentDeleted, OutlineAdded, OutlineRemoved } from "outlines-events";
 import Outline from "./outline";
 
-export default class OutlineDocument extends EventSourcedAggregate {
+export default class OutlineDocument extends EncryptedEventSourcedAggregate {
 
-  constructor(id, createdOn, modifiedOn, deleted, version, uncommittedEvents, title, children) {
-    super(id, createdOn, modifiedOn, deleted, version, uncommittedEvents);
+  constructor(id, createdOn, modifiedOn, deleted, version, uncommittedEvents, nonce, title, children) {
+    super(id, createdOn, modifiedOn, deleted, version, uncommittedEvents, nonce);
     this._title = title;
     this._children = children;
     if (this._children) {
@@ -104,8 +104,8 @@ export default class OutlineDocument extends EventSourcedAggregate {
   }
 
   static createFrom({ id = uuid(), createdOn = getTimestamp(), modifiedOn = null, deleted = false, version = 0,
-    uncommittedEvents = [], title = null, children = []} = {}) {
-    return new OutlineDocument(id, createdOn, modifiedOn, deleted, version, uncommittedEvents, title, children);
+    uncommittedEvents = [], nonce = getRandomValues(16), title = null, children = []} = {}) {
+    return new OutlineDocument(id, createdOn, modifiedOn, deleted, version, uncommittedEvents, nonce, title, children);
   }
 
   _applyOutlineEvent(event) {
