@@ -18,66 +18,88 @@
  */
 
 import EventStore from "./event-store";
+import InMemoryEventStreamFactory from "./in-memory-event-stream-factory";
 
 export default class InMemoryEventStore extends EventStore {
 
-  constructor(eventStreamFactory, streams = new Map()) {
-    super(eventStreamFactory);
-    if (streams instanceof Array) {
-      this._streams = new Map(streams);
-    } else {
-      this._streams = streams;
-    }
+  constructor() {
+    super();
+    this._eventStreamFactory = new InMemoryEventStreamFactory();
+    this._streams = new Map();
+    this._snapshots = new Map();
   }
 
-  async hasStream(name) {
-    if (!name) {
+  async hasStream(streamName) {
+    if (!streamName) {
       throw new Error("Stream name is null");
     }
     if (this.closed) {
       throw new Error("Event store is closed");
     }
-    return this._streams.has(name);
+    return this._streams.has(streamName);
   }
 
-  async createStream(name) {
-    if (!name) {
+  async createStream(streamName) {
+    if (!streamName) {
       throw new Error("Stream name is null");
     }
     if (this.closed) {
       throw new Error("Event store is closed");
     }
-    if (await this.hasStream(name)) {
-      throw new Error(`Stream with name '${name}' already exists`);
+    if (await this.hasStream(streamName)) {
+      throw new Error(`Stream with name '${streamName}' already exists`);
     }
-    var stream = this.eventStreamFactory.create(name);
-    this._streams.set(name, stream);
+    var stream = this._eventStreamFactory.create(streamName);
+    this._streams.set(streamName, stream);
     stream.open();
     return stream;
   }
 
-  async getStream(name) {
-    if (!name) {
+  async getStream(streamName) {
+    if (!streamName) {
       throw new Error("Stream name is null");
     }
     if (this.closed) {
       throw new Error("Event store is closed");
     }
-    var stream = this._streams.get(name);
+    var stream = this._streams.get(streamName);
     if (stream) {
       return stream;
     }
     return null;
   }
 
-  async deleteStream(name) {
-    if (!name) {
+  async deleteStream(streamName) {
+    if (!streamName) {
       throw new Error("Stream name is null");
     }
     if (this.closed) {
       throw new Error("Event store is closed");
     }
-    this._streams.delete(name);
+    this._streams.delete(streamName);
+  }
+
+  async addSnapshot(streamName, snapshop) {
+    if (!streamName) {
+      throw new Error("Stream name is null");
+    }
+    if (!snapshop) {
+      throw new Error("Snapshop is null");
+    }
+    if (this.closed) {
+      throw new Error("Event store is closed");
+    }
+    this._snapshots.set(streamName, snapshop);
+  }
+
+  async getLatestSnapshot(streamName) {
+    if (!streamName) {
+      throw new Error("Stream name is null");
+    }
+    if (this.closed) {
+      throw new Error("Event store is closed");
+    }
+    return this._snapshots.get(streamName);
   }
 
 }

@@ -39,13 +39,9 @@ export default class FileEventStream extends EventStream {
     return this._path;
   }
 
-  set path(value) {
-    this._path = value;
-  }
-
   async open() {
     await super.open();
-    var pathToFile = this.getPathToStream();
+    var pathToFile = this._getPathToStream();
     if (await fileExists(pathToFile)) {
       var content = await readFile(pathToFile, { flag: "r", encoding: "utf8" });
       if (content) {
@@ -75,7 +71,7 @@ export default class FileEventStream extends EventStream {
 
   async close() {
     await super.close();
-    var pathToFile = this.getPathToStream();
+    var pathToFile = this._getPathToStream();
     var pathToDirectory = path.dirname(pathToFile);
     if (!await directoryExists(pathToDirectory)) {
       await createDirectory(pathToDirectory);
@@ -124,7 +120,7 @@ export default class FileEventStream extends EventStream {
     this._events.push(event);
   }
 
-  getPathToStream() {
+  _getPathToStream() {
     if (this.path) {
       return path.resolve(this.path, this.name);
     }
@@ -134,7 +130,7 @@ export default class FileEventStream extends EventStream {
   toJSON() {
     return {
       name: this.name,
-      path: this.getPathToStream()
+      path: this.path
     };
   }
 

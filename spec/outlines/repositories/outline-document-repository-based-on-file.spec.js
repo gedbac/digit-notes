@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { fileExists, writeFile } from "infrastructure-util";
-import { FileEventStreamFactory, FileEventStore } from "infrastructure-events";
+import { FileEventStore } from "infrastructure-events";
 import { OutlineDocument } from "outlines-model";
 import { OutlineDocumentFactory } from "outlines-factories";
 import { OutlineDocumentRepository } from "outlines-repositories";
@@ -12,7 +12,7 @@ describe("Outline Document Repository", () => {
     var factory = new OutlineDocumentFactory();
     var document = factory.create();
     var eventStore = new FileEventStore(
-      new FileEventStreamFactory(new Map([[ "OutlineDocumentCreated", OutlineDocumentCreated ]]), "./streams")
+      [[ "OutlineDocumentCreated", OutlineDocumentCreated ]]
     );
     await eventStore.open();
     var repository = new OutlineDocumentRepository(eventStore);
@@ -33,7 +33,7 @@ describe("Outline Document Repository", () => {
       "\"outlineDocumentId\":\"ba7d6c18-26a6-4492-85b7-a6ac02659f7e\"" +
       "}");
     var eventStore = new FileEventStore(
-      new FileEventStreamFactory(new Map([[ "OutlineDocumentCreated", OutlineDocumentCreated ]]), "./streams")
+      [[ "OutlineDocumentCreated", OutlineDocumentCreated ]]
     );
     await eventStore.open();
     var repository = new OutlineDocumentRepository(eventStore);
@@ -54,13 +54,10 @@ describe("Outline Document Repository", () => {
       "\"outlineDocumentId\":\"995c6eb4-a049-4a04-8201-91a0a146be4a\"" +
       "}");
     var eventStore = new FileEventStore(
-      new FileEventStreamFactory(
-        new Map([
-          [ "OutlineDocumentCreated", OutlineDocumentCreated ],
-          [ "OutlineDocumentTitleChanged", OutlineDocumentTitleChanged ]
-        ]),
-        "./streams"
-      )
+      [
+        [ "OutlineDocumentCreated", OutlineDocumentCreated ],
+        [ "OutlineDocumentTitleChanged", OutlineDocumentTitleChanged ]
+      ]
     );
     await eventStore.open();
     var repository = new OutlineDocumentRepository(eventStore);
@@ -82,9 +79,7 @@ describe("Outline Document Repository", () => {
       "\"timestamp\":1514371604655," +
       "\"outlineDocumentId\":\"52c049de-6991-4e30-82b7-1fd353685d3f\"" +
       "}");
-    var eventStore = new FileEventStore(
-      new FileEventStreamFactory(null, "./streams")
-    );
+    var eventStore = new FileEventStore();
     await eventStore.open();
     var repository = new OutlineDocumentRepository(eventStore);
     await repository.delete(id);

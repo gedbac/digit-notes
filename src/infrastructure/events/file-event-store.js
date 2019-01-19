@@ -18,75 +18,133 @@
  */
 
 import * as path from "path";
-import { fileExists, deleteFile } from "infrastructure-util";
+import { directoryExists, createDirectory, fileExists, readFile, writeFile, deleteFile } from "infrastructure-util";
 import EventStore from "./event-store";
+import FileEventStreamFactory from "./file-event-stream-factory";
 
 export default class FileEventStore extends EventStore {
 
-  constructor(eventStreamFactory) {
-    super(eventStreamFactory);
+  constructor(supportedEventTypes, path) {
+    super();
+    this._path = path;
+    this._eventStreamFactory = new FileEventStreamFactory(supportedEventTypes, this._getPathToStreams());
   }
 
-  async hasStream(name) {
-    if (!name) {
+  get path() {
+    return this._path;
+  }
+
+  async hasStream(streamName) {
+    if (!streamName) {
       throw new Error("Stream name is null");
     }
     if (this.closed) {
       throw new Error("Event store is closed");
     }
-    var pathToFile = this.getPathToStream(name);
+    var pathToFile = this._getPathToStream(streamName);
     if (pathToFile) {
       return await fileExists(pathToFile);
     }
     return false;
   }
 
-  async createStream(name) {
-    if (!name) {
+  async createStream(streamName) {
+    if (!streamName) {
       throw new Error("Stream name is null");
     }
     if (this.closed) {
       throw new Error("Event store is closed");
     }
-    if (await this.hasStream(name)) {
+    if (await this.hasStream(streamName)) {
       throw new Error("Stream with same name can't be created");
     }
-    return this.eventStreamFactory.create(name);
+    return this._eventStreamFactory.create(streamName);
   }
 
-  async getStream(name) {
-    if (!name) {
+  async getStream(streamName) {
+    if (!streamName) {
       throw new Error("Stream name is null");
     }
     if (this.closed) {
       throw new Error("Event store is closed");
     }
-    if (await this.hasStream(name)) {
-      return this.eventStreamFactory.create(name);
+    if (await this.hasStream(streamName)) {
+      return this._eventStreamFactory.create(streamName);
     }
     return null;
   }
 
-  async deleteStream(name) {
-    if (!name) {
+  async deleteStream(streamName) {
+    if (!streamName) {
       throw new Error("Stream name is null");
     }
     if (this.closed) {
       throw new Error("Event store is closed");
     }
-    if (await this.hasStream(name)) {
-      var pathToFile = this.getPathToStream(name);
+    if (await this.hasStream(streamName)) {
+      var pathToFile = this._getPathToStream(streamName);
       if (pathToFile) {
         await deleteFile(pathToFile);
       }
     }
   }
 
-  getPathToStream(name) {
-    if (this.eventStreamFactory.path) {
-      return path.resolve(this.eventStreamFactory.path, name);
+  async addSnapshot(streamName, snapshop) {
+    if (!streamName) {
+      throw new Error("Stream name is null");
     }
-    return name;
+    if (!snapshop) {
+      throw new Error("Snapshop is null");
+    }
+    if (this.closed) {
+      throw new Error("Event store is closed");
+    }
+    var pathToFile = this._getPathToSnapshot(streamName);
+    var pathToDirectory = path.dirname(pathToFile);
+    if (!await directoryExists(pathToDirectory)) {
+      await createDirectory(pathToDirectory);
+    }
+    var content = JSON.stringify(snapshop);
+    await writeFile(pathToFile, { flag: "w" , encoding: "utf8" }, content);
+  }
+
+  async getLatestSnapshot(streamName) {
+    if (!streamName) {
+      throw new Error("Stream name is null");
+    }
+    if (this.closed) {
+      throw new Error("Event store is closed");
+    }
+    var snapshop = null;
+    var pathToFile = this._getPathToSnapshot(streamName);
+    if (await fileExists(pathToFile)) {
+      var content = await readFile(pathToFile, { flag: "r", encoding: "utf8" });
+      if (content) {
+        snapshop = JSON.parse(content);
+      }
+    }
+    return snapshop;
+  }
+
+  _getPathToStreams() {
+    if (this.path) {
+      return path.resolve(this.path, "./streams");
+    }
+    return "./streams";
+  }
+
+  _getPathToStream(streamName) {
+    if (this.path) {
+      return path.resolve(this.path, "./streams", streamName);
+    }
+    return path.resolve("./streams", streamName);
+  }
+
+  _getPathToSnapshot(streamName) {
+    if (this.path) {
+      return path.resolve(this.path, "./snapshots", streamName);
+    }
+    return path.resolve("./snapshots", streamName);
   }
 
 }
