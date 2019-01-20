@@ -26,7 +26,7 @@ export default function uuid() {
       uuid += "-";
     } else {
       var buffer = crypto.randomBytes(1);
-      r = buffer.readUInt8(0);
+      r = buffer.readUInt8(0) % 16 | 0;
       uuid += (i === 14 ? "4" : (i === 19 ? (r & 3 | 8) : r)).toString(16);
     }
   }

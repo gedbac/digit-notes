@@ -25,7 +25,7 @@ export default function uuid() {
     } else {
       var numbers = new Uint8Array(1);
       crypto.getRandomValues(numbers);
-      r = numbers[0];
+      r = numbers[0] % 16 | 0;
       uuid += (i === 14 ? "4" : (i === 19 ? (r & 3 | 8) : r)).toString(16);
     }
   }
