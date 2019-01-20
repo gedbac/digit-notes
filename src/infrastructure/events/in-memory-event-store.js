@@ -22,9 +22,9 @@ import InMemoryEventStreamFactory from "./in-memory-event-stream-factory";
 
 export default class InMemoryEventStore extends EventStore {
 
-  constructor() {
+  constructor(supportedEventTypes) {
     super();
-    this._eventStreamFactory = new InMemoryEventStreamFactory();
+    this._eventStreamFactory = new InMemoryEventStreamFactory(supportedEventTypes);
     this._streams = new Map();
     this._snapshots = new Map();
   }

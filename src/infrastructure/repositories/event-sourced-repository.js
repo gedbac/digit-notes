@@ -23,6 +23,9 @@ export default class EventSourcedRepository extends Repository {
 
   constructor(eventStore, aggregateType) {
     super();
+    if (new.target === EventSourcedRepository) {
+      throw new Error("Can't construct abstract instances directly");
+    }
     this._eventStore = eventStore;
     if (!eventStore) {
       throw new Error("Event store is null");
@@ -49,11 +52,26 @@ export default class EventSourcedRepository extends Repository {
     if (!id) {
       throw new Error("Aggregate id is null");
     }
+    var aggregate = null;
     var streamName = this.streamNameFor(id);
+    var snapshot = await this.eventStore.getLatestSnapshot(streamName);
+    if (snapshot) {
+      aggregate = this.aggregateType.createFrom(snapshot);
+    } else {
+      aggregate = this.aggregateType.createFrom();
+    }
     var stream = await this.eventStore.getStream(streamName);
     if (stream) {
-      var aggregate = this.aggregateType.createFrom();
       await stream.open();
+      if (snapshot) {
+        if ("version" in snapshot) {
+          stream.position = snapshot.version;
+        } else {
+          throw new Error("Snapshot version is null");
+        }
+      } else {
+        stream.position = 0;
+      }
       for (var event of stream) {
         aggregate.apply(event);
       }
