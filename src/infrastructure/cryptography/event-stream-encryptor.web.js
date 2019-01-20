@@ -105,17 +105,20 @@ export default class EventStreamEncryptor extends EventStream {
     var props = event.toJSON();
     var propertyNames = this._getPropertyNames(event);
     if (propertyNames) {
+      var nonce = event.nonce;
       for (var propertyName of propertyNames) {
         var propertyValue = event[propertyName];
         if (propertyName === "nonce") {
-          props[propertyName] = this._toBase64(propertyValue);
+          props[propertyName] = this._toBase64(nonce);
+        } else if (propertyName === "id" || propertyName === "name") {
+          props[propertyName] = propertyValue;
         } else if (propertyValue && typeof propertyValue === "string") {
-          props[propertyName] = await this._encryptText(propertyValue, event.nonce);
+          props[propertyName] = await this._encryptText(propertyValue, nonce);
         } else if (propertyValue && propertyValue instanceof Array) {
           var values = [];
           for(var item of propertyValue) {
             if (typeof item === "string") {
-              values.push(await this._encryptText(item, event.nonce));
+              values.push(await this._encryptText(item, nonce));
             } else {
               values.push(item);
             }
@@ -137,12 +140,25 @@ export default class EventStreamEncryptor extends EventStream {
     var props = event.toJSON();
     var propertyNames = this._getPropertyNames(event);
     if (propertyNames) {
+      var nonce = this._fromBase64(event.nonce);
       for (var propertyName of propertyNames) {
         var propertyValue = event[propertyName];
         if (propertyName === "nonce") {
-          props[propertyName] = this._fromBase64(propertyValue);
+          props[propertyName] = nonce;
+        } else if (propertyName === "id" || propertyName === "name") {
+          props[propertyName] = propertyValue;
         } else if (propertyValue && typeof propertyValue === "string") {
-          props[propertyName] = await this._decryptText(propertyValue, event.nonce);
+          props[propertyName] = await this._decryptText(propertyValue, nonce);
+        } else if (propertyValue instanceof Array) {
+          for (var item of propertyValue) {
+            var values = [];
+            if (typeof item === "string") {
+              values.push(await this._decryptText(item, nonce));
+            } else {
+              values.push(item);
+            }
+            props[propertyName] = values;
+          }
         }
       }
     }
@@ -190,7 +206,7 @@ export default class EventStreamEncryptor extends EventStream {
         var ownPropertyNames = Object.getOwnPropertyNames(instance);
         for (var propertyName of ownPropertyNames) {
           var propertyDescriptor = Object.getOwnPropertyDescriptor(instance, propertyName);
-          if (propertyDescriptor.get && propertyDescriptor.set) {
+          if (propertyDescriptor.get) {
             propertyNames.push(propertyName);
           }
         }
