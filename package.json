@@ -18,10 +18,14 @@
     "node": ">=10.13.0"
   },
   "scripts": {
-    "develop": "./node_modules/.bin/webpack-dev-server --config webapp.config.js --mode development",
-    "build": "yarn build-specs && yarn build-webapp",
+    "develop": "yarn develop-webapp",
+    "develop-webapp": "./node_modules/.bin/webpack-dev-server --config webapp.config.js --mode development",
+    "build": "yarn build-specs && yarn build-webapp && yarn build-streaming-service",
     "build-specs": "./node_modules/.bin/webpack --config spec.config.js --mode development",
     "build-webapp": "./node_modules/.bin/webpack --config webapp.config.js --mode development",
+    "build-streaming-service": "./node_modules/.bin/webpack --config streaming-service.config.js --mode development",
+    "build-containers": "docker-compose --project-name amber-notes build",
+    "start-containers": "docker-compose --project-name amber-notes up -d",
     "run-node-spec": "cd ./dist/spec/node && ../../../node_modules/mocha/bin/_mocha ./amber-notes-infrastructure.spec.js",
     "run-web-spec": "cd ./dist/spec/web && ../../../node_modules/mocha-headless-chrome/bin/start -f ./spec-runner.html -a no-sandbox"
   },
@@ -51,6 +55,12 @@
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
+    "koa": "^2.6.2",
+    "koa-bodyparser": "^4.2.1",
+    "koa-compress": "^3.0.0",
+    "koa-logger": "^3.2.0",
+    "koa-response-time": "^2.1.0",
+    "koa-router": "^7.4.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0"
   }

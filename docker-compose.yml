@@ -1,0 +1,18 @@
+version: '2.4'
+services:
+  streaming-service:
+    image: amber-notes/streaming-service
+    container_name: streaming-service
+    ports:
+      - "5801:5801"
+    networks:
+      - amber-notes-network
+    build:
+      context: .
+      dockerfile: ./src/streaming-service/dockerfile
+    cpus: 0.5
+    mem_limit: 512m
+    mem_swappiness: 0
+    restart: on-failure
+networks:
+  amber-notes-network:

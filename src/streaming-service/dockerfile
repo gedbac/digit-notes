@@ -1,0 +1,14 @@
+FROM node:11.8.0-slim
+
+WORKDIR /usr/src/app
+
+COPY package.json ./
+COPY yarn.lock ./
+
+RUN yarn install --production=true --network-timeout 1000000
+
+COPY ./dist/streaming-service ./
+
+EXPOSE 5801
+
+CMD [ "node", "./streaming-service.js", "--max_old_space_size=512" ]
