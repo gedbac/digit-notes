@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { TextIndex, WhitespaceTextAnalyzer } from "infrastructure-text-search";
+import { TextIndex, WhitespaceTextAnalyzer } from "amber-notes/infrastructure/text-search";
 
 describe("Text Index", () => {
 

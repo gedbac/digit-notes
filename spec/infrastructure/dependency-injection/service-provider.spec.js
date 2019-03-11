@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { ServiceProviderBuilder, ServiceDescriptor } from "infrastructure-dependency-injection";
+import { ServiceProviderBuilder, ServiceDescriptor } from "amber-notes/infrastructure/dependency-injection";
 
 class FooService {
   constructor() {}

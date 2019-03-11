@@ -22,24 +22,20 @@ import FileEventStream from "./file-event-stream";
 
 export default class FileEventStreamFactory extends EventStreamFactory {
 
-  constructor(supportedEventTypes, path) {
-    super(supportedEventTypes);
+  constructor(objectSerializer, path) {
+    super();
+    this._objectSerializer = objectSerializer;
+    if (!this._objectSerializer) {
+      throw new Error("Object serializer is null");
+    }
     this._path = path;
-  }
-
-  get path() {
-    return this._path;
-  }
-
-  set path(value) {
-    this._path = value;
   }
 
   create(name) {
     if (!name) {
       throw new Error("Stream name is null");
     }
-    return new FileEventStream(name, this.supportedEventTypes, this.path);
+    return new FileEventStream(name, this._objectSerializer, this._path);
   }
 
 }

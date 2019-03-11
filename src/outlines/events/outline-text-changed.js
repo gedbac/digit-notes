@@ -17,29 +17,17 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { uuid, getTimestamp, getRandomValues } from "infrastructure-util";
 import OutlineEvent from "./outline-event";
 
 export default class OutlineTextChanged extends OutlineEvent {
 
-  constructor(id, name, timestamp, nonce, outlineDocumentId, outlineId, outlineText) {
-    super(id, name, timestamp, nonce, outlineDocumentId, outlineId);
+  constructor({ id, createdOn, outlineDocumentId, outlineId, outlineText } = {}) {
+    super({ id, createdOn, outlineDocumentId, outlineId });
     this._outlineText = outlineText;
   }
 
   get outlineText() {
     return this._outlineText;
-  }
-
-  toJSON() {
-    var json = super.toJSON();
-    json.outlineText = this._outlineText;
-    return json;
-  }
-
-  static createFrom({ id = uuid(), name = "OutlineTextChanged", timestamp = getTimestamp(), nonce = getRandomValues(16),
-    outlineDocumentId = null, outlineId = null, outlineText = null } = {}) {
-    return new OutlineTextChanged(id, name, timestamp, nonce, outlineDocumentId, outlineId, outlineText);
   }
 
 }

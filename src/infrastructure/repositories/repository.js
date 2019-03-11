@@ -19,10 +19,18 @@
 
 export default class Repository {
 
-  constructor() {
+  constructor(logger) {
     if (new.target === Repository) {
       throw new Error("Can't construct abstract instances directly");
     }
+    this._logger = logger;
+    if (!this._logger) {
+      throw new Error("Logger is null");
+    }
+  }
+
+  get logger() {
+    return this._logger;
   }
 
   findBy(id) {

@@ -17,18 +17,12 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { uuid, getTimestamp, getRandomValues } from "infrastructure-util";
 import OutlineEvent from "./outline-event";
 
 export default class OutlineIncompleted extends OutlineEvent {
 
-  constructor(id, name, timestamp, nonce, outlineDocumentId, outlineId) {
-    super(id, name, timestamp, nonce, outlineDocumentId, outlineId);
-  }
-
-  static createFrom({ id = uuid(), name = "OutlineIncompleted", timestamp = getTimestamp(), nonce = getRandomValues(16),
-    outlineDocumentId = null , outlineId = null } = {}) {
-    return new OutlineIncompleted(id, name, timestamp, nonce, outlineDocumentId, outlineId);
+  constructor({ id, createdOn, outlineDocumentId, outlineId} = {}) {
+    super({ id, createdOn, outlineDocumentId, outlineId });
   }
 
 }

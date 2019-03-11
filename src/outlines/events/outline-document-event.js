@@ -17,12 +17,12 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { EncryptedEvent } from "infrastructure-cryptography";
+import { Event } from "amber-notes/infrastructure/events";
 
-export default class OutlineDocumentEvent extends EncryptedEvent {
+export default class OutlineDocumentEvent extends Event {
 
-  constructor(id, name, timestamp, nonce, outlineDocumentId) {
-    super(id, name, timestamp, nonce);
+  constructor({ id, createdOn, outlineDocumentId } = {}) {
+    super({ id, createdOn });
     if (new.target === OutlineDocumentEvent) {
       throw new Error("Can't construct abstract instances directly");
     }
@@ -38,12 +38,6 @@ export default class OutlineDocumentEvent extends EncryptedEvent {
 
   set outlineDocumentId(value) {
     this._outlineDocumentId = value;
-  }
-
-  toJSON() {
-    var json = super.toJSON();
-    json.outlineDocumentId = this._outlineDocumentId;
-    return json;
   }
 
 }

@@ -17,8 +17,8 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { ServiceProviderBuilder, ConstructorInjection, PropertyInjection } from "infrastructure-dependency-injection";
-import { ConsoleLoggerFactory, LogLevels } from "infrastructure-logging";
+import { ServiceProviderBuilder, ConstructorInjection, PropertyInjection } from "amber-notes/infrastructure/dependency-injection";
+import { ConsoleLoggerFactory, LogLevels } from "amber-notes/infrastructure/logging";
 import Dispatcher from "./shared/dispatcher";
 import ApplicationActions from "./actions/application-actions";
 import ApplicationStore from "./stores/application-store";
@@ -28,7 +28,7 @@ import OutlinerStore from "./stores/outliner-store";
 export default class Startup {
 
   constructor() {
-    this._serviceProviderBuilder= new ServiceProviderBuilder();
+    this._serviceProviderBuilder = new ServiceProviderBuilder();
   }
 
   configure() {
@@ -54,7 +54,7 @@ export default class Startup {
       .addScoped("consoleLoggerFactory", () => new ConsoleLoggerFactory(LogLevels.DEBUG))
       .addScoped("logger", x => x
         .getService("consoleLoggerFactory")
-        .createLogger("application")
+        .createLogger("Application")
       );
   }
 
@@ -62,7 +62,7 @@ export default class Startup {
     serviceProviderBuilder
       .addScoped("dispatcherLogger", x => x
         .getService("consoleLoggerFactory")
-        .createLogger("dispatcherLogger")
+        .createLogger("Dispatcher")
       )
       .addScoped("dispatcher", x =>
         new Dispatcher(

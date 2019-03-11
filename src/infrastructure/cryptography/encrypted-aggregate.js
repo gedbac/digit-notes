@@ -17,29 +17,28 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { AggregateRoot } from "infrastructure-model";
+import { AggregateRoot } from "amber-notes/infrastructure/model";
 
 export default class EncryptedAggregate extends AggregateRoot {
 
-  constructor(id, createdOn, modifiedOn, deleted, nonce) {
-    super(id, createdOn, modifiedOn, deleted);
-    if (new.target === EncryptedAggregate) {
-      throw new Error("Can't construct abstract instances directly");
+  constructor({ id, createdOn, modifiedOn, deleted, chippertext, iv } = {}) {
+    super({ id, createdOn, modifiedOn, deleted });
+    this._chippertext = chippertext;
+    if (!this._chippertext) {
+      throw new Error("Chippertext is null");
     }
-    this._nonce = nonce;
-    if (!this._nonce) {
-      throw new Error("Nonce is null");
+    this._iv = iv;
+    if (!this._iv) {
+      throw new Error("Initialization vector is null");
     }
   }
 
-  get nonce() {
-    return this._nonce;
+  get chippertext() {
+    return this._chippertext;
   }
 
-  toJSON() {
-    var json = super.toJSON();
-    json.nonce = this.nonce;
-    return json;
+  get iv() {
+    return this._iv;
   }
 
 }

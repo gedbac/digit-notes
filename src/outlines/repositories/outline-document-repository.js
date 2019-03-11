@@ -17,13 +17,13 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { EventSourcedRepository } from "infrastructure-repositories";
-import { OutlineDocument } from "outlines-model";
+import { EventSourcedRepository } from "amber-notes/infrastructure/repositories";
+import { OutlineDocument } from "amber-notes/outlines/model";
 
 export default class OutlineDocumentRepository extends EventSourcedRepository {
 
-  constructor(eventStore) {
-    super(eventStore, OutlineDocument);
+  constructor(eventStore, logger) {
+    super(eventStore, OutlineDocument, logger);
   }
 
 }

@@ -17,9 +17,11 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { uuid, timestamp } from "amber-notes/infrastructure/util";
+
 export default class Event {
 
-  constructor(id, name, timestamp) {
+  constructor({ id = uuid(), createdOn = timestamp() } = {}) {
     if (new.target === Event) {
       throw new Error("Can't construct abstract instances directly");
     }
@@ -27,13 +29,9 @@ export default class Event {
     if (!this._id) {
       throw new Error("Id is null");
     }
-    this._name = name;
-    if (!this._name) {
-      throw new Error("Name is null");
-    }
-    this._timestamp = timestamp;
-    if (!this._timestamp) {
-      throw new Error("Timestamp is null");
+    this._createdOn = createdOn;
+    if (!this._createdOn) {
+      throw new Error("Created on is null");
     }
   }
 
@@ -41,20 +39,8 @@ export default class Event {
     return this._id;
   }
 
-  get name() {
-    return this._name;
-  }
-
-  get timestamp() {
-    return this._timestamp;
-  }
-
-  toJSON() {
-    return {
-      id: this.id,
-      name: this.name,
-      timestamp: this.timestamp
-    };
+  get createdOn() {
+    return this._createdOn;
   }
 
 }

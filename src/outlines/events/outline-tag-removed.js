@@ -17,13 +17,12 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { uuid, getTimestamp, getRandomValues } from "infrastructure-util";
 import OutlineEvent from "./outline-event";
 
 export default class OutlineTagRemoved extends OutlineEvent {
 
-  constructor(id, name, timestamp, nonce, outlineDocumentId, outlineId, outlineTag) {
-    super(id, name, timestamp, nonce, outlineDocumentId, outlineId);
+  constructor({ id, createdOn, outlineDocumentId, outlineId, outlineTag } = {}) {
+    super({ id, createdOn, outlineDocumentId, outlineId });
     this._outlineTag = outlineTag;
     if (!this._outlineTag) {
       throw new Error("Outline tag is null");
@@ -32,17 +31,6 @@ export default class OutlineTagRemoved extends OutlineEvent {
 
   get outlineTag() {
     return this._outlineTag;
-  }
-
-  toJSON() {
-    var json = super.toJSON();
-    json.outlineTag = this._outlineTag;
-    return json;
-  }
-
-  static createFrom({ id = uuid(), name = "OutlineTagRemoved", timestamp = getTimestamp(), nonce = getRandomValues(16),
-    outlineDocumentId = null, outlineId = null, outlineTag = null } = {}) {
-    return new OutlineTagRemoved(id, name, timestamp, nonce, outlineDocumentId, outlineId, outlineTag);
   }
 
 }

@@ -17,13 +17,13 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Event } from "infrastructure-events";
+import { Event } from "amber-notes/infrastructure/events";
 import Entity from "./entity";
 
 export default class EventSourcedEntity extends Entity {
 
-  constructor(id, aggregateRoot) {
-    super(id);
+  constructor({ id, aggregateRoot }) {
+    super({ id });
     if (new.target === EventSourcedEntity) {
       throw new Error("Can't construct abstract instances directly");
     }
@@ -44,7 +44,8 @@ export default class EventSourcedEntity extends Entity {
     if (!(event instanceof Event)) {
       throw new Error("Type of event is invalid");
     }
-    var eventHandlerName = `_on${event.name}`;
+    var eventName = event.constructor.name;
+    var eventHandlerName = `_on${eventName}`;
     if (eventHandlerName in this) {
       this[eventHandlerName](event);
     } else {

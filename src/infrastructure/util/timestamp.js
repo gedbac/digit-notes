@@ -17,6 +17,6 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-export default function getTimestamp() {
+export default function timestamp() {
   return new Date().getTime();
 }

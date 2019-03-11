@@ -19,7 +19,7 @@
 
 export default class EventStream {
 
-  constructor(name, supportedEventTypes = new Map()) {
+  constructor(name) {
     if (new.target === EventStream) {
       throw new Error("Can't construct abstract instances directly");
     }
@@ -27,11 +27,6 @@ export default class EventStream {
       this._name = name;
     } else {
       this._name = new.target.name;
-    }
-    if (supportedEventTypes instanceof Array) {
-      this._supportedEventTypes = new Map(supportedEventTypes);
-    } else {
-      this._supportedEventTypes = supportedEventTypes;
     }
     this._position = 0;
     this._closed = true;
@@ -51,10 +46,6 @@ export default class EventStream {
 
   get length() {
     throw new Error("Property 'length' is not implemented");
-  }
-
-  get supportedEventTypes() {
-    return this._supportedEventTypes;
   }
 
   get closed() {
@@ -82,4 +73,5 @@ export default class EventStream {
       name: this.name
     };
   }
+
 }

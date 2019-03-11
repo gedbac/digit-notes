@@ -55,7 +55,7 @@ export default class OutlinerStore extends Store {
         notes: "Notes goes here"
       }]
     };
-    this.trigger(OutlinerStore.CHANGED);
+    this.raise(OutlinerStore.CHANGED);
   }
 
 }

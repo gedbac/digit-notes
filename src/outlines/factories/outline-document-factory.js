@@ -17,17 +17,17 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { uuid } from "infrastructure-util";
-import { OutlineDocument } from "outlines-model";
-import { OutlineDocumentCreated } from "outlines-events";
+import { uuid } from "amber-notes/infrastructure/util";
+import { OutlineDocument } from "amber-notes/outlines/model";
+import { OutlineDocumentCreated } from "amber-notes/outlines/events";
 
 export default class OutlineDocumentFactory {
 
   constructor() {}
 
   create() {
-    var document = OutlineDocument.createFrom();
-    document.raise(OutlineDocumentCreated.createFrom({
+    var document = new OutlineDocument();
+    document.raise(new OutlineDocumentCreated({
       outlineDocumentId: uuid()
     }));
     return document;

@@ -17,29 +17,24 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { EventSourcedAggregate } from "infrastructure-model";
+export default class KeyVault {
 
-export default class EncryptedEventSourcedAggregate extends EventSourcedAggregate {
-
-  constructor(id, createdOn, modifiedOn, deleted, version, uncommittedEvents, nonce) {
-    super(id, createdOn, modifiedOn, deleted, version, uncommittedEvents);
-    if (new.target === EncryptedEventSourcedAggregate) {
+  constructor(logger) {
+    if (new.target === KeyVault) {
       throw new Error("Can't construct abstract instances directly");
     }
-    this._nonce = nonce;
-    if (!this._nonce) {
-      throw new Error("Nonce is null");
+    this._logger = logger;
+    if (!this._logger) {
+      throw new Error("Logger is null");
     }
   }
 
-  get nonce() {
-    return this._nonce;
+  addSecret(name, value) {
+    throw new Error("Method 'addSecret' is not implemented");
   }
 
-  toJSON() {
-    var json = super.toJSON();
-    json.nonce = this.nonce;
-    return json;
+  getSecret(name) {
+    throw new Error("Method 'getSecret' is not implemented");
   }
 
 }

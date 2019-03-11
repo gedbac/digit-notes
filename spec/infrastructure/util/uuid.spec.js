@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { uuid } from "infrastructure-util";
+import { uuid } from "amber-notes/infrastructure/util";
 
 describe("UUID", () => {
 

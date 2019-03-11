@@ -57,7 +57,7 @@ export default class ApplicationStore extends Store {
       } else {
         this._currentView = null;
       }
-      this.trigger(ApplicationStore.CHANGED);
+      this.raise(ApplicationStore.CHANGED);
     }
   }
 

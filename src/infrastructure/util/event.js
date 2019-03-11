@@ -26,7 +26,7 @@ export default class Event {
     target.on = Event.on.bind(target);
     target.off = Event.off.bind(target);
     target.once = Event.once.bind(target);
-    target.trigger = Event.trigger.bind(target);
+    target.raise = Event.raise.bind(target);
     return target;
   }
 
@@ -79,7 +79,7 @@ export default class Event {
     return this;
   }
 
-  static trigger(eventName, ...args) {
+  static raise(eventName, ...args) {
     if (this === Event) {
       throw new Error("Event's target is not set");
     }

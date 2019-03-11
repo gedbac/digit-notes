@@ -17,21 +17,20 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { uuid, getTimestamp, getRandomValues } from "infrastructure-util";
-import { EncryptedEventSourcedAggregate } from "infrastructure-cryptography";
-import { OutlineDocumentTitleChanged, OutlineDocumentDeleted, OutlineAdded, OutlineRemoved } from "outlines-events";
+import { EventSourcedAggregate } from "amber-notes/infrastructure/model";
+import { OutlineDocumentTitleChanged, OutlineDocumentDeleted, OutlineAdded, OutlineRemoved } from "amber-notes/outlines/events";
 import Outline from "./outline";
 
-export default class OutlineDocument extends EncryptedEventSourcedAggregate {
+export default class OutlineDocument extends EventSourcedAggregate {
 
-  constructor(id, createdOn, modifiedOn, deleted, version, uncommittedEvents, nonce, title, children) {
-    super(id, createdOn, modifiedOn, deleted, version, uncommittedEvents, nonce);
+  constructor({ id, createdOn, modifiedOn, deleted, version, title = null, children = [] } = {}) {
+    super({ id, createdOn, modifiedOn, deleted, version });
     this._title = title;
     this._children = children;
     if (this._children) {
       this._children = children.map(props => {
         props.aggregateRoot = this;
-        return Outline.createFrom(props);
+        return new Outline(props);
       });
     }
   }
@@ -42,7 +41,7 @@ export default class OutlineDocument extends EncryptedEventSourcedAggregate {
 
   set title(value) {
     if (this._title !== value) {
-      this.raise(OutlineDocumentTitleChanged.createFrom({
+      this.raise(new OutlineDocumentTitleChanged({
         outlineDocumentId: this.id,
         outlineDocumentTitle: value
       }));
@@ -57,7 +56,7 @@ export default class OutlineDocument extends EncryptedEventSourcedAggregate {
     if (!id) {
       throw new Error("Outline's id is null");
     }
-    this.raise(OutlineAdded.createFrom({
+    this.raise(new OutlineAdded({
       outlineDocumentId: this.id,
       parentOutlineId: null,
       outlineId: id,
@@ -69,7 +68,7 @@ export default class OutlineDocument extends EncryptedEventSourcedAggregate {
     if (!id) {
       throw new Error("Outline's id is null");
     }
-    this.raise(OutlineRemoved.createFrom({
+    this.raise(new OutlineRemoved({
       outlineDocumentId: this.id,
       parentOutlineId: null,
       outlineId: id
@@ -78,7 +77,7 @@ export default class OutlineDocument extends EncryptedEventSourcedAggregate {
 
   delete() {
     if (!this.deleted) {
-      this.raise(OutlineDocumentDeleted.createFrom({
+      this.raise(new OutlineDocumentDeleted({
         outlineDocumentId: this.id
       }));
     }
@@ -90,22 +89,6 @@ export default class OutlineDocument extends EncryptedEventSourcedAggregate {
 
   hasOutline(id) {
     return !!this.findOutlineBy(id);
-  }
-
-  toJSON() {
-    var json = super.toJSON();
-    if (this._title) {
-      json.title = this._title;
-    }
-    if (this._children && this._children.length > 0) {
-      json.children = this._children.map(x => x.toJSON());
-    }
-    return json;
-  }
-
-  static createFrom({ id = uuid(), createdOn = getTimestamp(), modifiedOn = null, deleted = false, version = 0,
-    uncommittedEvents = [], nonce = getRandomValues(16), title = null, children = []} = {}) {
-    return new OutlineDocument(id, createdOn, modifiedOn, deleted, version, uncommittedEvents, nonce, title, children);
   }
 
   _applyOutlineEvent(event) {
@@ -131,7 +114,7 @@ export default class OutlineDocument extends EncryptedEventSourcedAggregate {
   _onOutlineAdded(event) {
     if (!event.parentOutlineId) {
       if (!this.hasOutline(event.outlineId)) {
-        this._children.push(Outline.createFrom({
+        this._children.push(new Outline({
           id: event.outlineId,
           aggregateRoot: this,
           text: event.outlineText

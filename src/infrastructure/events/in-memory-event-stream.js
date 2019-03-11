@@ -17,14 +17,14 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import Event from "./event";
 import EventStream from "./event-stream";
+import Event from "./event";
 
 export default class InMemoryEventStream extends EventStream {
 
-  constructor(name, supportedEventTypes, events = []) {
-    super(name, supportedEventTypes);
-    this._events = events;
+  constructor(name) {
+    super(name);
+    this._events = [];
   }
 
   get length() {
@@ -47,24 +47,12 @@ export default class InMemoryEventStream extends EventStream {
       throw new Error("Event is null");
     }
     if (!(event instanceof Event)) {
-      throw new Error("Type of event is invalid");
-    }
-    if (!this.supportedEventTypes.has(event.name)) {
-      throw new Error(`Event '${event.name}' is not supported`);
+      throw new Error("Event type is invalid");
     }
     if (this.closed) {
       throw new Error("Stream is closed");
     }
     this._events.push(event);
-  }
-
-  [Symbol.iterator]() {
-    return {
-      next: () => ({
-        value: this._events[this.position++],
-        done: this.position < 0 || this.position > this._events.length
-      })
-    };
   }
 
 }

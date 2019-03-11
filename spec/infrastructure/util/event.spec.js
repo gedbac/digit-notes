@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import sinon from "sinon";
-import { Event } from "infrastructure-util";
+import { Event } from "amber-notes/infrastructure/util";
 
 describe("Event", () => {
 
@@ -10,7 +10,7 @@ describe("Event", () => {
     var callback = sinon.spy();
     target.on("changed", callback);
     var args = {};
-    target.trigger("changed", args);
+    target.raise("changed", args);
     expect(callback.calledWithExactly(args)).to.be.true;
   });
 
@@ -20,7 +20,7 @@ describe("Event", () => {
     var callback = sinon.spy();
     target.on("changed", callback);
     target.off("changed", callback);
-    target.trigger("changed");
+    target.raise("changed");
     expect(callback.notCalled).to.be.true;
   });
 
@@ -29,14 +29,14 @@ describe("Event", () => {
     Event.attach(target);
     var callback = sinon.spy();
     target.once("changed", callback);
-    target.trigger("changed");
-    target.trigger("changed");
+    target.raise("changed");
+    target.raise("changed");
     expect(callback.callCount).to.be.equals(1);
   });
 
   it("should throw an error due missing target", () => {
     expect(() => {
-      Event.trigger("changed");
+      Event.raise("changed");
     }).throw().with.property("message", "Event's target is not set");
     expect(() => {
       Event.on("changed", () => {});

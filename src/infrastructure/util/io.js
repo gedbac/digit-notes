@@ -43,6 +43,18 @@ export function createDirectory(pathToDirectory) {
   });
 }
 
+export function deleteDirectory(pathToDirectory) {
+  return new Promise((resolve, reject) => {
+    fs.rmdir(pathToDirectory, error => {
+      if (!error) {
+        resolve();
+      } else {
+        reject(error);
+      }
+    });
+  });
+}
+
 export function fileExists(pathToFile) {
   return new Promise((resolve) => {
     fs.access(pathToFile, error => {

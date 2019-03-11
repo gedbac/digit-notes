@@ -19,19 +19,10 @@
 
 export default class EventStreamFactory {
 
-  constructor(supportedEventTypes = new Map()) {
+  constructor() {
     if (new.target === EventStreamFactory) {
       throw new Error("Can't construct abstract instances directly");
     }
-    if (supportedEventTypes instanceof Array) {
-      this._supportedEventTypes = new Map(supportedEventTypes);
-    } else {
-      this._supportedEventTypes = supportedEventTypes;
-    }
-  }
-
-  get supportedEventTypes() {
-    return this._supportedEventTypes;
   }
 
   create(name) {

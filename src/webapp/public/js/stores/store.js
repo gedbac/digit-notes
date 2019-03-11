@@ -17,7 +17,7 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Event } from "infrastructure-util";
+import { Event } from "amber-notes/infrastructure/util";
 
 export default class Store {
 

@@ -21,17 +21,17 @@ import Repository from "./repository";
 
 export default class EventSourcedRepository extends Repository {
 
-  constructor(eventStore, aggregateType) {
-    super();
+  constructor(eventStore, aggregateType, logger) {
+    super(logger);
     if (new.target === EventSourcedRepository) {
       throw new Error("Can't construct abstract instances directly");
     }
     this._eventStore = eventStore;
-    if (!eventStore) {
+    if (!this._eventStore) {
       throw new Error("Event store is null");
     }
     this._aggregateType = aggregateType;
-    if (!aggregateType) {
+    if (!this._aggregateType) {
       throw new Error("Aggregate type is null");
     }
   }
@@ -44,97 +44,129 @@ export default class EventSourcedRepository extends Repository {
     return this._aggregateType;
   }
 
-  streamNameFor(id) {
-    return `${this.aggregateType.name}::${id}`;
-  }
-
   async findBy(id) {
-    if (!id) {
-      throw new Error("Aggregate id is null");
-    }
     var aggregate = null;
-    var streamName = this.streamNameFor(id);
-    var snapshot = await this.eventStore.getLatestSnapshot(streamName);
-    if (snapshot) {
-      aggregate = this.aggregateType.createFrom(snapshot);
-    } else {
-      aggregate = this.aggregateType.createFrom();
-    }
-    var stream = await this.eventStore.getStream(streamName);
-    if (stream) {
-      await stream.open();
+    try {
+      if (!id) {
+        throw new Error("Aggregate id is null");
+      }
+      var streamName = this._streamNameFor(id);
+      var snapshot = await this.eventStore.getLatestSnapshot(streamName);
       if (snapshot) {
-        if ("version" in snapshot) {
-          stream.position = snapshot.version;
-        } else {
-          throw new Error("Snapshot version is null");
-        }
+        aggregate = new this.aggregateType(snapshot);
       } else {
-        stream.position = 0;
+        aggregate = new this.aggregateType();
       }
-      for (var event of stream) {
-        aggregate.apply(event);
+      var stream = await this.eventStore.getStream(streamName);
+      if (stream) {
+        await stream.open();
+        if (snapshot) {
+          if ("version" in snapshot) {
+            stream.position = snapshot.version;
+          } else {
+            throw new Error("Snapshot version is null");
+          }
+        } else {
+          stream.position = 0;
+        }
+        var event = await stream.read();
+        while (event) {
+          aggregate.apply(event);
+          event = await stream.read();
+        }
+        await stream.close();
+      } else {
+        throw new Error(`Stream '${streamName}' not found`);
       }
-      await stream.close();
-    } else {
-      throw new Error(`Stream '${streamName}' not found`);
+      this.logger.logDebug(`Aggregate has been fetched by id [id=${id}]`);
+    } catch(error) {
+      this.logger.logError(`Failed to fetch aggregate by id [id=${id}]\n${error}`);
+      throw error;
     }
     return aggregate;
   }
 
   async save(aggregate) {
-    if (!aggregate) {
-      throw new Error("Aggregate is null");
-    }
-    if (!aggregate.id) {
-      throw new Error("Aggregate id is null");
-    }
-    var streamName = this.streamNameFor(aggregate.id);
-    var stream = await this.eventStore.createStream(streamName);
-    if (stream) {
-      var uncommittedEvents = aggregate.uncommittedEvents;
-      if (uncommittedEvents && uncommittedEvents.length > 0) {
-        await stream.open();
-        for (var event of uncommittedEvents) {
-          await stream.write(event);
-        }
-        await stream.close();
+    var id = null;
+    try {
+      if (!aggregate) {
+        throw new Error("Aggregate is null");
       }
-    } else {
-      throw new Error(`Failed to create stream '${streamName}'`);
+      if (!aggregate.id) {
+        throw new Error("Aggregate id is null");
+      }
+      var streamName = this._streamNameFor(aggregate.id);
+      var stream = await this.eventStore.createStream(streamName);
+      if (stream) {
+        var uncommittedEvents = aggregate.uncommittedEvents;
+        if (uncommittedEvents && uncommittedEvents.length > 0) {
+          await stream.open();
+          for (var event of uncommittedEvents) {
+            await stream.write(event);
+          }
+          await stream.close();
+          this.eventStore.addSnapshot(streamName, aggregate);
+        }
+      } else {
+        throw new Error(`Failed to create stream '${streamName}'`);
+      }
+      aggregate.commit();
+      this.logger.logDebug(`Aggregate has been saved [id=${id}]`);
+    } catch(error) {
+      this.logger.logError(`Failed to save aggregate [id=${id}]\n${error}`);
+      throw error;
     }
   }
 
-
   async update(aggregate) {
-    if (!aggregate) {
-      throw new Error("Aggregate is null");
-    }
-    if (!aggregate.id) {
-      throw new Error("Aggregate id is null");
-    }
-    var streamName = this.streamNameFor(aggregate.id);
-    var stream = await this.eventStore.getStream(streamName);
-    if (stream) {
-      var uncommittedEvents = aggregate.uncommittedEvents;
-      if (uncommittedEvents && uncommittedEvents.length > 0) {
-        await stream.open();
-        for (var event of uncommittedEvents) {
-          await stream.write(event);
-        }
-        await stream.close();
+    var id = null;
+    try {
+      if (!aggregate) {
+        throw new Error("Aggregate is null");
       }
-    } else {
-      throw new Error(`Failed to get stream '${streamName}'`);
+      if (!aggregate.id) {
+        throw new Error("Aggregate id is null");
+      }
+      id = aggregate.id;
+      var streamName = this._streamNameFor(id);
+      var stream = await this.eventStore.getStream(streamName);
+      if (stream) {
+        var uncommittedEvents = aggregate.uncommittedEvents;
+        if (uncommittedEvents && uncommittedEvents.length > 0) {
+          await stream.open();
+          for (var event of uncommittedEvents) {
+            await stream.write(event);
+          }
+          await stream.close();
+          this.eventStore.addSnapshot(streamName, aggregate);
+        }
+      } else {
+        throw new Error(`Failed to get stream '${streamName}'`);
+      }
+      aggregate.commit();
+      this.logger.logDebug(`Aggregate has been updated [id=${id}]`);
+    } catch(error) {
+      this.logger.logError(`Failed to update aggregate [id=${id}]\n${error}`);
+      throw error;
     }
   }
 
   async delete(id) {
-    if (!id) {
-      throw new Error("Aggregate id is null");
+    try {
+      if (!id) {
+        throw new Error("Aggregate id is null");
+      }
+      var streamName = this._streamNameFor(id);
+      await this.eventStore.deleteStream(streamName);
+      this.logger.logDebug(`Aggregate has been deleted [id=${id}]`);
+    } catch(error) {
+      this.logger.logError(`Failed to delete aggregate [id=${id}]\n${error}`);
+      throw error;
     }
-    var streamName = this.streamNameFor(id);
-    await this.eventStore.deleteStream(streamName);
+  }
+
+  _streamNameFor(id) {
+    return `${this.aggregateType.name}::${id}`;
   }
 
 }

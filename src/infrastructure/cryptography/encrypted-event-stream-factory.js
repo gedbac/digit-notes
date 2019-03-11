@@ -17,21 +17,28 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-export default class EventStreamEncryptorOptions {
+import { EventStreamFactory } from "amber-notes/infrastructure/events";
+import { EncryptedEventStream } from "amber-notes/infrastructure/cryptography";
 
-  constructor(privateKey) {
-    this._privateKey = privateKey;
-    if (!this._privateKey) {
-      throw new Error("Private key is null");
+export default class EncryptedStreamFactory extends EventStreamFactory {
+
+  constructor(eventStreamFactory, encryptionService) {
+    super();
+    this._eventStreamFactory = eventStreamFactory;
+    if (!this._eventStreamFactory) {
+      throw new Error("Event stream factory is null");
+    }
+    this._encryptionService = encryptionService;
+    if (!this._encryptionService) {
+      throw new Error("Encryption service is null");
     }
   }
 
-  get privateKey() {
-    return this._privateKey;
-  }
-
-  set privateKey(value) {
-    this._privateKey = value;
+  create(name) {
+    return new EncryptedEventStream(
+      this._eventStreamFactory.create(name),
+      this._encryptionService
+    );
   }
 
 }

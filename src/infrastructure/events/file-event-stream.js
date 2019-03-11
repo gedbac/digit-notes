@@ -19,16 +19,20 @@
 
 import * as os from "os";
 import * as path from "path";
-import { directoryExists, createDirectory, fileExists, readFile, writeFile } from "infrastructure-util";
+import { directoryExists, createDirectory, fileExists, readFile, writeFile } from "amber-notes/infrastructure/util";
 import Event from "./event";
 import EventStream from "./event-stream";
 
 export default class FileEventStream extends EventStream {
 
-  constructor(name, supportedEventTypes, path, events = []) {
-    super(name, supportedEventTypes);
+  constructor(name, objectSerializer, path) {
+    super(name);
+    this._objectSerializer = objectSerializer;
+    if (!this._objectSerializer) {
+      throw new Error("Object serializer is null");
+    }
     this._path = path;
-    this._events = events;
+    this._events = [];
   }
 
   get length() {
@@ -48,21 +52,7 @@ export default class FileEventStream extends EventStream {
         var lines = content.split(/\r?\n/);
         if (lines) {
           for(var line of lines) {
-            var props = JSON.parse(line);
-            if ("name" in props) {
-              if (this.supportedEventTypes.has(props.name)) {
-                var eventType = this.supportedEventTypes.get(props.name);
-                if (!("createFrom" in eventType)) {
-                  throw new Error(`Static method 'createFrom' not found in class '${eventType.name}'`);
-                }
-                var event = eventType.createFrom(props);
-                this._events.push(event);
-              } else {
-                throw new Error(`Event '${props.name}' is not supported`);
-              }
-            } else {
-              throw new Error("Event's name is missing");
-            }
+            this._events.push(this._objectSerializer.deserialize(line));
           }
         }
       }
@@ -83,7 +73,7 @@ export default class FileEventStream extends EventStream {
         if (index) {
           content += os.EOL;
         }
-        content += JSON.stringify(event);
+        content += this._objectSerializer.serialize(event);
         index++;
       }
     }
@@ -106,13 +96,7 @@ export default class FileEventStream extends EventStream {
       throw new Error("Event is null");
     }
     if (!(event instanceof Event)) {
-      throw new Error("Type of event is invalid");
-    }
-    if (!event.name) {
-      throw new Error("Event's name is not set");
-    }
-    if (!this.supportedEventTypes.has(event.name)) {
-      throw new Error(`Event '${event.name}' is not supported`);
+      throw new Error("Event type is invalid");
     }
     if (this.closed) {
       throw new Error("Stream is closed");
@@ -127,19 +111,4 @@ export default class FileEventStream extends EventStream {
     return this.name;
   }
 
-  toJSON() {
-    return {
-      name: this.name,
-      path: this.path
-    };
-  }
-
-  [Symbol.iterator]() {
-    return {
-      next: () => ({
-        value: this._events[this._position++],
-        done: this._position < 0 || this._position > this._events.length
-      })
-    };
-  }
 }

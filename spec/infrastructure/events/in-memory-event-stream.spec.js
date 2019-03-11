@@ -1,10 +1,10 @@
 import { expect } from "chai";
-import { Event, InMemoryEventStream } from "infrastructure-events";
+import { Event, InMemoryEventStream } from "amber-notes/infrastructure/events";
 
 class Foo extends Event {
 
-  constructor(id, name, timestamp) {
-    super(id, name, timestamp);
+  constructor({ id, createdOn } = {}) {
+    super({ id, createdOn });
   }
 
 }
@@ -12,32 +12,23 @@ class Foo extends Event {
 describe("In Memory Event Stream", () => {
 
   it("should write and read event from stream", async () => {
-    var stream = new InMemoryEventStream("stream1", [[ "Foo", Foo ]]);
+    var stream = new InMemoryEventStream("stream1");
     await stream.open();
-    await stream.write(new Foo(1, "Foo", 1000));
-    stream.position = 0;
-    var event = await stream.read();
-    await stream.close();
-    expect(event).to.not.be.null;
-    expect(stream.length).to.be.equal(1);
-    expect(stream.position).to.be.equal(1);
-  });
-
-  it("should iterate over stream", async () => {
-    var stream = new InMemoryEventStream("stream1", null, [
-      new Foo(1, "Foo", 1000),
-      new Foo(2, "Foo", 1001),
-      new Foo(3, "Foo", 1002)
-    ]);
-    stream.open();
+    await stream.write(new Foo({ id: 1, createdOn: 1000 }));
+    await stream.write(new Foo({ id: 2, createdOn: 1001 }));
+    await stream.write(new Foo({ id: 3, createdOn: 1002 }));
     stream.position = 0;
     var index = 1;
-    for (var event of stream) {
+    var event = await stream.read();
+    while (event) {
       expect(event.id).to.be.equal(index);
       index++;
+      event = await stream.read();
     }
     await stream.close();
     expect(index).to.be.equal(4);
+    expect(stream.length).to.be.equal(3);
+    expect(stream.position).to.be.equal(3);
   });
 
 });

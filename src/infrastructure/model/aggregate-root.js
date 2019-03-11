@@ -17,12 +17,13 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { uuid, timestamp } from "amber-notes/infrastructure/util";
 import Entity from "./entity";
 
 export default class AggregateRoot extends Entity {
 
-  constructor(id, createdOn, modifiedOn, deleted) {
-    super(id);
+  constructor({ id = uuid(), createdOn = timestamp(), modifiedOn = null, deleted = false } = {}) {
+    super({ id });
     if (new.target === AggregateRoot) {
       throw new Error("Can't construct abstract instances directly");
     }
@@ -41,14 +42,6 @@ export default class AggregateRoot extends Entity {
 
   get deleted() {
     return this._deleted;
-  }
-
-  toJSON() {
-    var json = super.toJSON();
-    json.createOn = this.createOn;
-    json.modifiedOn = this.modifiedOn;
-    json.deleted = this.deleted;
-    return json;
   }
 
 }

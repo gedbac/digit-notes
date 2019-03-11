@@ -19,11 +19,19 @@
 
 export default class EventStore {
 
-  constructor() {
+  constructor(logger) {
     if (new.target === EventStore) {
       throw new Error("Can't construct abstract instances directly");
     }
+    this._logger = logger;
+    if (!this._logger) {
+      throw new Error("Logger is null");
+    }
     this._closed = true;
+  }
+
+  get logger() {
+    return this._logger;
   }
 
   get closed() {
@@ -38,27 +46,27 @@ export default class EventStore {
     this._closed = true;
   }
 
-  async hasStream(streamName) {
+  async hasStream(name) {
     throw new Error("Method 'hasStream' is not implemented");
   }
 
-  async getStream(streamName) {
+  async getStream(name) {
     throw new Error("Method 'getStream' is not implemented");
   }
 
-  async createStream(streamName) {
+  async createStream(name) {
     throw new Error("Method 'createStream' is not implemented");
   }
 
-  async deleteStream(streamName) {
+  async deleteStream(name) {
     throw new Error("Method 'deleteStream' is not implemented");
   }
 
-  async addSnapshot(streamName, snapshop) {
+  async addSnapshot(name, t) {
     throw new Error("Method 'addSnapshot' is not implemented");
   }
 
-  async getLatestSnapshot(streamName) {
+  async getLatestSnapshot(name) {
     throw new Error("Method 'addSnapshot' is not implemented");
   }
 

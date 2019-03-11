@@ -18,17 +18,17 @@
  */
 
 import AggregateRoot from "./aggregate-root";
-import { Event } from "infrastructure-events";
+import { Event } from "amber-notes/infrastructure/events";
 
 export default class EventSourcedAggregate extends AggregateRoot {
 
-  constructor(id, createdOn, modifiedOn, deleted, version, uncommittedEvents) {
-    super(id, createdOn, modifiedOn, deleted);
+  constructor({ id, createdOn, modifiedOn, deleted, version = 0 } = {}) {
+    super({ id, createdOn, modifiedOn, deleted });
     if (new.target === EventSourcedAggregate) {
       throw new Error("Can't construct abstract instances directly");
     }
     this._version = version;
-    this._uncommittedEvents = uncommittedEvents;
+    this._uncommittedEvents = [];
   }
 
   get version() {
@@ -46,7 +46,8 @@ export default class EventSourcedAggregate extends AggregateRoot {
     if (!(event instanceof Event)) {
       throw new Error("Type of event is invalid");
     }
-    var eventHandlerName = `_on${event.name}`;
+    var eventName = event.constructor.name;
+    var eventHandlerName = `_on${eventName}`;
     if (eventHandlerName in this) {
       this[eventHandlerName](event);
     } else {
@@ -69,13 +70,6 @@ export default class EventSourcedAggregate extends AggregateRoot {
 
   commit() {
     this._uncommittedEvents = [];
-  }
-
-  toJSON() {
-    var json = super.toJSON();
-    json.version = this.version;
-    json.uncommittedEvents = this.uncommittedEvents.map(x => x.toJSON());
-    return json;
   }
 
 }

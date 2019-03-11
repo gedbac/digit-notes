@@ -22,15 +22,15 @@ import InMemoryEventStream from "./in-memory-event-stream";
 
 export default class InMemoryEventStreamFactory extends EventStreamFactory {
 
-  constructor(supportedEventTypes) {
-    super(supportedEventTypes);
+  constructor() {
+    super();
   }
 
   create(name) {
     if (!name) {
       throw new Error("Stream name is null");
     }
-    return new InMemoryEventStream(name, this.supportedEventTypes);
+    return new InMemoryEventStream(name);
   }
 
 }

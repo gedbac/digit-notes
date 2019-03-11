@@ -1,25 +1,21 @@
 import { expect } from "chai";
-import { uuid, getTimestamp } from "infrastructure-util";
-import { EventSourcedAggregate } from "infrastructure-model";
-import { EventSourcedRepository } from "infrastructure-repositories";
-import { Event, InMemoryEventStore } from "infrastructure-events";
+import { Logger } from "amber-notes/infrastructure/logging";
+import { EventSourcedAggregate } from "amber-notes/infrastructure/model";
+import { EventSourcedRepository } from "amber-notes/infrastructure/repositories";
+import { Event, InMemoryEventStore } from "amber-notes/infrastructure/events";
 
 class FooCreated extends Event {
 
-  constructor(id, name, timestamp) {
-    super(id, name, timestamp);
-  }
-
-  static createFrom({id = uuid(), name = "FooCreated", timestamp = getTimestamp()} = {}) {
-    return new FooCreated(id, name, timestamp);
+  constructor({ id, createdOn } = {}) {
+    super({ id, createdOn });
   }
 
 }
 
 class FooTextChanged extends Event {
 
-  constructor(id, name, timestamp, text) {
-    super(id, name, timestamp);
+  constructor({ id, createdOn, text = null } = {}) {
+    super({ id, createdOn });
     this._text = text;
   }
 
@@ -27,16 +23,12 @@ class FooTextChanged extends Event {
     return this._text;
   }
 
-  static createFrom({id = uuid(), name = "FooTextChanged", timestamp = getTimestamp(), text = null} = {}) {
-    return new FooTextChanged(id, name, timestamp, text);
-  }
-
 }
 
 class Foo extends EventSourcedAggregate {
 
-  constructor(id, createdOn, modifiedOn, deleted, version, uncommittedEvents, text) {
-    super(id, createdOn, modifiedOn, deleted, version, uncommittedEvents);
+  constructor({ id, createdOn, modifiedOn, deleted, version, uncommittedEvents, text = null } = {}) {
+    super({ id, createdOn, modifiedOn, deleted, version, uncommittedEvents });
     this._text = text;
   }
 
@@ -48,17 +40,12 @@ class Foo extends EventSourcedAggregate {
     this._text = event.text;
   }
 
-  static createFrom({ id = uuid(), createdOn = getTimestamp(), modifiedOn = null, deleted = false, version = 0,
-    uncommittedEvents = [], text = null} = {}) {
-    return new Foo(id, createdOn, modifiedOn, deleted, version, uncommittedEvents, text);
-  }
-
 }
 
 class FooRepository extends EventSourcedRepository {
 
-  constructor(eventStore, aggregateType) {
-    super(eventStore, aggregateType);
+  constructor(eventStore, aggregateType, logger) {
+    super(eventStore, aggregateType, logger);
   }
 
 }
@@ -67,18 +54,26 @@ describe("Event Sourced Repository", () => {
 
   it("should get document from snapshot", async () => {
     var id = "9cb9f65c-2904-4180-8e38-dde3c14a5fd1";
-    var eventStore = new InMemoryEventStore([
-      [ "FooCreated", FooCreated ],
-      [ "FooTextChanged", FooTextChanged ]
-    ]);
+    var eventStore = new InMemoryEventStore(
+      new Logger("InMemoryEventStore")
+    );
     await eventStore.open();
     var stream = await eventStore.createStream(`Foo::${id}`);
     await stream.open();
-    await stream.write(FooCreated.createFrom({ createdOn: 1000 }));
-    await stream.write(FooTextChanged.createFrom({ text: "#TEXT" }));
+    await stream.write(new FooCreated({ createdOn: 1000 }));
+    await stream.write(new FooTextChanged({ text: "#TEXT" }));
     await stream.close();
-    await eventStore.addSnapshot(`Foo::${id}`, { id: id, createdOn: 1000, version: 1 });
-    var repository = new FooRepository(eventStore, Foo);
+    var snapshot = new Foo({
+      id: id,
+      createdOn: 1000,
+      version: 1
+    });
+    await eventStore.addSnapshot(`Foo::${id}`, snapshot);
+    var repository = new FooRepository(
+      eventStore,
+      Foo,
+      new Logger("FooRepository")
+    );
     var aggregate = await repository.findBy(id);
     await eventStore.close();
     expect(aggregate).to.be.not.null;

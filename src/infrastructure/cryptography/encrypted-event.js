@@ -17,29 +17,28 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { Event } from "infrastructure-events";
+import { Event } from "amber-notes/infrastructure/events";
 
 export default class EncryptedEvent extends Event {
 
-  constructor(id, name, timestamp, nonce) {
-    super(id, name, timestamp);
-    if (new.target === EncryptedEvent) {
-      throw new Error("Can't construct abstract instances directly");
+  constructor({ id, createdOn, chippertext, iv } = {}) {
+    super(id, createdOn);
+    this._chippertext = chippertext;
+    if (!this._chippertext) {
+      throw new Error("Ciphertext is null");
     }
-    this._nonce = nonce;
-    if (!this._nonce) {
-      throw new Error("Nonce is null");
+    this._iv = iv;
+    if (!this._iv) {
+      throw new Error("Initialization vector is null");
     }
   }
 
-  get nonce() {
-    return this._nonce;
+  get chippertext() {
+    return this._chippertext;
   }
 
-  toJSON() {
-    var json = super.toJSON();
-    json.nonce = this.nonce;
-    return json;
+  get iv() {
+    return this._iv;
   }
 
 }

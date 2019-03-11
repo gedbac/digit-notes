@@ -9,7 +9,7 @@ var specNodeConfig = {
   target: "node",
   entry: [
     path.resolve(__dirname, "./spec/infrastructure/logging/index.js"),
-    path.resolve(__dirname, "./spec/infrastructure/util/index.node.js"),
+    path.resolve(__dirname, "./spec/infrastructure/util/index.js"),
     path.resolve(__dirname, "./spec/infrastructure/events/index.node.js"),
     path.resolve(__dirname, "./spec/infrastructure/repositories/index.js"),
     path.resolve(__dirname, "./spec/infrastructure/cryptography/index.js"),
@@ -26,18 +26,18 @@ var specNodeConfig = {
   resolve: {
     extensions: [ ".node.js", ".js" ],
     alias: {
-      "infrastructure-logging$": path.resolve(__dirname, "./src/infrastructure/logging/index.js"),
-      "infrastructure-util$": path.resolve(__dirname, "./src/infrastructure/util/index.node.js"),
-      "infrastructure-model$": path.resolve(__dirname, "./src/infrastructure/model/index.js"),
-      "infrastructure-repositories$": path.resolve(__dirname, "./src/infrastructure/repositories/index.js"),
-      "infrastructure-events$": path.resolve(__dirname, "./src/infrastructure/events/index.node.js"),
-      "infrastructure-cryptography$": path.resolve(__dirname, "./src/infrastructure/cryptography/index.js"),
-      "infrastructure-text-search$": path.resolve(__dirname, "./src/infrastructure/text-search/index.js"),
-      "infrastructure-dependency-injection$": path.resolve(__dirname, "./src/infrastructure/dependency-injection/index.js"),
-      "outlines-events$": path.resolve(__dirname, "./src/outlines/events/index.js"),
-      "outlines-model$": path.resolve(__dirname, "./src/outlines/model/index.js"),
-      "outlines-factories$": path.resolve(__dirname, "./src/outlines/factories/index.js"),
-      "outlines-repositories$": path.resolve(__dirname, "./src/outlines/repositories/index.js")
+      "amber-notes/infrastructure/logging$": path.resolve(__dirname, "./src/infrastructure/logging/index.js"),
+      "amber-notes/infrastructure/util$": path.resolve(__dirname, "./src/infrastructure/util/index.node.js"),
+      "amber-notes/infrastructure/model$": path.resolve(__dirname, "./src/infrastructure/model/index.js"),
+      "amber-notes/infrastructure/repositories$": path.resolve(__dirname, "./src/infrastructure/repositories/index.js"),
+      "amber-notes/infrastructure/events$": path.resolve(__dirname, "./src/infrastructure/events/index.node.js"),
+      "amber-notes/infrastructure/cryptography$": path.resolve(__dirname, "./src/infrastructure/cryptography/index.js"),
+      "amber-notes/infrastructure/text-search$": path.resolve(__dirname, "./src/infrastructure/text-search/index.js"),
+      "amber-notes/infrastructure/dependency-injection$": path.resolve(__dirname, "./src/infrastructure/dependency-injection/index.js"),
+      "amber-notes/outlines/events$": path.resolve(__dirname, "./src/outlines/events/index.js"),
+      "amber-notes/outlines/model$": path.resolve(__dirname, "./src/outlines/model/index.js"),
+      "amber-notes/outlines/factories$": path.resolve(__dirname, "./src/outlines/factories/index.js"),
+      "amber-notes/outlines/repositories$": path.resolve(__dirname, "./src/outlines/repositories/index.js")
     }
   },
   module: {
@@ -63,7 +63,7 @@ var specWebConfig = {
   target: "web",
   entry: [
     path.resolve(__dirname, "./spec/infrastructure/logging/index.js"),
-    path.resolve(__dirname, "./spec/infrastructure/util/index.web.js"),
+    path.resolve(__dirname, "./spec/infrastructure/util/index.js"),
     path.resolve(__dirname, "./spec/infrastructure/events/index.web.js"),
     path.resolve(__dirname, "./spec/infrastructure/repositories/index.js"),
     path.resolve(__dirname, "./spec/infrastructure/cryptography/index.js"),
@@ -83,18 +83,18 @@ var specWebConfig = {
   resolve: {
     extensions: [ ".web.js", ".js" ],
     alias: {
-      "infrastructure-logging$": path.resolve(__dirname, "./src/infrastructure/logging/index.js"),
-      "infrastructure-util$": path.resolve(__dirname, "./src/infrastructure/util/index.web.js"),
-      "infrastructure-model$": path.resolve(__dirname, "./src/infrastructure/model/index.js"),
-      "infrastructure-repositories$": path.resolve(__dirname, "./src/infrastructure/repositories/index.js"),
-      "infrastructure-events$": path.resolve(__dirname, "./src/infrastructure/events/index.web.js"),
-      "infrastructure-cryptography$": path.resolve(__dirname, "./src/infrastructure/cryptography/index.js"),
-      "infrastructure-text-search$": path.resolve(__dirname, "./src/infrastructure/text-search/index.js"),
-      "infrastructure-dependency-injection$": path.resolve(__dirname, "./src/infrastructure/dependency-injection/index.js"),
-      "outlines-events$": path.resolve(__dirname, "./src/outlines/events/index.js"),
-      "outlines-model$": path.resolve(__dirname, "./src/outlines/model/index.js"),
-      "outlines-factories$": path.resolve(__dirname, "./src/outlines/factories/index.js"),
-      "outlines-repositories$": path.resolve(__dirname, "./src/outlines/repositories/index.js")
+      "amber-notes/infrastructure/logging$": path.resolve(__dirname, "./src/infrastructure/logging/index.js"),
+      "amber-notes/infrastructure/util$": path.resolve(__dirname, "./src/infrastructure/util/index.web.js"),
+      "amber-notes/infrastructure/model$": path.resolve(__dirname, "./src/infrastructure/model/index.js"),
+      "amber-notes/infrastructure/repositories$": path.resolve(__dirname, "./src/infrastructure/repositories/index.js"),
+      "amber-notes/infrastructure/events$": path.resolve(__dirname, "./src/infrastructure/events/index.web.js"),
+      "amber-notes/infrastructure/cryptography$": path.resolve(__dirname, "./src/infrastructure/cryptography/index.js"),
+      "amber-notes/infrastructure/text-search$": path.resolve(__dirname, "./src/infrastructure/text-search/index.js"),
+      "amber-notes/infrastructure/dependency-injection$": path.resolve(__dirname, "./src/infrastructure/dependency-injection/index.js"),
+      "amber-notes/outlines/events$": path.resolve(__dirname, "./src/outlines/events/index.js"),
+      "amber-notes/outlines/model$": path.resolve(__dirname, "./src/outlines/model/index.js"),
+      "amber-notes/outlines/factories$": path.resolve(__dirname, "./src/outlines/factories/index.js"),
+      "amber-notes/outlines/repositories$": path.resolve(__dirname, "./src/outlines/repositories/index.js")
     }
   },
   module: {

@@ -27,7 +27,7 @@ export default class EventComparer {
     }
     if (event1.id === event2.id) {
       return 0;
-    } else if (event1.timestamp > event2.timestamp) {
+    } else if (event1.createdOn > event2.createdOn) {
       return 1;
     } else {
       return -1;

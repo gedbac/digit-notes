@@ -17,14 +17,13 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { uuid } from "infrastructure-util";
-import { EventSourcedEntity } from "infrastructure-model";
-import { OutlineAdded, OutlineRemoved, OutlineTextChanged, OutlineNotesChanged, OutlineCompleted, OutlineIncompleted, OutlineTagAdded, OutlineTagRemoved } from "outlines-events";
+import { EventSourcedEntity } from "amber-notes/infrastructure/model";
+import { OutlineAdded, OutlineRemoved, OutlineTextChanged, OutlineNotesChanged, OutlineCompleted, OutlineIncompleted, OutlineTagAdded, OutlineTagRemoved } from "amber-notes/outlines/events";
 
 export default class Outline extends EventSourcedEntity {
 
-  constructor(id, aggregateRoot, children, text, notes, completed, tags) {
-    super(id, aggregateRoot);
+  constructor({ id, aggregateRoot, children = [], text = null, notes = null, completed= false, tags = [] } = {}) {
+    super({ id, aggregateRoot });
     this._children = children;
     this._text = text;
     this._notes = notes;
@@ -33,7 +32,7 @@ export default class Outline extends EventSourcedEntity {
     if (this._children) {
       this._children = this._children.map(props => {
         props.aggregateRoot = aggregateRoot;
-        return Outline.createFrom(props);
+        return new Outline(props);
       });
     }
   }
@@ -44,7 +43,7 @@ export default class Outline extends EventSourcedEntity {
 
   set text(value) {
     if (this._text !== value) {
-      this.raise(OutlineTextChanged.createFrom({
+      this.raise(new OutlineTextChanged({
         outlineDocumentId: this.aggregateRoot.id,
         outlineId: this.id,
         outlineText: value
@@ -58,7 +57,7 @@ export default class Outline extends EventSourcedEntity {
 
   set notes(value) {
     if (this._notes !== value) {
-      this.raise(OutlineNotesChanged.createFrom({
+      this.raise(new OutlineNotesChanged({
         outlineDocumentId: this.aggregateRoot.id,
         outlineId: this.id,
         outlineNotes: value
@@ -82,7 +81,7 @@ export default class Outline extends EventSourcedEntity {
     if (!id) {
       throw new Error("Outline's id is null");
     }
-    this.raise(OutlineAdded.createFrom({
+    this.raise(new OutlineAdded({
       outlineDocumentId: this.aggregateRoot.id,
       parentOutlineId: this.id,
       outlineId: id,
@@ -94,7 +93,7 @@ export default class Outline extends EventSourcedEntity {
     if (!id) {
       throw new Error("Outline's id is null");
     }
-    this.raise(OutlineRemoved.createFrom({
+    this.raise(new OutlineRemoved({
       outlineDocumentId: this.aggregateRoot.id,
       parentOutlineId: this.id,
       outlineId: id
@@ -103,7 +102,7 @@ export default class Outline extends EventSourcedEntity {
 
   complete() {
     if (!this._completed) {
-      this.raise(OutlineCompleted.createFrom({
+      this.raise(new OutlineCompleted({
         outlineDocumentId: this.aggregateRoot.id,
         outlineId: this.id
       }));
@@ -112,7 +111,7 @@ export default class Outline extends EventSourcedEntity {
 
   incomplete() {
     if (this._completed) {
-      this.raise(OutlineIncompleted.createFrom({
+      this.raise(new OutlineIncompleted({
         outlineDocumentId: this.aggregateRoot.id,
         outlineId: this.id
       }));
@@ -124,7 +123,7 @@ export default class Outline extends EventSourcedEntity {
       throw new Error("Outline's tag is null");
     }
     if (!this._tags.includes(tag)) {
-      this.raise(OutlineTagAdded.createFrom({
+      this.raise(new OutlineTagAdded({
         outlineDocumentId: this.aggregateRoot.id,
         outlineId: this.id,
         outlineTag: tag
@@ -137,32 +136,12 @@ export default class Outline extends EventSourcedEntity {
       throw new Error("Outline's tag is null");
     }
     if (this._tags.includes(tag)) {
-      this.raise(OutlineTagRemoved.createFrom({
+      this.raise(new OutlineTagRemoved({
         outlineDocumentId: this.aggregateRoot.id,
         outlineId: this.id,
         outlineTag: tag
       }));
     }
-  }
-
-  toJSON() {
-    var json = super.toJSON();
-    if (this._text) {
-      json.text = this._text;
-    }
-    if (this._notes) {
-      json.notes = this._notes;
-    }
-    if (this._completed) {
-      json.completed = this._completed;
-    }
-    if (this._children && this._children.length > 0) {
-      json.children = this._children.map(x => x.toJSON());
-    }
-    if (this._tags && this._tags.length > 0) {
-      json.tags = this._tags.map(x => x.toJSON());
-    }
-    return json;
   }
 
   findOutlineBy(id) {
@@ -173,14 +152,9 @@ export default class Outline extends EventSourcedEntity {
     return !!this.findOutlineBy(id);
   }
 
-  static createFrom({ id = uuid(), aggregateRoot = null, children = [], text = null, notes = null, completed = false,
-    tags = []} = {}) {
-    return new Outline(id, aggregateRoot, children, text, notes, completed, tags);
-  }
-
   _onOutlineAdded(event) {
     if (!this.hasOutline(event.outlineId)) {
-      this._children.push(Outline.createFrom({
+      this._children.push(new Outline({
         id: event.outlineId,
         aggregateRoot: this.aggregateRoot,
         text: event.outlineText

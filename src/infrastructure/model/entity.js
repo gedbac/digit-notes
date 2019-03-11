@@ -17,9 +17,11 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { uuid } from "amber-notes/infrastructure/util";
+
 export default class Entity {
 
-  constructor(id) {
+  constructor({ id = uuid() } = {}) {
     if (new.target === Entity) {
       throw new Error("Can't construct abstract instances directly");
     }
@@ -29,14 +31,8 @@ export default class Entity {
     }
   }
 
-  get id () {
+  get id() {
     return this._id;
-  }
-
-  toJSON() {
-    return {
-      id: this.id
-    };
   }
 
 }

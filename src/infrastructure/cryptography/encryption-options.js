@@ -17,12 +17,18 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import OutlineDocumentEvent from "./outline-document-event";
+export default class EncryptionOptions {
 
-export default class OutlineDocumentDeleted extends OutlineDocumentEvent {
+  constructor({ privateKey } = {}) {
+    this._privateKey = privateKey;
+  }
 
-  constructor({ id, createdOn, outlineDocumentId } = {}) {
-    super({ id, createdOn, outlineDocumentId });
+  get privateKey() {
+    return this._privateKey;
+  }
+
+  set privateKey(value) {
+    this._privateKey = value;
   }
 
 }
