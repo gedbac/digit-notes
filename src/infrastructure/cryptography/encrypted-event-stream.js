@@ -22,11 +22,15 @@ import { EncryptedEvent } from "amber-notes/infrastructure/cryptography";
 
 export default class EnryptedEventStream extends EventStream {
 
-  constructor(stream, encryptionService) {
+  constructor(stream, privateKey, encryptionService) {
     super();
     this._stream = stream;
     if (!this._stream) {
       throw new Error("Event stream is null");
+    }
+    this._privateKey = privateKey;
+    if (!this._privateKey) {
+      throw new Error("Private key is null");
     }
     this._encryptionService = encryptionService;
     if (!this._encryptionService) {
@@ -68,7 +72,7 @@ export default class EnryptedEventStream extends EventStream {
     if (props) {
       var encryptedEvent = new EncryptedEvent(props);
       if (encryptedEvent) {
-        event = await this._encryptionService.decrypt(encryptedEvent.chippertext, encryptedEvent.iv);
+        event = await this._encryptionService.decrypt(encryptedEvent.chippertext, encryptedEvent.iv, this._privateKey);
       }
     }
     return event;
@@ -78,7 +82,7 @@ export default class EnryptedEventStream extends EventStream {
     if (!event) {
       throw new Error("Event is null");
     }
-    var { chippertext, iv } = await this._encryptionService.encrypt(event);
+    var { chippertext, iv } = await this._encryptionService.encrypt(event, this._privateKey);
     var encryptedEvent = new EncryptedEvent({
       id: event.id,
       createdOn: event.createdOn,

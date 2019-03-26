@@ -5,3 +5,4 @@ export { default as EncryptedEvent } from "./encrypted-event";
 export { default as EncryptedAggregate } from "./encrypted-aggregate";
 export { default as EncryptedEventStore} from "./encrypted-event-store";
 export { default as KeyStore } from "./key-store";
+export { default as WebKeyStore } from "./web-key-store";

@@ -17,24 +17,12 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-export default class KeyVault {
+import KeyStore from "./key-store";
+
+export default class FileKeyStore extends KeyStore {
 
   constructor(logger) {
-    if (new.target === KeyVault) {
-      throw new Error("Can't construct abstract instances directly");
-    }
-    this._logger = logger;
-    if (!this._logger) {
-      throw new Error("Logger is null");
-    }
-  }
-
-  addSecret(name, value) {
-    throw new Error("Method 'addSecret' is not implemented");
-  }
-
-  getSecret(name) {
-    throw new Error("Method 'getSecret' is not implemented");
+    super(logger);
   }
 
 }

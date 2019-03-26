@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { Logger } from "amber-notes/infrastructure/logging";
 import { ObjectSerializer } from "amber-notes/infrastructure/util";
 import { InMemoryEventStore } from "amber-notes/infrastructure/events";
-import { EncryptedEventStore, EncryptionOptions, EncryptionService } from "amber-notes/infrastructure/cryptography";
+import { EncryptedEventStore, EncryptionService } from "amber-notes/infrastructure/cryptography";
 
 describe("Encrypted Event Store", () => {
 
@@ -15,11 +15,9 @@ describe("Encrypted Event Store", () => {
       new InMemoryEventStore(
         new Logger("InMemoryEventStore")
       ),
+      "fwtyt/x+HBAie1oHzUZ1zLId8EdCuLnoGeS+lj4bplM=",
       new EncryptionService(
-        new ObjectSerializer(),
-        new EncryptionOptions({
-          privateKey: "fwtyt/x+HBAie1oHzUZ1zLId8EdCuLnoGeS+lj4bplM="
-        })
+        new ObjectSerializer()
       ),
       new Logger("EncryptedEventStore")
     );

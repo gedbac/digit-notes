@@ -22,11 +22,15 @@ import { EncryptedEventStream } from "amber-notes/infrastructure/cryptography";
 
 export default class EncryptedStreamFactory extends EventStreamFactory {
 
-  constructor(eventStreamFactory, encryptionService) {
+  constructor(eventStreamFactory, privateKey, encryptionService) {
     super();
     this._eventStreamFactory = eventStreamFactory;
     if (!this._eventStreamFactory) {
       throw new Error("Event stream factory is null");
+    }
+    this._privateKey = privateKey;
+    if (!this._privateKey) {
+      throw new Error("Private key is null");
     }
     this._encryptionService = encryptionService;
     if (!this._encryptionService) {
@@ -37,6 +41,7 @@ export default class EncryptedStreamFactory extends EventStreamFactory {
   create(name) {
     return new EncryptedEventStream(
       this._eventStreamFactory.create(name),
+      this._privateKey,
       this._encryptionService
     );
   }

@@ -23,11 +23,15 @@ import EncryptedAggregate from "./encrypted-aggregate";
 
 export default class EncryptedEventStore extends EventStore {
 
-  constructor(eventStore, encryptionService, logger) {
+  constructor(eventStore, privateKey, encryptionService, logger) {
     super(logger);
     this._eventStore = eventStore;
     if (!this._eventStore) {
       throw new Error("Event store is null");
+    }
+    this._privateKey = privateKey;
+    if (!this._privateKey) {
+      throw new Error("Private key is null");
     }
     this._encryptionService = encryptionService;
     if (!this._encryptionService) {
@@ -82,7 +86,7 @@ export default class EncryptedEventStore extends EventStore {
       }
       stream = await this._eventStore.getStream(name);
       if (stream) {
-        stream = new EncryptedEventStream(stream, this._objectEncryptor);
+        stream = new EncryptedEventStream(stream, this._privateKey, this._objectEncryptor);
       }
       this.logger.logDebug(`Stream has been fetched [snapshotName=${name}]`);
     } catch(error) {
@@ -100,7 +104,7 @@ export default class EncryptedEventStore extends EventStore {
       }
       stream = await this._eventStore.createStream(name);
       if (stream) {
-        stream = new EncryptedEventStream(stream, this._encryptionService);
+        stream = new EncryptedEventStream(stream, this._privateKey, this._encryptionService);
       }
       this.logger.logDebug(`Stream has been created [streamName=${name}]`);
     } catch(error) {
@@ -131,7 +135,10 @@ export default class EncryptedEventStore extends EventStore {
       if (!snapshot) {
         throw new Error("Snapshot is null");
       }
-      var { chippertext, iv } = await this._encryptionService.encrypt(snapshot);
+      var { chippertext, iv } = await this._encryptionService.encrypt(
+        snapshot,
+        this._privateKey
+      );
       var encryptedSnapshot = new EncryptedAggregate({
         id: snapshot.id,
         createdOn: snapshot.createdOn,
@@ -158,7 +165,11 @@ export default class EncryptedEventStore extends EventStore {
       if (props) {
         var enryptedSnapshot = new EncryptedAggregate(props);
         if (enryptedSnapshot) {
-          snapshot = await this._encryptionService.decrypt(enryptedSnapshot.chippertext, enryptedSnapshot.iv);
+          snapshot = await this._encryptionService.decrypt(
+            enryptedSnapshot.chippertext,
+            enryptedSnapshot.iv,
+            this._privateKey
+          );
         }
       }
       this.logger.logDebug(`Snapshot has been fetched [snapshotName=${name}]`);

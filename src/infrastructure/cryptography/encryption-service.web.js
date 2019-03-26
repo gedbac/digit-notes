@@ -21,24 +21,20 @@ import { getRandomValues } from "amber-notes/infrastructure/util";
 
 export default class EncryptionService {
 
-  constructor(objectSerializer, options) {
+  constructor(objectSerializer) {
     this._objectSerializer = objectSerializer;
     if (!this._objectSerializer) {
       throw new Error("Object serializer is null");
-    }
-    this._options = options;
-    if (!this._options) {
-      throw new Error("Options is null");
     }
     this._textEncoder = new TextEncoder("utf-8");
     this._textDecoder = new TextDecoder("utf-8");
   }
 
-  async encrypt(obj) {
+  async encrypt(obj, privateKey) {
     if (!obj) {
       throw new Error("Object is null");
     }
-    if (!this._options.privateKey) {
+    if (!privateKey) {
       throw new Error("Private key is null");
     }
     var plainText = this._objectSerializer.serialize(obj);
@@ -48,34 +44,43 @@ export default class EncryptionService {
       name: "AES-CBC",
       iv: iv
     };
-    var privateKey = await this._toCryptoKey(this._options.privateKey);
-    var chippertext = await crypto.subtle.encrypt(algorithm, privateKey, encodedText);
+    var key = await this._toCryptoKey(privateKey);
+    var chippertext = await crypto.subtle.encrypt(algorithm, key, encodedText);
     return {
       chippertext: this._toBase64(chippertext),
       iv: this._toBase64(iv)
     };
   }
 
-  async decrypt(chippertext, iv) {
+  async decrypt(chippertext, iv, privateKey) {
     if (!chippertext) {
       throw new Error("Chippertext is null");
     }
     if (!iv) {
       throw new Error("Initialization vector is null");
     }
-    if (!this._options.privateKey) {
+    if (!privateKey) {
       throw new Error("Private key is null");
     }
     iv = this._fromBase64(iv);
     chippertext = this._fromBase64(chippertext);
-    var privateKey = await this._toCryptoKey(this._options.privateKey);
+    var key = await this._toCryptoKey(privateKey);
     var algorithm = {
       name: "AES-CBC",
       iv: iv
     };
-    var encodedText = await crypto.subtle.decrypt(algorithm, privateKey, chippertext);
+    var encodedText = await crypto.subtle.decrypt(algorithm, key, chippertext);
     var plainText = this._textDecoder.decode(encodedText);
     return this._objectSerializer.deserialize(plainText);
+  }
+
+  async computeHash(text) {
+    if (!text) {
+      throw new Error("Text is null");
+    }
+    var encodedText = this._textEncoder.encode(text);
+    var hash = await crypto.subtle.digest("SHA-256", encodedText);
+    return this._toBase64(hash);
   }
 
   async _toCryptoKey(privateKey) {

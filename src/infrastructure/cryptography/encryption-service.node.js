@@ -22,28 +22,24 @@ import { getRandomValues } from "amber-notes/infrastructure/util";
 
 export default class EncryptionService {
 
-  constructor(objectSerializer, options) {
+  constructor(objectSerializer) {
     this._objectSerializer = objectSerializer;
     if (!this._objectSerializer) {
       throw new Error("Object serializer is null");
     }
-    this._options = options;
-    if (!this._options) {
-      throw new Error("Options is null");
-    }
   }
 
-  async encrypt(obj) {
+  async encrypt(obj, privateKey) {
     if (!obj) {
       throw new Error("Object is null");
     }
-    if (!this._options.privateKey) {
+    if (!privateKey) {
       throw new Error("Private key is null");
     }
     var plainText = this._objectSerializer.serialize(obj);
     var iv = getRandomValues(16);
-    var privateKey = Buffer.from(this._options.privateKey, "base64");
-    var chipher = crypto.createCipheriv("AES-256-CBC", privateKey, iv);
+    var key = Buffer.from(privateKey, "base64");
+    var chipher = crypto.createCipheriv("AES-256-CBC", key, iv);
     var chippertext = chipher.update(plainText, "utf8", "base64") + chipher.final("base64");
     return {
       chippertext: chippertext,
@@ -51,21 +47,31 @@ export default class EncryptionService {
     };
   }
 
-  async decrypt(chippertext, iv) {
+  async decrypt(chippertext, iv, privateKey) {
     if (!chippertext) {
       throw new Error("Chippertext is null");
     }
     if (!iv) {
       throw new Error("Initialization vector is null");
     }
-    if (!this._options.privateKey) {
+    if (!privateKey) {
       throw new Error("Private key is null");
     }
     iv = Buffer.from(iv, "base64");
-    var privateKey = Buffer.from(this._options.privateKey, "base64");
-    var decipher = crypto.createDecipheriv("AES-256-CBC", privateKey, iv);
+    var key = Buffer.from(privateKey, "base64");
+    var decipher = crypto.createDecipheriv("AES-256-CBC", key, iv);
     var plainText = decipher.update(chippertext, "base64", "utf8") + decipher.final("utf8");
     return this._objectSerializer.deserialize(plainText);
+  }
+
+  async computeHash(text) {
+    if (!text) {
+      throw new Error("Text is null");
+    }
+    return crypto
+      .createHash("sha256")
+      .update(text, "utf8")
+      .digest("base64");
   }
 
 }

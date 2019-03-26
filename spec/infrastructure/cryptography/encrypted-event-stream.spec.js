@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { ObjectSerializer } from "amber-notes/infrastructure/util";
 import { Event, InMemoryEventStream } from "amber-notes/infrastructure/events";
-import { EncryptedEventStream, EncryptionService, EncryptionOptions } from "amber-notes/infrastructure/cryptography";
+import { EncryptedEventStream, EncryptionService } from "amber-notes/infrastructure/cryptography";
 
 class Foo extends Event {
 
@@ -26,11 +26,9 @@ describe("Encrypted Event Stream", () => {
   it ("should encrypt and decrypt message", async () => {
     var encryptedStream = new EncryptedEventStream(
       new InMemoryEventStream("foo"),
+      "fwtyt/x+HBAie1oHzUZ1zLId8EdCuLnoGeS+lj4bplM=",
       new EncryptionService(
-        new ObjectSerializer([[ "Foo", Foo ]]),
-        new EncryptionOptions({
-          privateKey: "fwtyt/x+HBAie1oHzUZ1zLId8EdCuLnoGeS+lj4bplM="
-        })
+        new ObjectSerializer([[ "Foo", Foo ]])
       )
     );
     await encryptedStream.open();
