@@ -22,12 +22,7 @@ import KeyStore from "./key-store";
 export default class WebKeyStore extends KeyStore {
 
   constructor(encryptionService, logger) {
-    super(logger);
-    this._encryptionService = encryptionService;
-    if (!this._encryptionService) {
-      throw new Error("Encryption service is null");
-    }
-    this._secrets = new Map();
+    super(encryptionService, logger);
   }
 
   async load(password) {
@@ -67,50 +62,6 @@ export default class WebKeyStore extends KeyStore {
       this.logger.logDebug("Keys has been stored");
     } catch(error) {
       this.logger.logError(`Failed store to store keys\n${error}`);
-      throw error;
-    }
-  }
-
-  async getSecret(name) {
-    var secret = null;
-    try {
-      if (!name) {
-        throw new Error("Name is null");
-      }
-      secret = this._secrets.get(name);
-      this.logger.logDebug(`Secret has been fetched [name=${name}]`);
-    } catch(error) {
-      this.logger.logError(`Failed to get secret\n${error}`);
-      throw error;
-    }
-    return secret;
-  }
-
-  async addSecret(name, value) {
-    try {
-      if (!name) {
-        throw new Error("Name is null");
-      }
-      if (!value) {
-        throw new Error("Value is null");
-      }
-      this._secrets.set(name, value);
-      this.logger.logDebug(`Secret has been added [name=${name}]`);
-    } catch(error) {
-      this.logger.logError(`Failed to add secret\n${error}`);
-      throw error;
-    }
-  }
-
-  async deleteSecret(name) {
-    try {
-      if (!name) {
-        throw new Error("Name is null");
-      }
-      this._secrets.delete(name);
-      this.logger.logDebug(`Secret has been deleted [name=${name}]`);
-    } catch(error) {
-      this.logger.logError(`Failed to delete secret\n${error}`);
       throw error;
     }
   }

@@ -19,36 +19,23 @@
 
 export default class KeyStore {
 
-  constructor(logger) {
+  constructor(encryptionService, logger) {
     if (new.target === KeyStore) {
       throw new Error("Can't construct abstract instances directly");
+    }
+    this._encryptionService = encryptionService;
+    if (!this._encryptionService) {
+      throw new Error("Encryption service is null");
     }
     this._logger = logger;
     if (!this._logger) {
       throw new Error("Logger is null");
     }
-    this._closed = true;
-    this._loaded = false;
+    this._secrets = new Map();
   }
 
   get logger() {
     return this._logger;
-  }
-
-  get closed() {
-    return this._closed;
-  }
-
-  get loaded() {
-    return this._loaded;
-  }
-
-  async open() {
-    this._closed = false;
-  }
-
-  async close() {
-    this._closed = true;
   }
 
   async load(password) {
@@ -60,15 +47,47 @@ export default class KeyStore {
   }
 
   async getSecret(name) {
-    throw new Error("Method 'getSecret' is not implemented");
+    var secret = null;
+    try {
+      if (!name) {
+        throw new Error("Name is null");
+      }
+      secret = this._secrets.get(name);
+      this.logger.logDebug(`Secret has been fetched [name=${name}]`);
+    } catch(error) {
+      this.logger.logError(`Failed to get secret\n${error}`);
+      throw error;
+    }
+    return secret;
   }
 
   async addSecret(name, value) {
-    throw new Error("Method 'addSecret' is not implemented");
+    try {
+      if (!name) {
+        throw new Error("Name is null");
+      }
+      if (!value) {
+        throw new Error("Value is null");
+      }
+      this._secrets.set(name, value);
+      this.logger.logDebug(`Secret has been added [name=${name}]`);
+    } catch(error) {
+      this.logger.logError(`Failed to add secret\n${error}`);
+      throw error;
+    }
   }
 
   async deleteSecret(name) {
-    throw new Error("Method 'name' is not implemented");
+    try {
+      if (!name) {
+        throw new Error("Name is null");
+      }
+      this._secrets.delete(name);
+      this.logger.logDebug(`Secret has been deleted [name=${name}]`);
+    } catch(error) {
+      this.logger.logError(`Failed to delete secret\n${error}`);
+      throw error;
+    }
   }
 
 }
