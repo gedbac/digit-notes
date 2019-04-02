@@ -7,3 +7,4 @@ export { default as EventStreamMerger } from "./event-stream-merger";
 export { default as InMemoryEventStream } from "./in-memory-event-stream";
 export { default as InMemoryEventStreamFactory } from "./in-memory-event-stream-factory";
 export { default as InMemoryEventStore } from "./in-memory-event-store";
+export { default as WebEventStream } from "./web-event-stream";

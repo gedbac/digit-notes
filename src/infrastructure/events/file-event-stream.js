@@ -19,7 +19,7 @@
 
 import * as os from "os";
 import * as path from "path";
-import { directoryExists, createDirectory, fileExists, readFile, writeFile } from "amber-notes/infrastructure/util";
+import { directoryExists, createDirectory, fileExists, readFile, writeFile, appendFile } from "amber-notes/infrastructure/util";
 import Event from "./event";
 import EventStream from "./event-stream";
 
@@ -44,40 +44,27 @@ export default class FileEventStream extends EventStream {
   }
 
   async open() {
-    await super.open();
-    var pathToFile = this._getPathToStream();
-    if (await fileExists(pathToFile)) {
-      var content = await readFile(pathToFile, { flag: "r", encoding: "utf8" });
-      if (content) {
-        var lines = content.split(/\r?\n/);
-        if (lines) {
-          for(var line of lines) {
-            this._events.push(this._objectSerializer.deserialize(line));
+    if (this.closed) {
+      var pathToFile = this._getPathToStream();
+      if (await fileExists(pathToFile)) {
+        var content = await readFile(pathToFile, { flag: "r", encoding: "utf8" });
+        if (content) {
+          var lines = content.split(/\r?\n/);
+          if (lines) {
+            for(var line of lines) {
+              this._events.push(this._objectSerializer.deserialize(line));
+            }
           }
         }
-      }
-    }
-  }
-
-  async close() {
-    await super.close();
-    var pathToFile = this._getPathToStream();
-    var pathToDirectory = path.dirname(pathToFile);
-    if (!await directoryExists(pathToDirectory)) {
-      await createDirectory(pathToDirectory);
-    }
-    var content = "";
-    if (this._events) {
-      var index = 0;
-      for (var event of this._events) {
-        if (index) {
-          content += os.EOL;
+      } else {
+        var pathToDirectory = path.dirname(pathToFile);
+        if (!await directoryExists(pathToDirectory)) {
+          await createDirectory(pathToDirectory);
         }
-        content += this._objectSerializer.serialize(event);
-        index++;
+        await writeFile(pathToFile, { flag: "w" , encoding: "utf8" }, "");
       }
+      await super.open();
     }
-    await writeFile(pathToFile, { flag: "w" , encoding: "utf8" }, content);
   }
 
   async read() {
@@ -102,6 +89,13 @@ export default class FileEventStream extends EventStream {
       throw new Error("Stream is closed");
     }
     this._events.push(event);
+    var pathToFile = this._getPathToStream();
+    var content = "";
+    if (this._events.length > 1) {
+      content += os.EOL;
+    }
+    content += this._objectSerializer.serialize(event);
+    await appendFile(pathToFile, { encoding: "utf8" }, content);
   }
 
   _getPathToStream() {

@@ -91,6 +91,18 @@ export function writeFile(pathToFile, options, content) {
   });
 }
 
+export function appendFile(pathToFile, options, content) {
+  return new Promise((resolve, reject) => {
+    fs.appendFile(pathToFile, content, options, error => {
+      if (!error) {
+        resolve();
+      } else {
+        reject(error);
+      }
+    });
+  });
+}
+
 export function deleteFile(pathToFile) {
   return new Promise((resolve, reject) => {
     fs.unlink(pathToFile, error => {
