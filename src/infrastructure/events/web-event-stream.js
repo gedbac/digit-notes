@@ -19,16 +19,17 @@
 
 import Event from "./event";
 import EventStream from "./event-stream";
+import WebEventDatabase from "./web-event-database";
 
 export default class WebEventStream extends EventStream {
 
-  constructor(name, objectSerializer) {
+  constructor(name, databaseName, objectSerializer) {
     super(name);
     this._objectSerializer = objectSerializer;
     if (!this._objectSerializer) {
       throw new Error("Object serializer is null");
     }
-    this._database = null;
+    this._database = new WebEventDatabase(databaseName);
     this._events = [];
   }
 
@@ -38,15 +39,8 @@ export default class WebEventStream extends EventStream {
 
   async open() {
     if (this.closed) {
-      await this._openDB("event-store", 1, database => {
-        if (database.version === 1) {
-          if (!database.objectStoreNames.contains("events")) {
-            var objectStore = database.createObjectStore("events", { autoIncrement : true });
-            objectStore.createIndex("streamName", "streamName", { unique: false });
-          }
-        }
-      });
-      await this._forEach("events", value => {
+      await this._database.open();
+      await this._database.forEach("events", "streamName", IDBKeyRange.only(this.name), value => {
         if (value.data) {
           this._events.push(this._objectSerializer.deserialize(value.data));
         }
@@ -57,7 +51,7 @@ export default class WebEventStream extends EventStream {
 
   async close() {
     if (!this.closed) {
-      await this._closeDB();
+      await this._database.close();
       await super.close();
     }
   }
@@ -84,74 +78,10 @@ export default class WebEventStream extends EventStream {
       throw new Error("Stream is closed");
     }
     this._events.push(event);
-    await this._add("events", {
+    await this._database.add("events", {
+      id: event.id,
       streamName: this.name,
       data: this._objectSerializer.serialize(event)
-    });
-  }
-
-  async _openDB(name, version, onupgrade) {
-    await new Promise((resolve, reject) => {
-      var request = indexedDB.open(name, version);
-      request.onerror += () => {
-        reject(request.error);
-      };
-      request.onupgradeneeded = e => {
-        if (onupgrade) {
-          onupgrade(e.target.result);
-        }
-      };
-      request.onsuccess = e => {
-        this._database = e.target.result;
-        resolve();
-      };
-    });
-  }
-
-  async _closeDB() {
-    if (this._database) {
-      this._database.close();
-    }
-    this._database = null;
-    return Promise.resolve(null);
-  }
-
-  async _forEach(objectStoreName, callback) {
-    return await new Promise((resolve, reject) => {
-      var objectStore = this._database
-        .transaction(objectStoreName, "readwrite")
-        .objectStore(objectStoreName);
-      var index = objectStore.index("streamName");
-      var request = index.openCursor(IDBKeyRange.only(this.name));
-      request.onerror = () => {
-        reject(request.error);
-      };
-      request.onsuccess = e => {
-        var cursor = e.target.result;
-        if (cursor) {
-          if (callback) {
-            callback(cursor.value);
-          }
-          cursor.continue();
-        } else {
-          resolve();
-        }
-      };
-    });
-  }
-
-  async _add(objectStoreName, value) {
-    await new Promise((resolve, reject) => {
-      var objectStore = this._database
-        .transaction(objectStoreName, "readwrite")
-        .objectStore(objectStoreName);
-      var request = objectStore.add(value);
-      request.onerror = () => {
-        reject(request.error);
-      };
-      request.onsuccess = () => {
-        resolve();
-      };
     });
   }
 

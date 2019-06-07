@@ -68,10 +68,4 @@ export default class EventStream {
     this._closed = true;
   }
 
-  toJSON() {
-    return {
-      name: this.name
-    };
-  }
-
 }

@@ -1,6 +1,7 @@
 import { expect } from "chai";
-import { uuid, ObjectSerializer } from "amber-notes/infrastructure/util";
+import { ObjectSerializer } from "amber-notes/infrastructure/util";
 import { Event, WebEventStream } from "amber-notes/infrastructure/events";
+import { IndexedDatabase } from "amber-notes/infrastructure/data";
 
 class Foo extends Event {
 
@@ -12,10 +13,14 @@ class Foo extends Event {
 
 describe("Web Event Stream", () => {
 
+  afterEach(async () => {
+    await IndexedDatabase.deleteDatabase("event-store");
+  });
+
   it("should write and read event from stream", async () => {
-    var streamName = uuid();
     var stream1 = new WebEventStream(
-      streamName,
+      "foo",
+      "event-store",
       new ObjectSerializer([[ "Foo", Foo ]])
     );
     await stream1.open();
@@ -24,7 +29,8 @@ describe("Web Event Stream", () => {
     await stream1.write(new Foo({ id: 3, createdOn: 1002 }));
     await stream1.close();
     var stream2 = new WebEventStream(
-      streamName,
+      "foo",
+      "event-store",
       new ObjectSerializer([[ "Foo", Foo ]])
     );
     await stream2.open();

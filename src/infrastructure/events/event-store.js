@@ -62,7 +62,7 @@ export default class EventStore {
     throw new Error("Method 'deleteStream' is not implemented");
   }
 
-  async addSnapshot(name, t) {
+  async addSnapshot(name, snapshot) {
     throw new Error("Method 'addSnapshot' is not implemented");
   }
 

@@ -64,6 +64,7 @@ var specWebConfig = {
   entry: [
     path.resolve(__dirname, "./spec/infrastructure/logging/index.js"),
     path.resolve(__dirname, "./spec/infrastructure/util/index.js"),
+    path.resolve(__dirname, "./spec/infrastructure/data/index.web.js"),
     path.resolve(__dirname, "./spec/infrastructure/events/index.web.js"),
     path.resolve(__dirname, "./spec/infrastructure/repositories/index.js"),
     path.resolve(__dirname, "./spec/infrastructure/cryptography/index.web.js"),
@@ -85,6 +86,7 @@ var specWebConfig = {
     alias: {
       "amber-notes/infrastructure/logging$": path.resolve(__dirname, "./src/infrastructure/logging/index.js"),
       "amber-notes/infrastructure/util$": path.resolve(__dirname, "./src/infrastructure/util/index.web.js"),
+      "amber-notes/infrastructure/data$": path.resolve(__dirname, "./src/infrastructure/data/index.web.js"),
       "amber-notes/infrastructure/model$": path.resolve(__dirname, "./src/infrastructure/model/index.js"),
       "amber-notes/infrastructure/repositories$": path.resolve(__dirname, "./src/infrastructure/repositories/index.js"),
       "amber-notes/infrastructure/events$": path.resolve(__dirname, "./src/infrastructure/events/index.web.js"),
