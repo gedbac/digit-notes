@@ -1,7 +1,7 @@
 /*
- *  Amber Notes
+ *  Digit Notes
  *
- *  Copyright (C) 2016 - 2019 The Amber Notes Authors
+ *  Copyright (C) 2016 - 2019 The Digit Notes Authors
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
@@ -18,7 +18,7 @@
  */
 
 import AggregateRoot from "./aggregate-root";
-import { Event } from "amber-notes/infrastructure/events";
+import { Event } from "d8s/infrastructure/events";
 
 export default class EventSourcedAggregate extends AggregateRoot {
 

@@ -1,6 +1,6 @@
 import { expect } from "chai";
-import { Logger } from "amber-notes/infrastructure/logging";
-import { InMemoryEventStore } from "amber-notes/infrastructure/events";
+import { Logger } from "d8s/infrastructure/logging";
+import { InMemoryEventStore } from "d8s/infrastructure/events";
 
 describe("In Memory Event Store", () => {
 

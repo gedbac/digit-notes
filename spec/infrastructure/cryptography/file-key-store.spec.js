@@ -1,7 +1,7 @@
 import { expect } from "chai";
-import { Logger } from "amber-notes/infrastructure/logging";
-import { ObjectSerializer } from "amber-notes/infrastructure/util";
-import { FileKeyStore, EncryptionService } from "amber-notes/infrastructure/cryptography";
+import { Logger } from "d8s/infrastructure/logging";
+import { ObjectSerializer } from "d8s/infrastructure/util";
+import { FileKeyStore, EncryptionService } from "d8s/infrastructure/cryptography";
 
 describe("File Key Store",  () => {
 

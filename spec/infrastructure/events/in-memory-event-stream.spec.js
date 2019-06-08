@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { Event, InMemoryEventStream } from "amber-notes/infrastructure/events";
+import { Event, InMemoryEventStream } from "d8s/infrastructure/events";
 
 class Foo extends Event {
 

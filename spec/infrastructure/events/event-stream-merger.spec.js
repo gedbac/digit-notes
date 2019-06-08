@@ -5,7 +5,7 @@ import {
   InMemoryEventStreamFactory,
   InMemoryEventStream,
   EventStreamMerger
-} from "amber-notes/infrastructure/events";
+} from "d8s/infrastructure/events";
 
 class Foo extends Event {
 

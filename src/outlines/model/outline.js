@@ -1,7 +1,7 @@
 /*
- *  Amber Notes
+ *  Digit Notes
  *
- *  Copyright (C) 2016 - 2019 The Amber Notes Authors
+ *  Copyright (C) 2016 - 2019 The Digit Notes Authors
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
@@ -17,8 +17,8 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { EventSourcedEntity } from "amber-notes/infrastructure/model";
-import { OutlineAdded, OutlineRemoved, OutlineTextChanged, OutlineNotesChanged, OutlineCompleted, OutlineIncompleted, OutlineTagAdded, OutlineTagRemoved } from "amber-notes/outlines/events";
+import { EventSourcedEntity } from "d8s/infrastructure/model";
+import { OutlineAdded, OutlineRemoved, OutlineTextChanged, OutlineNotesChanged, OutlineCompleted, OutlineIncompleted, OutlineTagAdded, OutlineTagRemoved } from "d8s/outlines/events";
 
 export default class Outline extends EventSourcedEntity {
 

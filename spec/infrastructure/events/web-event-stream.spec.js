@@ -1,7 +1,7 @@
 import { expect } from "chai";
-import { ObjectSerializer } from "amber-notes/infrastructure/util";
-import { Event, WebEventStream } from "amber-notes/infrastructure/events";
-import { IndexedDatabase } from "amber-notes/infrastructure/data";
+import { ObjectSerializer } from "d8s/infrastructure/util";
+import { Event, WebEventStream } from "d8s/infrastructure/events";
+import { IndexedDatabase } from "d8s/infrastructure/data";
 
 class Foo extends Event {
 

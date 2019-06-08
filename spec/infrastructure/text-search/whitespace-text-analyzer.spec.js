@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { WhitespaceTextAnalyzer } from "amber-notes/infrastructure/text-search";
+import { WhitespaceTextAnalyzer } from "d8s/infrastructure/text-search";
 
 describe("Whitespace Text Analyzer", () => {
 

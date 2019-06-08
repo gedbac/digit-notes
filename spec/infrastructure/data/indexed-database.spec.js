@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { IndexedDatabase } from "amber-notes/infrastructure/data";
+import { IndexedDatabase } from "d8s/infrastructure/data";
 
 describe("Indexed Database", () => {
 

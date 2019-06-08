@@ -1,5 +1,5 @@
 {
-  "name": "amber-notes",
+  "name": "digit-notes",
   "description": "A tool which helps manage daily routines easier",
   "keywords": [
     "productivity",
@@ -12,7 +12,7 @@
   "main": "",
   "repository": {
     "type": "git",
-    "url": "https://github.com/gedbac/amber-notes-prototype.git"
+    "url": "https://github.com/gedbac/digit-notes.git"
   },
   "engines": {
     "node": ">=10.13.0"
@@ -24,9 +24,9 @@
     "build-specs": "./node_modules/.bin/webpack --config spec.config.js --mode development",
     "build-webapp": "./node_modules/.bin/webpack --config webapp.config.js --mode development",
     "build-streaming-service": "./node_modules/.bin/webpack --config streaming-service.config.js --mode development",
-    "build-containers": "docker-compose --project-name amber-notes build",
-    "start-containers": "docker-compose --project-name amber-notes up -d",
-    "run-node-spec": "cd ./dist/spec/node && ../../../node_modules/mocha/bin/_mocha ./amber-notes-infrastructure.spec.js",
+    "build-containers": "docker-compose --project-name d8s build",
+    "start-containers": "docker-compose --project-name d8s up -d",
+    "run-node-spec": "cd ./dist/spec/node && ../../../node_modules/mocha/bin/_mocha ./d8s-infrastructure.spec.js",
     "run-web-spec": "cd ./dist/spec/web && ../../../node_modules/mocha-headless-chrome/bin/start -f ./spec-runner.html -a no-sandbox"
   },
   "devDependencies": {

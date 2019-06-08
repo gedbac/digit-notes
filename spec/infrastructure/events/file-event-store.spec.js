@@ -1,7 +1,7 @@
 import { expect } from "chai";
-import { writeFile, fileExists, deleteFile, ObjectSerializer } from "amber-notes/infrastructure/util";
-import { Logger } from "amber-notes/infrastructure/logging";
-import { FileEventStore } from "amber-notes/infrastructure/events";
+import { writeFile, fileExists, deleteFile, ObjectSerializer } from "d8s/infrastructure/util";
+import { Logger } from "d8s/infrastructure/logging";
+import { FileEventStore } from "d8s/infrastructure/events";
 
 describe("File Event Store", () => {
 

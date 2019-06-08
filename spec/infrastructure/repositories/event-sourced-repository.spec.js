@@ -1,8 +1,8 @@
 import { expect } from "chai";
-import { Logger } from "amber-notes/infrastructure/logging";
-import { EventSourcedAggregate } from "amber-notes/infrastructure/model";
-import { EventSourcedRepository } from "amber-notes/infrastructure/repositories";
-import { Event, InMemoryEventStore } from "amber-notes/infrastructure/events";
+import { Logger } from "d8s/infrastructure/logging";
+import { EventSourcedAggregate } from "d8s/infrastructure/model";
+import { EventSourcedRepository } from "d8s/infrastructure/repositories";
+import { Event, InMemoryEventStore } from "d8s/infrastructure/events";
 
 class FooCreated extends Event {
 

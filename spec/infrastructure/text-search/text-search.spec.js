@@ -1,6 +1,6 @@
 import { expect } from "chai";
-import { TextSearch, WhitespaceTextAnalyzer } from "amber-notes/infrastructure/text-search";
-import { ConsoleLoggerFactory, LogLevels } from "amber-notes/infrastructure/logging";
+import { TextSearch, WhitespaceTextAnalyzer } from "d8s/infrastructure/text-search";
+import { ConsoleLoggerFactory, LogLevels } from "d8s/infrastructure/logging";
 
 describe("Text Search", () => {
 

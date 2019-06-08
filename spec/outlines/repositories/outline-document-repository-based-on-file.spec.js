@@ -1,11 +1,11 @@
 import { expect } from "chai";
-import { fileExists, writeFile, ObjectSerializer } from "amber-notes/infrastructure/util";
-import { Logger } from "amber-notes/infrastructure/logging";
-import { FileEventStore } from "amber-notes/infrastructure/events";
-import { OutlineDocument } from "amber-notes/outlines/model";
-import { OutlineDocumentFactory } from "amber-notes/outlines/factories";
-import { OutlineDocumentRepository } from "amber-notes/outlines/repositories";
-import { OutlineDocumentCreated, OutlineDocumentTitleChanged } from "amber-notes/outlines/events";
+import { fileExists, writeFile, ObjectSerializer } from "d8s/infrastructure/util";
+import { Logger } from "d8s/infrastructure/logging";
+import { FileEventStore } from "d8s/infrastructure/events";
+import { OutlineDocument } from "d8s/outlines/model";
+import { OutlineDocumentFactory } from "d8s/outlines/factories";
+import { OutlineDocumentRepository } from "d8s/outlines/repositories";
+import { OutlineDocumentCreated, OutlineDocumentTitleChanged } from "d8s/outlines/events";
 
 describe("Outline Document Repository", () => {
 

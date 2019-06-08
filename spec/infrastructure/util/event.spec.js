@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import sinon from "sinon";
-import { Event } from "amber-notes/infrastructure/util";
+import { Event } from "d8s/infrastructure/util";
 
 describe("Event", () => {
 

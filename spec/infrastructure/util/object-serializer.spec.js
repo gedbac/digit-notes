@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { ObjectSerializer } from "amber-notes/infrastructure/util";
+import { ObjectSerializer } from "d8s/infrastructure/util";
 
 class Person {
 

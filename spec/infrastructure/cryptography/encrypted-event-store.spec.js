@@ -1,8 +1,8 @@
 import { expect } from "chai";
-import { Logger } from "amber-notes/infrastructure/logging";
-import { ObjectSerializer } from "amber-notes/infrastructure/util";
-import { InMemoryEventStore } from "amber-notes/infrastructure/events";
-import { EncryptedEventStore, EncryptionService } from "amber-notes/infrastructure/cryptography";
+import { Logger } from "d8s/infrastructure/logging";
+import { ObjectSerializer } from "d8s/infrastructure/util";
+import { InMemoryEventStore } from "d8s/infrastructure/events";
+import { EncryptedEventStore, EncryptionService } from "d8s/infrastructure/cryptography";
 
 describe("Encrypted Event Store", () => {
 

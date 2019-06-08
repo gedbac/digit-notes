@@ -1,7 +1,7 @@
 import { expect } from "chai";
-import { ObjectSerializer } from "amber-notes/infrastructure/util";
-import { Event, InMemoryEventStream } from "amber-notes/infrastructure/events";
-import { EncryptedEventStream, EncryptionService } from "amber-notes/infrastructure/cryptography";
+import { ObjectSerializer } from "d8s/infrastructure/util";
+import { Event, InMemoryEventStream } from "d8s/infrastructure/events";
+import { EncryptedEventStream, EncryptionService } from "d8s/infrastructure/cryptography";
 
 class Foo extends Event {
 

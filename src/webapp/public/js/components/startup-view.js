@@ -1,7 +1,7 @@
 /*
- *  Amber Notes
+ *  Digit Notes
  *
- *  Copyright (C) 2016 - 2019 The Amber Notes Authors
+ *  Copyright (C) 2016 - 2019 The Digit Notes Authors
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
@@ -29,7 +29,7 @@ export default class StartupView extends View {
   render() {
     return (
       <div className="startup-view">
-        <div className="name">Amber Notes</div>
+        <div className="name">Digit Notes</div>
       </div>
     );
   }

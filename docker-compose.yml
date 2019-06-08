@@ -1,12 +1,12 @@
 version: '2.4'
 services:
   streaming-service:
-    image: amber-notes/streaming-service
+    image: d8s/streaming-service
     container_name: streaming-service
     ports:
       - "5801:5801"
     networks:
-      - amber-notes-network
+      - d8s-network
     build:
       context: .
       dockerfile: ./src/streaming-service/dockerfile
@@ -15,4 +15,4 @@ services:
     mem_swappiness: 0
     restart: on-failure
 networks:
-  amber-notes-network:
+  d8s-network:

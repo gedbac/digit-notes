@@ -16,10 +16,10 @@ module.exports = {
   resolve: {
     extensions: [ ".web.js", ".js", ".scss" ],
     alias: {
-      "amber-notes/infrastructure/logging$": path.resolve(__dirname, "./src/infrastructure/logging/index.js"),
-      "amber-notes/infrastructure/util$": path.resolve(__dirname, "./src/infrastructure/util/index.web.js"),
-      "amber-notes/infrastructure/dependency-injection$": path.resolve(__dirname, "./src/infrastructure/dependency-injection/index.js"),
-      "amber-notes/infrastructure/cryptography$": path.resolve(__dirname, "./src/infrastructure/cryptography/index.web.js")
+      "d8s/infrastructure/logging$": path.resolve(__dirname, "./src/infrastructure/logging/index.js"),
+      "d8s/infrastructure/util$": path.resolve(__dirname, "./src/infrastructure/util/index.web.js"),
+      "d8s/infrastructure/dependency-injection$": path.resolve(__dirname, "./src/infrastructure/dependency-injection/index.js"),
+      "d8s/infrastructure/cryptography$": path.resolve(__dirname, "./src/infrastructure/cryptography/index.web.js")
     }
   },
   module: {

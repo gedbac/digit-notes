@@ -1,6 +1,6 @@
 import { expect } from "chai";
-import { fileExists, writeFile, deleteFile, ObjectSerializer } from "amber-notes/infrastructure/util";
-import { Event, FileEventStream } from "amber-notes/infrastructure/events";
+import { fileExists, writeFile, deleteFile, ObjectSerializer } from "d8s/infrastructure/util";
+import { Event, FileEventStream } from "d8s/infrastructure/events";
 
 class Foo extends Event {
 

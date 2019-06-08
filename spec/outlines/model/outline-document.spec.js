@@ -1,7 +1,7 @@
 import { expect } from "chai";
-import { uuid } from "amber-notes/infrastructure/util";
-import { OutlineDocument } from "amber-notes/outlines/model";
-import { OutlineDocumentFactory } from "amber-notes/outlines/factories";
+import { uuid } from "d8s/infrastructure/util";
+import { OutlineDocument } from "d8s/outlines/model";
+import { OutlineDocumentFactory } from "d8s/outlines/factories";
 
 describe("Outlines", () => {
 

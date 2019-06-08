@@ -1,7 +1,7 @@
 /*
- *  Amber Notes
+ *  Digit Notes
  *
- *  Copyright (C) 2016 - 2019 The Amber Notes Authors
+ *  Copyright (C) 2016 - 2019 The Digit Notes Authors
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
@@ -19,7 +19,7 @@
 
 import * as os from "os";
 import * as path from "path";
-import { directoryExists, createDirectory, fileExists, readFile, writeFile, appendFile } from "amber-notes/infrastructure/util";
+import { directoryExists, createDirectory, fileExists, readFile, writeFile, appendFile } from "d8s/infrastructure/util";
 import Event from "./event";
 import EventStream from "./event-stream";
 

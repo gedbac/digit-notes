@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { ServiceProviderBuilder, PropertyInjection } from "amber-notes/infrastructure/dependency-injection";
+import { ServiceProviderBuilder, PropertyInjection } from "d8s/infrastructure/dependency-injection";
 
 describe("Property injection", () => {
 

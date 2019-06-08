@@ -20,24 +20,24 @@ var specNodeConfig = {
   ],
   output: {
     path: path.resolve(__dirname, "./dist/spec/node"),
-    filename: "amber-notes-infrastructure.spec.js"
+    filename: "d8s-infrastructure.spec.js"
   },
   externals: [ nodeExternals() ],
   resolve: {
     extensions: [ ".node.js", ".js" ],
     alias: {
-      "amber-notes/infrastructure/logging$": path.resolve(__dirname, "./src/infrastructure/logging/index.js"),
-      "amber-notes/infrastructure/util$": path.resolve(__dirname, "./src/infrastructure/util/index.node.js"),
-      "amber-notes/infrastructure/model$": path.resolve(__dirname, "./src/infrastructure/model/index.js"),
-      "amber-notes/infrastructure/repositories$": path.resolve(__dirname, "./src/infrastructure/repositories/index.js"),
-      "amber-notes/infrastructure/events$": path.resolve(__dirname, "./src/infrastructure/events/index.node.js"),
-      "amber-notes/infrastructure/cryptography$": path.resolve(__dirname, "./src/infrastructure/cryptography/index.node.js"),
-      "amber-notes/infrastructure/text-search$": path.resolve(__dirname, "./src/infrastructure/text-search/index.js"),
-      "amber-notes/infrastructure/dependency-injection$": path.resolve(__dirname, "./src/infrastructure/dependency-injection/index.js"),
-      "amber-notes/outlines/events$": path.resolve(__dirname, "./src/outlines/events/index.js"),
-      "amber-notes/outlines/model$": path.resolve(__dirname, "./src/outlines/model/index.js"),
-      "amber-notes/outlines/factories$": path.resolve(__dirname, "./src/outlines/factories/index.js"),
-      "amber-notes/outlines/repositories$": path.resolve(__dirname, "./src/outlines/repositories/index.js")
+      "d8s/infrastructure/logging$": path.resolve(__dirname, "./src/infrastructure/logging/index.js"),
+      "d8s/infrastructure/util$": path.resolve(__dirname, "./src/infrastructure/util/index.node.js"),
+      "d8s/infrastructure/model$": path.resolve(__dirname, "./src/infrastructure/model/index.js"),
+      "d8s/infrastructure/repositories$": path.resolve(__dirname, "./src/infrastructure/repositories/index.js"),
+      "d8s/infrastructure/events$": path.resolve(__dirname, "./src/infrastructure/events/index.node.js"),
+      "d8s/infrastructure/cryptography$": path.resolve(__dirname, "./src/infrastructure/cryptography/index.node.js"),
+      "d8s/infrastructure/text-search$": path.resolve(__dirname, "./src/infrastructure/text-search/index.js"),
+      "d8s/infrastructure/dependency-injection$": path.resolve(__dirname, "./src/infrastructure/dependency-injection/index.js"),
+      "d8s/outlines/events$": path.resolve(__dirname, "./src/outlines/events/index.js"),
+      "d8s/outlines/model$": path.resolve(__dirname, "./src/outlines/model/index.js"),
+      "d8s/outlines/factories$": path.resolve(__dirname, "./src/outlines/factories/index.js"),
+      "d8s/outlines/repositories$": path.resolve(__dirname, "./src/outlines/repositories/index.js")
     }
   },
   module: {
@@ -75,7 +75,7 @@ var specWebConfig = {
   ],
   output: {
     path: path.resolve(__dirname, "./dist/spec/web"),
-    filename: "amber-notes-infrastructure.spec.js"
+    filename: "d8s-infrastructure.spec.js"
   },
   externals: {
     "chai": "chai",
@@ -84,19 +84,19 @@ var specWebConfig = {
   resolve: {
     extensions: [ ".web.js", ".js" ],
     alias: {
-      "amber-notes/infrastructure/logging$": path.resolve(__dirname, "./src/infrastructure/logging/index.js"),
-      "amber-notes/infrastructure/util$": path.resolve(__dirname, "./src/infrastructure/util/index.web.js"),
-      "amber-notes/infrastructure/data$": path.resolve(__dirname, "./src/infrastructure/data/index.web.js"),
-      "amber-notes/infrastructure/model$": path.resolve(__dirname, "./src/infrastructure/model/index.js"),
-      "amber-notes/infrastructure/repositories$": path.resolve(__dirname, "./src/infrastructure/repositories/index.js"),
-      "amber-notes/infrastructure/events$": path.resolve(__dirname, "./src/infrastructure/events/index.web.js"),
-      "amber-notes/infrastructure/cryptography$": path.resolve(__dirname, "./src/infrastructure/cryptography/index.web.js"),
-      "amber-notes/infrastructure/text-search$": path.resolve(__dirname, "./src/infrastructure/text-search/index.js"),
-      "amber-notes/infrastructure/dependency-injection$": path.resolve(__dirname, "./src/infrastructure/dependency-injection/index.js"),
-      "amber-notes/outlines/events$": path.resolve(__dirname, "./src/outlines/events/index.js"),
-      "amber-notes/outlines/model$": path.resolve(__dirname, "./src/outlines/model/index.js"),
-      "amber-notes/outlines/factories$": path.resolve(__dirname, "./src/outlines/factories/index.js"),
-      "amber-notes/outlines/repositories$": path.resolve(__dirname, "./src/outlines/repositories/index.js")
+      "d8s/infrastructure/logging$": path.resolve(__dirname, "./src/infrastructure/logging/index.js"),
+      "d8s/infrastructure/util$": path.resolve(__dirname, "./src/infrastructure/util/index.web.js"),
+      "d8s/infrastructure/data$": path.resolve(__dirname, "./src/infrastructure/data/index.web.js"),
+      "d8s/infrastructure/model$": path.resolve(__dirname, "./src/infrastructure/model/index.js"),
+      "d8s/infrastructure/repositories$": path.resolve(__dirname, "./src/infrastructure/repositories/index.js"),
+      "d8s/infrastructure/events$": path.resolve(__dirname, "./src/infrastructure/events/index.web.js"),
+      "d8s/infrastructure/cryptography$": path.resolve(__dirname, "./src/infrastructure/cryptography/index.web.js"),
+      "d8s/infrastructure/text-search$": path.resolve(__dirname, "./src/infrastructure/text-search/index.js"),
+      "d8s/infrastructure/dependency-injection$": path.resolve(__dirname, "./src/infrastructure/dependency-injection/index.js"),
+      "d8s/outlines/events$": path.resolve(__dirname, "./src/outlines/events/index.js"),
+      "d8s/outlines/model$": path.resolve(__dirname, "./src/outlines/model/index.js"),
+      "d8s/outlines/factories$": path.resolve(__dirname, "./src/outlines/factories/index.js"),
+      "d8s/outlines/repositories$": path.resolve(__dirname, "./src/outlines/repositories/index.js")
     }
   },
   module: {

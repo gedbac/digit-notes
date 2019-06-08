@@ -1,7 +1,7 @@
 /*
- *  Amber Notes
+ *  Digit Notes
  *
- *  Copyright (C) 2016 - 2019 The Amber Notes Authors
+ *  Copyright (C) 2016 - 2019 The Digit Notes Authors
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
@@ -17,8 +17,8 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { ServiceProviderBuilder, ConstructorInjection, PropertyInjection } from "amber-notes/infrastructure/dependency-injection";
-import { ConsoleLoggerFactory, LogLevels } from "amber-notes/infrastructure/logging";
+import { ServiceProviderBuilder, ConstructorInjection, PropertyInjection } from "d8s/infrastructure/dependency-injection";
+import { ConsoleLoggerFactory, LogLevels } from "d8s/infrastructure/logging";
 import Dispatcher from "./shared/dispatcher";
 import ApplicationActions from "./actions/application-actions";
 import ApplicationStore from "./stores/application-store";

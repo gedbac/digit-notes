@@ -31,7 +31,7 @@
         "--timeout",
         "999999",
         "--colors",
-        "${workspaceFolder}/dist/spec/node/amber-notes-infrastructure.spec.js"
+        "${workspaceFolder}/dist/spec/node/d8s-infrastructure.spec.js"
       ],
       "cwd": "${workspaceRoot}/dist/spec/node",
       "runtimeArgs": [

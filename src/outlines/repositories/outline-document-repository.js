@@ -1,7 +1,7 @@
 /*
- *  Amber Notes
+ *  Digit Notes
  *
- *  Copyright (C) 2016 - 2019 The Amber Notes Authors
+ *  Copyright (C) 2016 - 2019 The Digit Notes Authors
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
@@ -17,8 +17,8 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { EventSourcedRepository } from "amber-notes/infrastructure/repositories";
-import { OutlineDocument } from "amber-notes/outlines/model";
+import { EventSourcedRepository } from "d8s/infrastructure/repositories";
+import { OutlineDocument } from "d8s/outlines/model";
 
 export default class OutlineDocumentRepository extends EventSourcedRepository {
 

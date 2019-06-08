@@ -1,6 +1,6 @@
 import { expect } from "chai";
-import { ObjectSerializer } from "amber-notes/infrastructure/util";
-import { EncryptionService } from "amber-notes/infrastructure/cryptography";
+import { ObjectSerializer } from "d8s/infrastructure/util";
+import { EncryptionService } from "d8s/infrastructure/cryptography";
 
 describe("Encryption Service",  () => {
 
