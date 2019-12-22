@@ -15,7 +15,7 @@
     "url": "https://github.com/gedbac/digit-notes.git"
   },
   "engines": {
-    "node": ">=10.13.0"
+    "node": ">=12.14.0"
   },
   "scripts": {
     "develop": "yarn develop-webapp",
